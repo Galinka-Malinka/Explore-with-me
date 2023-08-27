@@ -1,10 +1,10 @@
 version: '3.1'
 services:
-  stats-server:
-    build: stats-server/
-    container_name: stats-server
+  stats-server-service:
+    build: stats-server/stats-server-service
+    container_name: stats-server-service
     ports:
-      - "9090:9090"
+      - "9091:9091"
     depends_on: [ stats-db ]
     environment:
       - DB_NAME=stats-db
@@ -23,12 +23,19 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
 
+  stats-server-client:
+    build: stats-server/stats-server-client
+    container_name: stats-server-client
+    ports:
+      - "9090:9090"
+    depends_on: [ stats-server-service ]
+
   ewm-service:
     build: ewm-service/
     container_name: ewm-service
     ports:
       - "8080:8080"
-    depends_on: [ stats-server , ewm-db ]
+    depends_on: [ stats-server-client , ewm-db ]
     environment:
       - STATS_SERVER_URL=http://server:9090
       - DB_NAME=ewm-db
