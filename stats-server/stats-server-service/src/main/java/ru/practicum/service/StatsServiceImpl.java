@@ -8,6 +8,8 @@ import ru.practicum.ViewStats;
 import ru.practicum.mapper.StatsMapper;
 import ru.practicum.storage.StatsStorage;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,7 @@ import java.util.List;
 public class StatsServiceImpl implements StatsService {
 
     private final StatsStorage statsStorage;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Transactional
     @Override
@@ -26,25 +29,53 @@ public class StatsServiceImpl implements StatsService {
     @Override
     public List<ViewStats> get(String start, String end, String[] uris, Boolean unique) {
 
+        LocalDateTime startTime = LocalDateTime.parse(start, formatter);
+        LocalDateTime endTime = LocalDateTime.parse(end, formatter);
+
         List<ViewStats> viewStatsList = new ArrayList<>();
 
-        for (String uri : uris) {
-            List<String> apps = statsStorage.findDistinctAppByUri(uri);
+        if (uris == null || uris.length == 0) {  // Если uri не указан, то выгружвется вся статистика
+            List<String> apps = statsStorage.findDistinctApp();
 
             for (String app : apps) {
-                Integer hits = null;
-                if (unique) {
-                    hits = statsStorage.countDistinctIpByAppAndUri(app, uri);
-                } else {
-                    hits = statsStorage.countIpByAppAndUri(app, uri);
+                List<String> uriList = statsStorage.findUriByApp(app);
+
+                for (String uri : uriList) {
+                    Integer hits = getHits(unique, app, uri, startTime, endTime);
+                    viewStatsList.add(ViewStats.builder()
+                            .app(app)
+                            .uri(uri)
+                            .hits(hits)
+                            .build());
+
                 }
-                viewStatsList.add(ViewStats.builder()
-                        .app(app)
-                        .uri(uri)
-                        .hits(hits)
-                        .build());
+            }
+        } else {  // Иначе идёт выгрузка статистики согласно заданным uri
+            for (String uri : uris) {
+                List<String> apps = statsStorage.findDistinctAppByUri(uri);
+
+                for (String app : apps) {
+                    Integer hits = getHits(unique, app, uri, startTime, endTime);
+                    viewStatsList.add(ViewStats.builder()
+                            .app(app)
+                            .uri(uri)
+                            .hits(hits)
+                            .build());
+                }
             }
         }
         return viewStatsList;
+    }
+
+    public Integer getHits(Boolean unique, String app, String uri, LocalDateTime startTime, LocalDateTime endTime) {
+        Integer hits = null;
+        if (unique) {
+            hits = statsStorage.countDistinctIpByAppAndUriAndTimestampGreaterThanAndTimestampLessThan(
+                    app, uri, startTime, endTime);
+        } else {
+            hits = statsStorage.countIpByAppAndUriAndTimestampGreaterThanAndTimestampLessThan(
+                    app, uri, startTime, endTime);
+        }
+        return hits;
     }
 }
