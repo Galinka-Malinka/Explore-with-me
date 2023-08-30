@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class StatsServiceImpl implements StatsService {
+public class StatsServiceImpl implements ru.practicum.service.StatsService {
 
     private final StatsStorage statsStorage;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -37,8 +37,9 @@ public class StatsServiceImpl implements StatsService {
         if (uris == null || uris.length == 0) {  // Если uri не указан, то выгружвется вся статистика
             List<String> apps = statsStorage.findDistinctApp();
 
+
             for (String app : apps) {
-                List<String> uriList = statsStorage.findUriByApp(app);
+                List<String> uriList = statsStorage.findDistinctUriByApp(app);
 
                 for (String uri : uriList) {
                     Integer hits = getHits(unique, app, uri, startTime, endTime);
@@ -68,13 +69,11 @@ public class StatsServiceImpl implements StatsService {
     }
 
     public Integer getHits(Boolean unique, String app, String uri, LocalDateTime startTime, LocalDateTime endTime) {
-        Integer hits = null;
+        Integer hits;
         if (unique) {
-            hits = statsStorage.countDistinctIpByAppAndUriAndTimestampGreaterThanAndTimestampLessThan(
-                    app, uri, startTime, endTime);
+            hits = statsStorage.countDistinctIp(app, uri, startTime, endTime);
         } else {
-            hits = statsStorage.countIpByAppAndUriAndTimestampGreaterThanAndTimestampLessThan(
-                    app, uri, startTime, endTime);
+            hits = statsStorage.countAllIp(app, uri, startTime, endTime);
         }
         return hits;
     }

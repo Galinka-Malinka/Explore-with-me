@@ -18,7 +18,7 @@ public class StatsMapper {
 
         Integer id = endpointHit.getId() != null ? endpointHit.getId() : null;
         LocalDateTime timestamp = endpointHit.getTimestamp() != null
-                ? LocalDateTime.parse(endpointHit.getTimestamp(), DATEFORMATTER) : null;
+                ? LocalDateTime.parse(endpointHit.getTimestamp(), DATEFORMATTER) : LocalDateTime.now();
 
         return Stats.builder()
                 .id(id)

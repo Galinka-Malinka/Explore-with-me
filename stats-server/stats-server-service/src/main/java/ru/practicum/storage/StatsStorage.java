@@ -9,19 +9,34 @@ import java.util.List;
 
 public interface StatsStorage extends JpaRepository<Stats, Integer> {
 
+    @Query("select distinct s.app" +
+            " from Stats as s" +
+            " where s.uri = ?1")
     List<String> findDistinctAppByUri(String uri);
 
-    Integer countDistinctIpByAppAndUriAndTimestampGreaterThanAndTimestampLessThan(String app, String uri,
-                                                                                  LocalDateTime start,
-                                                                                  LocalDateTime end);
+    @Query("select count(distinct s.ip)" +
+            " from Stats as s" +
+            " where s.app = ?1" +
+            " and s.uri = ?2" +
+            " and s.timestamp >= ?3" +
+            " and s.timestamp <= ?4")
+    Integer countDistinctIp(String app, String uri, LocalDateTime start, LocalDateTime end);
 
-    Integer countIpByAppAndUriAndTimestampGreaterThanAndTimestampLessThan(String app, String uri,
-                                                                          LocalDateTime start, LocalDateTime end);
+    @Query("select count(s.ip)" +
+            " from Stats as s" +
+            " where s.app = ?1" +
+            " and s.uri = ?2" +
+            " and s.timestamp >= ?3" +
+            " and s.timestamp <= ?4")
+    Integer countAllIp(String app, String uri, LocalDateTime start, LocalDateTime end);
 
     @Query("select distinct s.app" +
             " from Stats as s")
     List<String> findDistinctApp();
 
-    List<String> findUriByApp(String app);
+    @Query("select distinct s.uri" +
+            " from Stats as s" +
+            " where s.app = ?1")
+    List<String> findDistinctUriByApp(String app);
 
 }

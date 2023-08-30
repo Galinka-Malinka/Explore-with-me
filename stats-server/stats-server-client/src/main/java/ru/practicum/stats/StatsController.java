@@ -3,12 +3,14 @@ package ru.practicum.stats;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.expression.ParseException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -22,10 +24,11 @@ import java.time.format.DateTimeFormatter;
 @Validated
 public class StatsController {
 
-    private final StatsClient statsClient;
+    private final ru.practicum.stats.StatsClient statsClient;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @GetMapping
+    @ResponseStatus(code = HttpStatus.OK, reason = "Статистика собрана")
     public ResponseEntity<Object> getStats(@NotNull @NotBlank @RequestParam(value = "start") String start,
                                            @NotNull @NotBlank @RequestParam(value = "end") String end,
                                            @RequestParam(value = "uris") String[] uris,

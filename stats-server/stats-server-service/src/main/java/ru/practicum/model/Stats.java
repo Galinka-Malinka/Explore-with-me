@@ -1,5 +1,6 @@
 package ru.practicum.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -28,6 +29,7 @@ public class Stats {
     String ip;
 
     @Column(name = "timestamp", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime timestamp;
 
 }
