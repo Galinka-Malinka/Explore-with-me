@@ -34,7 +34,8 @@ public class StatsServiceImpl implements ru.practicum.service.StatsService {
 
         List<ViewStats> viewStatsList = new ArrayList<>();
 
-        if (uris == null || uris.length == 0) {  // Если uri не указан, то выгружвется вся статистика
+        if (uris[0].equals("all")) {  // Если uri изначально не был указан и ему присвоилось значение "all",
+            // то выгружвется вся статистика
             List<String> apps = statsStorage.findDistinctApp();
 
 

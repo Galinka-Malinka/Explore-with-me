@@ -57,14 +57,14 @@ public class StatsServiceServiceTest {
         EndpointHit endpointHit = EndpointHit.builder()
                 .app("ewm-main-service")
                 .uri("/events/1")
-                .ip("192.163.0.1")
+                .ip("192.163.0.2")
                 .build();
         LocalDateTime timeNow = LocalDateTime.now();
         statsService.create(endpointHit);
 
-        TypedQuery<Stats> queryForItem = em.createQuery("Select s from Stats s where s.id = :id",
+        TypedQuery<Stats> queryForItem = em.createQuery("Select s from Stats s where s.ip = :ip",
                 Stats.class);
-        Stats stats = queryForItem.setParameter("id", 1).getSingleResult();
+        Stats stats = queryForItem.setParameter("ip", "192.163.0.2").getSingleResult();
         assertThat(stats.getId(), notNullValue());
         assertThat(stats.getId(), is(1));
         assertThat(stats.getApp(), equalTo(endpointHit.getApp()));
@@ -115,7 +115,7 @@ public class StatsServiceServiceTest {
 
         List<ViewStats> resultWithoutUris =
                 statsService.get("2021-05-06 11:00:23", "2023-07-06 11:00:23",
-                        null, false);
+                        new String[]{"all"}, false);
 
         assertThat(resultWithoutUris, notNullValue());
         assertThat(resultWithoutUris.size(), is(2));

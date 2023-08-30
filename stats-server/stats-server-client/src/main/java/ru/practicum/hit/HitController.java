@@ -24,7 +24,7 @@ public class HitController {
     private final HitClient hitClient;
 
     @PostMapping
-    @ResponseStatus(code = HttpStatus.CREATED, reason = "Информация сохранена")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> create(@Valid @RequestBody EndpointHit endpointHit) {
         log.info("Сохранение в статистику запроса {}", endpointHit);
         return hitClient.create(endpointHit);

@@ -7,10 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -28,11 +25,12 @@ public class StatsController {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @GetMapping
-    @ResponseStatus(code = HttpStatus.OK, reason = "Статистика собрана")
     public ResponseEntity<Object> getStats(@NotNull @NotBlank @RequestParam(value = "start") String start,
                                            @NotNull @NotBlank @RequestParam(value = "end") String end,
-                                           @RequestParam(value = "uris") String[] uris,
-                                           @RequestParam(value = "unique", defaultValue = "false") Boolean unique) {
+                                           @RequestParam(value = "uris", required = false,
+                                                   defaultValue = "all") String[] uris,
+                                           @RequestParam(value = "unique", required = false,
+                                                   defaultValue = "false") Boolean unique) {
         LocalDateTime startTime;
         LocalDateTime endTime;
         try {

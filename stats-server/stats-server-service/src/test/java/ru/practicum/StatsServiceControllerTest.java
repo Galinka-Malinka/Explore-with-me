@@ -63,7 +63,7 @@ public class StatsServiceControllerTest {
         mvc.perform(post("/hit").content(objectMapper.writeValueAsString(endpointHit))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(endpointHit.getId()), Integer.class))
                 .andExpect(jsonPath("$.app", is(endpointHit.getApp()), String.class))
                 .andExpect(jsonPath("$.uri", is(endpointHit.getUri()), String.class))
