@@ -39,7 +39,7 @@ services:
       - "8080:8080"
     depends_on: [ stats-server-client , ewm-db ]
     environment:
-      - STATS_SERVER_URL=http://server:9090
+      - STATS_SERVER_CLIENT_URL=http://stats-server-client:9090
       - DB_NAME=ewm-db
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
