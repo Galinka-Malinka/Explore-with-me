@@ -11,7 +11,9 @@ import ru.practicum.storage.StatsStorage;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -66,7 +68,8 @@ public class StatsServiceImpl implements ru.practicum.service.StatsService {
                 }
             }
         }
-        return viewStatsList;
+        return viewStatsList.stream().sorted(Comparator.comparing(ViewStats::getHits).reversed())
+                .collect(Collectors.toList());
     }
 
     public Integer getHits(Boolean unique, String app, String uri, LocalDateTime startTime, LocalDateTime endTime) {

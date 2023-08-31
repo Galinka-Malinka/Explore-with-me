@@ -120,11 +120,12 @@ public class StatsServiceServiceTest {
         assertThat(resultWithoutUris, notNullValue());
         assertThat(resultWithoutUris.size(), is(2));
         assertThat(resultWithoutUris.get(0).getApp(), equalTo("ewm-main-service"));
-        assertThat(resultWithoutUris.get(0).getUri(), equalTo("/events"));
-        assertThat(resultWithoutUris.get(0).getHits(), is(1));
+        assertThat(resultWithoutUris.get(0).getUri(), equalTo("/events/1"));
+        assertThat(resultWithoutUris.get(0).getHits(), is(3));
         assertThat(resultWithoutUris.get(1).getApp(), equalTo("ewm-main-service"));
-        assertThat(resultWithoutUris.get(1).getUri(), equalTo("/events/1"));
-        assertThat(resultWithoutUris.get(1).getHits(), is(3));
+        assertThat(resultWithoutUris.get(1).getUri(), equalTo("/events"));
+        assertThat(resultWithoutUris.get(1).getHits(), is(1));
+
 
         //Вывод статистики с списком uri
 

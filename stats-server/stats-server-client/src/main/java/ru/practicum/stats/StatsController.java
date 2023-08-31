@@ -46,10 +46,6 @@ public class StatsController {
             throw new IllegalArgumentException("Начало диапазона статистики не может быть позже его окончания");
         }
 
-        if (endTime.isAfter(LocalDateTime.now())) {
-            throw new IllegalArgumentException("Окончание диапазона не может быть в будущем");
-        }
-
         log.info("Получение статистики с {} по {} для uris {} с учётом уникальных посещений {}",
                 start, end, uris, unique);
         return statsClient.getStats(start, end, uris, unique);
