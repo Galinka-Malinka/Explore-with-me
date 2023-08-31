@@ -26,11 +26,11 @@ public class StatsClient extends BaseClient {
 
     public ResponseEntity<Object> getStats(String start, String end, String[] uris, Boolean unique) {
         Map<String, Object> parameters = Map.of(
-                    "start", start,
-                    "end", end,
-                    "uris", uris,
-                    "unique", unique
-            );
+                "start", start,
+                "end", end,
+                "uris", uris,
+                "unique", unique
+        );
 
         return get("?start={start}&end={end}&uris={uris}&unique={unique}", null, parameters);
     }

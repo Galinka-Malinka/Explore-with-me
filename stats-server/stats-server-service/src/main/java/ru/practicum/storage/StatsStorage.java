@@ -38,5 +38,4 @@ public interface StatsStorage extends JpaRepository<Stats, Integer> {
             " from Stats as s" +
             " where s.app = ?1")
     List<String> findDistinctUriByApp(String app);
-
 }
