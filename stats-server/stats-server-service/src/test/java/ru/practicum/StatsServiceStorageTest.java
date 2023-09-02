@@ -89,38 +89,57 @@ public class StatsServiceStorageTest {
         statsStorage.save(StatsMapper.toStats(endpointHit3));
         statsStorage.save(StatsMapper.toStats(endpointHit4));
 
-        List<String> resultDistinctAppByUri = statsStorage.findDistinctAppByUri("/events/1");
-
-        assertThat(resultDistinctAppByUri, notNullValue());
-        assertThat(resultDistinctAppByUri.size(), is(1));
-
-        List<String> resultDistinctApp = statsStorage.findDistinctApp();
-
-        assertThat(resultDistinctApp, notNullValue());
-        assertThat(resultDistinctApp.size(), is(1));
-
-        List<String> resultDistinctUriByApp = statsStorage.findDistinctUriByApp("ewm-main-service");
-
-        assertThat(resultDistinctUriByApp, notNullValue());
-        assertThat(resultDistinctUriByApp.size(), is(2));
-        assertThat(resultDistinctUriByApp.get(0), equalTo("/events"));
-        assertThat(resultDistinctUriByApp.get(1), equalTo("/events/1"));
+        String[] uris1 = new String[]{"/events/1"};
+        String[] uris2 = new String[]{"/events", "/events/1"};
 
         LocalDateTime startTime = LocalDateTime.parse("2021-09-06 11:00:23",
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         LocalDateTime endTime = LocalDateTime.parse("2023-07-06 11:00:23",
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-        Integer countDistinctIp = statsStorage.countDistinctIp("ewm-main-service", "/events/1",
-                startTime, endTime);
+        List<ViewStats> statsAllList = statsStorage.findStatsAll(startTime, endTime);
+        assertThat(statsAllList, notNullValue());
+        assertThat(statsAllList.size(), is(2));
+        assertThat(statsAllList.get(0), equalTo(new ViewStats("ewm-main-service", "/events/1", 3)));
+        assertThat(statsAllList.get(1), equalTo(new ViewStats("ewm-main-service", "/events", 1)));
 
-        assertThat(countDistinctIp, notNullValue());
-        assertThat(countDistinctIp, is(2));
+        List<ViewStats> statsAllListWithUniqueIp = statsStorage.findStatsAllWithUniqueIp(startTime, endTime);
+        assertThat(statsAllListWithUniqueIp, notNullValue());
+        assertThat(statsAllListWithUniqueIp.size(), is(2));
+        assertThat(statsAllListWithUniqueIp.get(0),
+                equalTo(new ViewStats("ewm-main-service", "/events/1", 2)));
+        assertThat(statsAllListWithUniqueIp.get(1),
+                equalTo(new ViewStats("ewm-main-service", "/events", 1)));
 
-        Integer countAllIp = statsStorage.countAllIp("ewm-main-service", "/events/1",
-                startTime, endTime);
+        List<ViewStats> statsListForUris1 = statsStorage.findStatsForUris(uris1, startTime, endTime);
+        assertThat(statsListForUris1, notNullValue());
+        assertThat(statsListForUris1.size(), is(1));
+        assertThat(statsListForUris1.get(0), equalTo(new ViewStats("ewm-main-service", "/events/1", 3)));
 
-        assertThat(countAllIp, notNullValue());
-        assertThat(countAllIp, is(3));
+        List<ViewStats> statsListForUris2 = statsStorage.findStatsForUris(uris2, startTime, endTime);
+        assertThat(statsListForUris2, notNullValue());
+        assertThat(statsListForUris2.size(), is(2));
+        assertThat(statsListForUris2.get(0), equalTo(new ViewStats("ewm-main-service", "/events/1", 3)));
+        assertThat(statsListForUris2.get(1), equalTo(new ViewStats("ewm-main-service", "/events", 1)));
+
+        List<ViewStats> statsAllForUris2WithUniqueIp =
+                statsStorage.findStatsForUrisWithUniqueIp(uris2, startTime, endTime);
+        assertThat(statsAllForUris2WithUniqueIp, notNullValue());
+        assertThat(statsAllForUris2WithUniqueIp.size(), is(2));
+        assertThat(statsAllForUris2WithUniqueIp.get(0),
+                equalTo(new ViewStats("ewm-main-service", "/events/1", 2)));
+        assertThat(statsAllForUris2WithUniqueIp.get(1),
+                equalTo(new ViewStats("ewm-main-service", "/events", 1)));
+
+        LocalDateTime newStartTime = LocalDateTime.parse("2023-01-06 11:00:23",
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime newEndTime = LocalDateTime.parse("2023-04-06 11:00:23",
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+        List<ViewStats> statsListForUris1WithRange = statsStorage.findStatsForUris(uris1, newStartTime, newEndTime);
+        assertThat(statsListForUris1WithRange, notNullValue());
+        assertThat(statsListForUris1WithRange.size(), is(1));
+        assertThat(statsListForUris1WithRange.get(0),
+                equalTo(new ViewStats("ewm-main-service", "/events/1", 1)));
     }
 }
