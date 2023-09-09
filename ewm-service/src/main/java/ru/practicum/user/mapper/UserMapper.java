@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.practicum.user.dto.UserDto;
+import ru.practicum.user.dto.UserShortDto;
 import ru.practicum.user.model.User;
 
 import javax.validation.constraints.NotNull;
@@ -34,5 +35,12 @@ public class UserMapper {
             userDtoList.add(toUserDto(user));
         }
         return userDtoList;
+    }
+
+    public static UserShortDto toUserShortDto(@NotNull UserDto userDto) {
+        return UserShortDto.builder()
+                .id(userDto.getId())
+                .name(userDto.getName())
+                .build();
     }
 }

@@ -126,6 +126,20 @@ public class StatsServiceServiceTest {
         assertThat(resultWithoutUris.get(1).getUri(), equalTo("/events"));
         assertThat(resultWithoutUris.get(1).getHits(), is(1));
 
+        //Вывод статистики при отсутствии критериев к uri
+
+        List<ViewStats> resultWithoutUrisWithUniqueUri =
+                statsService.get("2021-05-06 11:00:23", "2023-07-06 11:00:23",
+                        new String[]{"all"}, true);
+
+        assertThat(resultWithoutUrisWithUniqueUri, notNullValue());
+        assertThat(resultWithoutUrisWithUniqueUri.size(), is(2));
+        assertThat(resultWithoutUrisWithUniqueUri.get(0).getApp(), equalTo("ewm-main-service"));
+        assertThat(resultWithoutUrisWithUniqueUri.get(0).getUri(), equalTo("/events/1"));
+        assertThat(resultWithoutUrisWithUniqueUri.get(0).getHits(), is(2));
+        assertThat(resultWithoutUrisWithUniqueUri.get(1).getApp(), equalTo("ewm-main-service"));
+        assertThat(resultWithoutUrisWithUniqueUri.get(1).getUri(), equalTo("/events"));
+        assertThat(resultWithoutUrisWithUniqueUri.get(1).getHits(), is(1));
 
         //Вывод статистики с списком uri
 

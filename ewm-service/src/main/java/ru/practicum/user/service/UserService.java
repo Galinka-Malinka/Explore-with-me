@@ -1,4 +1,4 @@
-package ru.practicum.user.server;
+package ru.practicum.user.service;
 
 import ru.practicum.user.dto.UserDto;
 
