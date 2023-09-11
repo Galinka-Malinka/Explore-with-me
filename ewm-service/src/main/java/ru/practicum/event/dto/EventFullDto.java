@@ -1,9 +1,11 @@
 package ru.practicum.event.dto;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.event.model.Location;
 import ru.practicum.user.dto.UserShortDto;
 
@@ -12,6 +14,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EventFullDto {
 

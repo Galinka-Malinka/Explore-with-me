@@ -20,7 +20,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class UserServiceImp implements UserService {
+public class UserServiceImpl implements UserService {
 
     private final UserStorage userStorage;
 

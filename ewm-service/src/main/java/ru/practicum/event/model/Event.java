@@ -3,6 +3,8 @@ package ru.practicum.event.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.category.model.Category;
+import ru.practicum.event.State;
 import ru.practicum.user.model.User;
 
 import javax.persistence.*;
@@ -35,7 +37,7 @@ public class Event {
     LocalDateTime eventDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "location_id", nullable = false)
+    @JoinColumn(name = "location", nullable = false)
     Location location;
 
     @Column(name = "paid", nullable = false)
@@ -44,23 +46,28 @@ public class Event {
     @Column(name = "participant_limit")
     Integer participantLimit;
 
+    //    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category", nullable = false)
     Category category;
 
     @Column(name = "request_moderation")
     Boolean requestModeration;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "initiator_id", nullable = false)
+    @JoinColumn(name = "initiator", nullable = false)
     User initiator;
 
     @Column(name = "created_on", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime createdOn;
 
-    @Column(name = "published_on", nullable = false)
+    @Column(name = "published_on")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime publishedOn;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "state")
+    State state;
 
 }

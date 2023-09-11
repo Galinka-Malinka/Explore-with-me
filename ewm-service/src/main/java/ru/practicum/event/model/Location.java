@@ -18,7 +18,9 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    float let;  //широта
+    @Column(name = "lat", nullable = false)
+    float lat;  //широта
 
+    @Column(name = "lon", nullable = false)
     float lon;  //долгота
 }

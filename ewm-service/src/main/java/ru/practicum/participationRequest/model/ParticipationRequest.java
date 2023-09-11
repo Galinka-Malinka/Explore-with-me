@@ -3,7 +3,7 @@ package ru.practicum.participationRequest.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.event.State;
+import ru.practicum.participationRequest.Status;
 import ru.practicum.event.model.Event;
 import ru.practicum.user.model.User;
 
@@ -36,6 +36,6 @@ public class ParticipationRequest {
     LocalDateTime created;
 
     @Column(name = "status", nullable = false)
-    State status;
+    Status status;
 
 }

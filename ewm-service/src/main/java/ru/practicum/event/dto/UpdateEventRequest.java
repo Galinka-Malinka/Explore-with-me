@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.event.model.Location;
 
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
 @Data
@@ -28,6 +29,7 @@ public class UpdateEventRequest {
 
     Boolean paid;
 
+    @PositiveOrZero
     Integer participantLimit;
 
     Integer category;

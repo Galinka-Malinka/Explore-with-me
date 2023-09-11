@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.user.dto.UserShortDto;
 
 import javax.validation.constraints.NotBlank;

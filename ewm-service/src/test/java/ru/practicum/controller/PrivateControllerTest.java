@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.event.dto.*;
 import ru.practicum.event.model.Location;
 import ru.practicum.event.service.EventService;
@@ -50,7 +51,7 @@ public class PrivateControllerTest {
             .description("description for Event")
             .eventDate("2024-09-05 09:00:00")
             .paid(false)
-            .location(Location.builder().let(57.457F).lon(34.87F).build())
+            .location(Location.builder().lat(57.457F).lon(34.87F).build())
             .category(1)
             .participantLimit(0)
             .requestModeration(false)
@@ -62,7 +63,7 @@ public class PrivateControllerTest {
             .annotation("annotation for Event")
             .description("description for Event")
             .eventDate("2024-09-05 09:00:00")
-            .location(Location.builder().lon(34.87F).let(57.457F).build())
+            .location(Location.builder().lon(34.87F).lat(57.457F).build())
             .paid(false)
             .participantLimit(0)
             .requestModeration(false)

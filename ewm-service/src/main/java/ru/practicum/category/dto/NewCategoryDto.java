@@ -1,5 +1,7 @@
-package ru.practicum.event.dto;
+package ru.practicum.category.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +15,9 @@ import javax.validation.constraints.Size;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NewCategoryDto {
+
+    @JsonCreator
+    public NewCategoryDto(@JsonProperty("name") String name) { this.name = name;}
 
     @NotNull
     @NotBlank

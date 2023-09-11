@@ -1,4 +1,4 @@
-package ru.practicum.event.model;
+package ru.practicum.category.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -18,6 +18,6 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @Column(name = "name", nullable = false, length = 50)
+    @Column(name = "name", nullable = false, length = 50, unique = true)
     String name;
 }

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.event.dto.CategoryDto;
+import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.model.Location;
@@ -70,7 +70,7 @@ public class PublicControllerTest {
             .annotation("annotation for Event")
             .description("description for Event")
             .eventDate("2024-09-05 09:00:00")
-            .location(Location.builder().lon(34.87F).let(57.457F).build())
+            .location(Location.builder().lon(34.87F).lat(57.457F).build())
             .paid(false)
             .participantLimit(0)
             .requestModeration(false)

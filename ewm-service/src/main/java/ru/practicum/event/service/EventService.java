@@ -16,7 +16,7 @@ public interface EventService {
 
     EventFullDto getByInitiatorById(Integer userId, Integer eventId);
 
-    List<EventShortDto> getByInitiator(Integer userId, Integer start, Integer size);
+    List<EventShortDto> getByInitiator(Integer userId, Integer from, Integer size);
 
     EventFullDto update(Integer userId, Integer eventId, UpdateEventRequest request);
 
@@ -28,7 +28,7 @@ public interface EventService {
     List<EventFullDto> getByAdmin(Integer[] users, String[] states, Integer[] categories, String rangeStart,
                                   String rangeEnd, Integer from, Integer size);
 
-    EventFullDto updateByAdmin(Integer userId, UpdateEventRequest request);
+    EventFullDto updateByAdmin(Integer eventId, UpdateEventRequest request);
 
     List<EventShortDto> getPublicly(String text, Integer[] categories, Boolean paid, String rangeStart, String rangeEnd,
                                     Boolean onlyAvailable, String sort, Integer from, Integer size);

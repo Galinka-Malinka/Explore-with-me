@@ -7,7 +7,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.event.dto.CategoryDto;
+import ru.practicum.category.dto.CategoryDto;
+import ru.practicum.category.dto.NewCategoryDto;
+import ru.practicum.category.service.CategoryService;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.UpdateEventRequest;
 import ru.practicum.event.model.Location;
@@ -40,6 +42,9 @@ public class AdminControllerTest {
     @MockBean
     EventService eventService;
 
+    @MockBean
+    CategoryService categoryService;
+
     @Autowired
     MockMvc mvc;
 
@@ -61,7 +66,7 @@ public class AdminControllerTest {
             .annotation("annotation for event1")
             .description("description for event1")
             .eventDate("2023-10-01 09:00:00")
-            .location(Location.builder().lon(55.754167F).let(37.62F).build())
+            .location(Location.builder().lon(55.754167F).lat(37.62F).build())
             .paid(false)
             .participantLimit(0)
             .requestModeration(false)
@@ -80,7 +85,7 @@ public class AdminControllerTest {
             .annotation("annotation for event2")
             .description("description for event2")
             .eventDate("2023-12-01 09:20:00")
-            .location(Location.builder().lon(55.754167F).let(37.62F).build())
+            .location(Location.builder().lon(55.754167F).lat(37.62F).build())
             .paid(true)
             .participantLimit(50)
             .requestModeration(true)
@@ -94,6 +99,15 @@ public class AdminControllerTest {
             .build();
 
     private final UpdateEventRequest updateEventRequest = UpdateEventRequest.builder().build();
+
+    private final NewCategoryDto newCategoryDto = NewCategoryDto.builder()
+            .name("Category")
+            .build();
+
+    private final CategoryDto categoryDto = CategoryDto.builder()
+            .id(1)
+            .name("Category")
+            .build();
 
     @Test
     void shouldCreateUser() throws Exception {
@@ -161,5 +175,27 @@ public class AdminControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(eventFullDto1.getId()), Integer.class));
+    }
+
+    @Test
+    void shouldCreateCategory() throws Exception {
+        when(categoryService.create(any())).thenReturn(categoryDto);
+
+        mvc.perform(post("/admin/categories").content(objectMapper.writeValueAsString(newCategoryDto))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name", is(categoryDto.getName()), String.class));
+    }
+
+    @Test
+    void shouldUpdateCategory() throws Exception {
+        when(categoryService.update(anyInt(), any())).thenReturn(categoryDto);
+
+        mvc.perform(patch("/admin/categories/1").content(objectMapper.writeValueAsString(categoryDto))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is(categoryDto.getName()), String.class));
     }
 }

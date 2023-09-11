@@ -18,10 +18,10 @@ public class UserDto {
 
     @NotNull(message = "Имя пользователя не заданно")
     @NotBlank(message = "Имя пользователя не может состоять из пустой строки")
-    private String name;
+    String name;
 
     @NotNull(message = "email пользователя не задан")
     @NotBlank(message = "email пользователя не может состоять из пустой строки")
     @Email(message = "Не верный формат email")
-    private String email;
+    String email;
 }

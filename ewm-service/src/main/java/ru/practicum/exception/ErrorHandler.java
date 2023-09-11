@@ -21,4 +21,17 @@ public class ErrorHandler {
     public ErrorResponse handleNotFound(final RuntimeException exception) {
         return new ErrorResponse(exception.getMessage());
     }
+
+    @ExceptionHandler(ConflictException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleConflict(final RuntimeException exception) {
+        return new ErrorResponse(exception.getMessage());
+    }
+
+    @ExceptionHandler(AlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.ALREADY_REPORTED)
+    public ErrorResponse handleAlreadyExists(final RuntimeException exception) {
+        return new ErrorResponse(exception.getMessage());
+    }
+
 }
