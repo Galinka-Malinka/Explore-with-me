@@ -3,6 +3,8 @@ package ru.practicum.category.service;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.dto.NewCategoryDto;
 
+import java.util.List;
+
 public interface CategoryService {
 
     CategoryDto create(NewCategoryDto newCategoryDto);
@@ -13,4 +15,5 @@ public interface CategoryService {
 
     CategoryDto getById(Integer catId);
 
+    List<CategoryDto> get(Integer from, Integer size);
 }

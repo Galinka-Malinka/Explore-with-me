@@ -1,6 +1,6 @@
 package ru.practicum.event.service;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +36,6 @@ import ru.practicum.user.storage.UserStorage;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -170,17 +169,6 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public ParticipationRequestDto getRequestsOnEvent(Integer userId, Integer eventId) {
-        return null;
-    }
-
-    @Transactional
-    @Override
-    public EventRequestStatusUpdateResult changeRequestStatuses(Integer userId, Integer eventId, EventRequestStatusUpdateRequest request) {
-        return null;
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public List<EventFullDto> getByAdmin(Integer[] users, String[] states, Integer[] categories,
                                          String rangeStart, String rangeEnd, Integer from, Integer size) {
@@ -191,25 +179,39 @@ public class EventServiceImpl implements EventService {
         Pageable sortedAndPageable =
                 PageRequest.of(page, size, Sort.by("id"));
 
-        BooleanExpression byAnyUserId = QEvent.event.initiator.id.in(users);
-        BooleanExpression byAnyStates = QEvent.event.state.stringValue().in(states);
-        BooleanExpression byAnyCategoryId = QEvent.event.category.id.in(categories);
-        BooleanExpression byRangeStart = QEvent.event.eventDate.after(LocalDateTime.parse(rangeStart, formatter));
-        BooleanExpression byRangeEnd = QEvent.event.eventDate.before(LocalDateTime.parse(rangeEnd, formatter));
+        QEvent event = QEvent.event;
 
-        Iterable<Event> foundEvent = eventStorage.findAll(byAnyUserId.and(byAnyStates).and(byAnyCategoryId)
-                .and(byRangeStart).and(byRangeEnd), sortedAndPageable);
+        BooleanBuilder where = new BooleanBuilder();
 
-        for (Event event : foundEvent) {
+        if (users != null) {
+            where.and(event.initiator.id.in(users));
+        }
+        if (states != null) {
+            where.and(event.state.stringValue().in(states));
+        }
+        if (categories != null) {
+            where.and(event.category.id.in(categories));
+        }
+        if (rangeStart != null) {
+            where.and(event.eventDate.after(LocalDateTime.parse(rangeStart, formatter)));
+        }
+        if (rangeEnd != null) {
+            where.and(event.eventDate.before(LocalDateTime.parse(rangeEnd, formatter)));
+        }
+
+        Iterable<Event> foundEvents = eventStorage.findAll(where, sortedAndPageable);
+
+
+        for (Event foundEvent : foundEvents) {
             Integer confirmedRequests = null;
             Integer views = null;
 
-            if (event.getState().equals(State.PUBLISHED)) {
-                List<Integer> confirmedRequestsAndViews = getConfirmedRequestAndViews(event);
+            if (foundEvent.getState().equals(State.PUBLISHED)) {
+                List<Integer> confirmedRequestsAndViews = getConfirmedRequestAndViews(foundEvent);
                 confirmedRequests = confirmedRequestsAndViews.get(0);
                 views = confirmedRequestsAndViews.get(1);
             }
-            eventFullDtoList.add(EventMapper.toEventFullDto(event, confirmedRequests, views));
+            eventFullDtoList.add(EventMapper.toEventFullDto(foundEvent, confirmedRequests, views));
         }
 
         return eventFullDtoList;
@@ -234,7 +236,7 @@ public class EventServiceImpl implements EventService {
             throw new ConflictException("Событие можно публиковать, только если оно в состоянии ожидания публикации");
         }
 
-        if (request.getStateAction() != null && request.getStateAction().equals(State.CANCELED.toString()) &&
+        if (request.getStateAction() != null && request.getStateAction().equals(State.CANCELED_EVENT.toString()) &&
                 event.getState().equals(State.PUBLISHED)) {
             throw new ConflictException("Событие можно отклонить, только если оно еще не опубликовано");
         }
@@ -243,6 +245,11 @@ public class EventServiceImpl implements EventService {
 
         if (request.getStateAction() != null && request.getStateAction().equals(State.PUBLISH_EVENT.toString())) {
             eventWithUpdatedParameters.setState(State.PUBLISHED);
+            eventWithUpdatedParameters.setPublishedOn(LocalDateTime.now());
+        }
+
+        if (request.getStateAction() != null && request.getStateAction().equals(State.CANCELED_EVENT.toString())) {
+            eventWithUpdatedParameters.setState(State.CANCELED);
         }
 
         Event updatedEvent = eventStorage.save(eventWithUpdatedParameters);
@@ -284,8 +291,12 @@ public class EventServiceImpl implements EventService {
         ResponseEntity<Object> result = eventClient.getStats(event.getPublishedOn().format(formatter),
                 LocalDateTime.now().format(formatter), new String[]{"/event/" + event.getId()}, false);
 
-        List<ViewStats> viewStatsList = Collections.singletonList((ViewStats) result.getBody());
-        views = viewStatsList.get(0).getHits();
+        if (result.hasBody()) {
+            List<ViewStats> viewStatsList = (List<ViewStats>) result.getBody();
+            if (viewStatsList != null && !viewStatsList.isEmpty()) {
+                views = viewStatsList.get(0).getHits();
+            }
+        }
 
         List<Integer> list = new ArrayList<>();
         list.add(confirmedRequests);

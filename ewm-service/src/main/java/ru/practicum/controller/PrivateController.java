@@ -2,9 +2,7 @@ package ru.practicum.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.client.EventClient;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.NewEventDto;
@@ -14,7 +12,6 @@ import ru.practicum.participationRequest.dto.EventRequestStatusUpdateRequest;
 import ru.practicum.participationRequest.dto.EventRequestStatusUpdateResult;
 import ru.practicum.participationRequest.dto.ParticipationRequestDto;
 import ru.practicum.participationRequest.service.ParticipationRequestService;
-import ru.practicum.participationRequest.storage.ParticipationRequestStorage;
 
 import java.util.List;
 
@@ -40,7 +37,6 @@ public class PrivateController {
                                      @PathVariable Integer eventId) {
 
 
-
         return eventService.getByInitiatorById(userId, eventId);
     }
 
@@ -62,16 +58,16 @@ public class PrivateController {
     }
 
     @GetMapping("/events/{eventId}/requests")
-    public ParticipationRequestDto getRequestsOnEvent(@PathVariable Integer userId,
+    public List<ParticipationRequestDto> getRequestsOnEvent(@PathVariable Integer userId,
                                                       @PathVariable Integer eventId) {
-        return eventService.getRequestsOnEvent(userId, eventId);
+        return participationRequestService.getRequestsOnEvent(userId, eventId);
     }
 
     @PatchMapping("/events/{eventId}/requests")
     public EventRequestStatusUpdateResult changeRequestStatuses(@PathVariable Integer userId,
                                                                 @PathVariable Integer eventId,
                                                                 @RequestBody EventRequestStatusUpdateRequest request) {
-        return eventService.changeRequestStatuses(userId, eventId, request);
+        return participationRequestService.changeRequestStatuses(userId, eventId, request);
     }
 
     @PostMapping("/requests")
@@ -88,7 +84,7 @@ public class PrivateController {
 
     @PatchMapping("/requests/{requestId}/cancel")
     public ParticipationRequestDto cancelRequest(@PathVariable Integer userId,
-                                                  @PathVariable Integer requestId) {
+                                                 @PathVariable Integer requestId) {
         return participationRequestService.cancel(userId, requestId);
     }
 

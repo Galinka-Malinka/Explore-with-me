@@ -20,11 +20,6 @@ public interface EventService {
 
     EventFullDto update(Integer userId, Integer eventId, UpdateEventRequest request);
 
-    ParticipationRequestDto getRequestsOnEvent(Integer userId, Integer eventId);
-
-    EventRequestStatusUpdateResult changeRequestStatuses(Integer userId, Integer eventId,
-                                                         EventRequestStatusUpdateRequest request);
-
     List<EventFullDto> getByAdmin(Integer[] users, String[] states, Integer[] categories, String rangeStart,
                                   String rangeEnd, Integer from, Integer size);
 

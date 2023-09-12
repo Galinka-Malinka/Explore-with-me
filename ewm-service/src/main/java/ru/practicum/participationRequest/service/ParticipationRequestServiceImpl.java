@@ -9,6 +9,8 @@ import ru.practicum.event.storage.EventStorage;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.participationRequest.Status;
+import ru.practicum.participationRequest.dto.EventRequestStatusUpdateRequest;
+import ru.practicum.participationRequest.dto.EventRequestStatusUpdateResult;
 import ru.practicum.participationRequest.dto.ParticipationRequestDto;
 import ru.practicum.participationRequest.mapper.ParticipationRequestMapper;
 import ru.practicum.participationRequest.model.ParticipationRequest;
@@ -117,15 +119,130 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                 participationRequestStorage.save(participationRequest));
     }
 
+    @Override
+    public List<ParticipationRequestDto> getRequestsOnEvent(Integer userId, Integer eventId) {
+        checkUser(userId);
+
+        Event event = eventStorage.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Событие с id " + eventId + " не найдено"));
+
+        checkUserIsInitiatorOfEvent(event, userId);
+
+        List<ParticipationRequestDto> result = new ArrayList<>();
+
+        List<ParticipationRequest> participationRequests = participationRequestStorage.findAllByEventId(eventId);
+
+        if (!participationRequests.isEmpty()) {
+            for (ParticipationRequest participationRequest : participationRequests) {
+                result.add(ParticipationRequestMapper.toParticipationRequestDto(participationRequest));
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public EventRequestStatusUpdateResult changeRequestStatuses(Integer userId, Integer eventId,
+                                                                EventRequestStatusUpdateRequest request) {
+        checkUser(userId);
+
+        Event event = eventStorage.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Событие с id " + eventId + " не найдено"));
+
+        checkUserIsInitiatorOfEvent(event, userId);
+
+        List<ParticipationRequestDto> confirmedList = new ArrayList<>();
+        List<ParticipationRequestDto> rejectedList = new ArrayList<>();
+
+        List<ParticipationRequest> participationRequestList = participationRequestStorage
+                .findAllByIdIn(request.getRequestIds());
+
+        if (!participationRequestStorage.existsByEventId(eventId) || participationRequestList.isEmpty()) {
+            return EventRequestStatusUpdateResult.builder()
+                    .confirmedRequests(confirmedList)
+                    .rejectedRequests(rejectedList)
+                    .build();
+        }
+
+        if (event.getParticipantLimit() == 0 || !event.getRequestModeration()) {
+            for (ParticipationRequest participationRequest : participationRequestList) {
+                checkRequestOnExistsEvent(participationRequest, eventId);
+
+                participationRequest.setStatus(Status.CONFIRMED);
+                participationRequestStorage.save(participationRequest);
+
+                confirmedList.add(ParticipationRequestMapper.toParticipationRequestDto(participationRequest));
+            }
+            return EventRequestStatusUpdateResult.builder()
+                    .confirmedRequests(confirmedList)
+                    .rejectedRequests(rejectedList)
+                    .build();
+        }
+
+            Integer confirmedRequests = participationRequestStorage.countByEventIdAndStatus(event.getId(),
+                    Status.CONFIRMED);
+
+            if (request.getStatus().equals(Status.CONFIRMED.toString())
+                    && event.getParticipantLimit().equals(confirmedRequests)) {
+                throw new ConflictException("Нельзя подтвердить запрос на участие," +
+                        " т.к. уже достигнут лимит по колличеству участников в данном событии");
+            }
+
+            for (ParticipationRequest participationRequest : participationRequestList) {
+                checkRequestOnExistsEvent(participationRequest, eventId);
+
+                if (!participationRequest.getStatus().equals(Status.PENDING)) {
+                    throw new ConflictException("Статус можно изменить только у заявок," +
+                            " находящихся в состоянии ожидания");
+                }
+
+                if (request.getStatus().equals(Status.CANCELED.toString())) {
+
+                    participationRequest.setStatus(Status.CANCELED);
+                    participationRequestStorage.save(participationRequest);
+                    rejectedList.add(ParticipationRequestMapper.toParticipationRequestDto(participationRequest));
+
+                } else if (request.getStatus().equals(Status.CONFIRMED.toString())) {
+
+                    if (!confirmedRequests.equals(event.getParticipantLimit())) {
+
+                        participationRequest.setStatus(Status.CONFIRMED);
+                        participationRequestStorage.save(participationRequest);
+                        confirmedList.add(ParticipationRequestMapper.toParticipationRequestDto(participationRequest));
+
+                        confirmedRequests++;
+                    } else {
+                        participationRequest.setStatus(Status.CANCELED);
+                        participationRequestStorage.save(participationRequest);
+                        rejectedList.add(ParticipationRequestMapper.toParticipationRequestDto(participationRequest));
+                    }
+                } else {
+                    throw new ValidationException("Команда " + request.getStatus() + " не поддерживается");
+                }
+            }
+        return EventRequestStatusUpdateResult.builder()
+                .confirmedRequests(confirmedList)
+                .rejectedRequests(rejectedList)
+                .build();
+    }
+
     public void checkUser(Integer userId) {
         if (!userStorage.existsById(userId)) {
             throw new NotFoundException("Пользователь с id " + userId + " не найден");
         }
     }
 
-    public void checkEvent(Integer eventId) {
-        if (!eventStorage.existsById(eventId)) {
-            throw new NotFoundException("Событие с id " + eventId + " не найдено");
+    public void checkRequestOnExistsEvent(ParticipationRequest participationRequest, Integer eventId) {
+        if (!participationRequest.getEvent().getId().equals(eventId)) {
+            throw new ValidationException("Запрос с id " + participationRequest.getId() +
+                    " не относится к событию с id " + eventId);
+        }
+    }
+
+    public void checkUserIsInitiatorOfEvent(Event event, Integer userId) {
+        if (!event.getInitiator().getId().equals(userId)) {
+            throw new ConflictException("Пользователь с id " + userId +
+                    " не может получить доступ к запросам на участие в событии с id " + event.getId() +
+                    ", т.к. он не является его инициатором");
         }
     }
 }

@@ -22,6 +22,7 @@ import ru.practicum.user.service.UserService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -86,7 +87,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    void shouldGetCategory() {
+    void shouldGetCategoryById() {
         createCategory(1);
         TypedQuery<Category> query =
                 entityManager.createQuery("Select c from Category c where c.id = :id", Category.class);
@@ -96,6 +97,9 @@ public class CategoryServiceTest {
         Category result = CategoryMapper.toCategory(categoryService.getById(1));
 
         assertThat(result, equalTo(category));
+
+        assertThrows(NotFoundException.class, () -> categoryService.getById(2),
+                "Категория с id 2 не найдена");
     }
 
     @Test
@@ -140,8 +144,35 @@ public class CategoryServiceTest {
                         " т.к. существуют входящие в неё события");
     }
 
-    public void createCategory(Integer id) {
+    @Test
+    void shouldGetCategories() {
+        Category category1 = createCategory(1);
+        Category category2 = createCategory(2);
+
+        List<CategoryDto> categoryDtoList = categoryService.get(0, 10);
+
+        assertThat(categoryDtoList, hasSize(2));
+        assertThat(categoryDtoList.get(0), equalTo(CategoryMapper.toCategoryDto(category1)));
+        assertThat(categoryDtoList.get(1), equalTo(CategoryMapper.toCategoryDto(category2)));
+
+        createCategory(3);
+
+        List<CategoryDto> categoryDtoListWithRange = categoryService.get(1, 1);
+
+        assertThat(categoryDtoListWithRange, hasSize(1));
+        assertThat(categoryDtoListWithRange.get(0), equalTo(CategoryMapper.toCategoryDto(category2)));
+
+        List<CategoryDto> emptyList = categoryService.get(4, 2);
+
+        assertThat(emptyList.isEmpty(), equalTo(true));
+    }
+
+    public Category createCategory(Integer id) {
         NewCategoryDto newCategoryDto = NewCategoryDto.builder().name("Category" + id).build();
         categoryService.create(newCategoryDto);
+        TypedQuery<Category> query =
+                entityManager.createQuery("Select c from Category c where c.id = :id", Category.class);
+
+        return query.setParameter("id", id).getSingleResult();
     }
 }

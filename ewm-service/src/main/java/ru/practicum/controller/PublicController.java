@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.practicum.category.dto.CategoryDto;
+import ru.practicum.category.service.CategoryService;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.service.EventService;
@@ -16,6 +18,8 @@ import java.util.List;
 public class PublicController {
 
     private final EventService eventService;
+
+    private final CategoryService categoryService;
 
     @GetMapping("/events")
     public List<EventShortDto> getEvents(@RequestParam(value = "text", required = false) String text,
@@ -39,5 +43,18 @@ public class PublicController {
     @GetMapping("/events/{eventId}")
     public EventFullDto geyEventById(@PathVariable Integer eventId) {
         return eventService.getPubliclyById(eventId);
+    }
+
+    @GetMapping("/categories")
+    public List<CategoryDto> getCategories(@RequestParam(value = "from", required = false, defaultValue = "0")
+                                           Integer from,
+                                           @RequestParam(value = "size", required = false, defaultValue = "10")
+                                           Integer size) {
+        return categoryService.get(from, size);
+    }
+
+    @GetMapping("/categories/{catId}")
+    public CategoryDto getCategoryById(@PathVariable Integer catId) {
+        return categoryService.getById(catId);
     }
 }

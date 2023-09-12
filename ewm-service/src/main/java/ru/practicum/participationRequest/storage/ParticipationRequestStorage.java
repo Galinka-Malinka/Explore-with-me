@@ -5,6 +5,7 @@ import ru.practicum.participationRequest.Status;
 import ru.practicum.participationRequest.model.ParticipationRequest;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ParticipationRequestStorage extends JpaRepository<ParticipationRequest, Integer> {
 
@@ -15,4 +16,8 @@ public interface ParticipationRequestStorage extends JpaRepository<Participation
     Boolean existsByEventIdAndRequesterId(Integer eventId, Integer userId);
 
     List<ParticipationRequest> findAllByRequesterId(Integer requesterId);
+
+    List<ParticipationRequest> findAllByEventId(Integer eventId);
+
+    List<ParticipationRequest> findAllByIdIn(Set<Integer> participationRequests);
 }

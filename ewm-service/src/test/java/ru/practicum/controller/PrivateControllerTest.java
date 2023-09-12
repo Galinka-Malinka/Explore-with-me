@@ -14,6 +14,7 @@ import ru.practicum.event.service.EventService;
 import ru.practicum.participationRequest.dto.EventRequestStatusUpdateRequest;
 import ru.practicum.participationRequest.dto.EventRequestStatusUpdateResult;
 import ru.practicum.participationRequest.dto.ParticipationRequestDto;
+import ru.practicum.participationRequest.service.ParticipationRequestService;
 import ru.practicum.user.dto.UserShortDto;
 
 import java.nio.charset.StandardCharsets;
@@ -36,6 +37,9 @@ public class PrivateControllerTest {
 
     @MockBean
     EventService eventService;
+
+    @MockBean
+    ParticipationRequestService participationRequestService;
 
     @Autowired
     MockMvc mvc;
@@ -174,7 +178,10 @@ public class PrivateControllerTest {
 
     @Test
     void shouldGetRequestOnEvent() throws Exception {
-        when(eventService.getRequestsOnEvent(anyInt(), anyInt())).thenReturn(participationRequestDto1);
+        List<ParticipationRequestDto> participationRequestDtoList = new ArrayList<>();
+        participationRequestDtoList.add(participationRequestDto1);
+
+        when(participationRequestService.getRequestsOnEvent(anyInt(), anyInt())).thenReturn(participationRequestDtoList);
 
         mvc.perform(get("/users/1/events/1/requests"))
                 .andExpect(status().isOk())
@@ -197,7 +204,7 @@ public class PrivateControllerTest {
                 .rejectedRequests(rejectedRequests)
                 .build();
 
-        when(eventService.changeRequestStatuses(anyInt(), anyInt(), any())).thenReturn(result);
+        when(participationRequestService.changeRequestStatuses(anyInt(), anyInt(), any())).thenReturn(result);
 
         mvc.perform(patch("/users/1/events/1/requests")
                         .content(objectMapper.writeValueAsString(statusUpdateRequest))
