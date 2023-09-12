@@ -8,6 +8,7 @@ import ru.practicum.participationRequest.dto.EventRequestStatusUpdateRequest;
 import ru.practicum.participationRequest.dto.EventRequestStatusUpdateResult;
 import ru.practicum.participationRequest.dto.ParticipationRequestDto;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface EventService {
@@ -26,8 +27,9 @@ public interface EventService {
     EventFullDto updateByAdmin(Integer eventId, UpdateEventRequest request);
 
     List<EventShortDto> getPublicly(String text, Integer[] categories, Boolean paid, String rangeStart, String rangeEnd,
-                                    Boolean onlyAvailable, String sort, Integer from, Integer size);
+                                    Boolean onlyAvailable, String sort, Integer from, Integer size,
+                                    HttpServletRequest request);
 
-    EventFullDto getPubliclyById(Integer eventId);
+    EventFullDto getPubliclyById(Integer eventId, HttpServletRequest request);
 
 }

@@ -9,6 +9,7 @@ import ru.practicum.category.model.Category;
 import ru.practicum.event.State;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventShortDto;
+import ru.practicum.event.dto.EventWithConfirmedRequest;
 import ru.practicum.event.dto.NewEventDto;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.Location;
@@ -89,6 +90,26 @@ public class EventMapper {
                 .views(views)
                 .initiator(UserMapper.toUserShortDto(event.getInitiator()))
                 .category(CategoryMapper.toCategoryDto(event.getCategory()))
+                .build();
+    }
+
+    public static EventFullDto toEventFullDto(EventWithConfirmedRequest eventWithConfirmedRequest, Integer views) {
+        return EventFullDto.builder()
+                .id(eventWithConfirmedRequest.getId())
+                .title(eventWithConfirmedRequest.getTitle())
+                .annotation(eventWithConfirmedRequest.getAnnotation())
+                .description(eventWithConfirmedRequest.getDescription())
+                .eventDate(eventWithConfirmedRequest.getEventDate().format(formatter))
+                .location(eventWithConfirmedRequest.getLocation())
+                .paid(eventWithConfirmedRequest.getPaid())
+                .participantLimit(eventWithConfirmedRequest.getParticipantLimit())
+                .requestModeration(eventWithConfirmedRequest.getRequestModeration())
+                .category(CategoryMapper.toCategoryDto(eventWithConfirmedRequest.getCategory()))
+                .initiator(UserMapper.toUserShortDto(eventWithConfirmedRequest.getInitiator()))
+                .createdOn(eventWithConfirmedRequest.getCreatedOn().format(formatter))
+                .publishedOn(eventWithConfirmedRequest.getPublishedOn().format(formatter))
+                .confirmedRequests(Math.toIntExact(eventWithConfirmedRequest.getConfirmedRequests()))
+                .views(views)
                 .build();
     }
 }

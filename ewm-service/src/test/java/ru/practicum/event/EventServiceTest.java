@@ -6,6 +6,7 @@ import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +16,8 @@ import ru.practicum.category.dto.NewCategoryDto;
 import ru.practicum.category.mapper.CategoryMapper;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.service.CategoryService;
-import ru.practicum.client.EventClient;
+import ru.practicum.client.EventEndpointHitClient;
+import ru.practicum.client.EventViewStatsClient;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.NewEventDto;
@@ -32,6 +34,7 @@ import ru.practicum.user.service.UserService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -63,8 +66,7 @@ public class EventServiceTest {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @MockBean
-    EventClient eventClient;
-
+    EventViewStatsClient eventViewStatsClient;
 
     @Test
     void shouldCreateEvent() {
@@ -159,7 +161,7 @@ public class EventServiceTest {
                 .build();
         viewStats.add(stats);
 
-        when(eventClient.getStats(anyString(), anyString(), ArgumentMatchers.any(), anyBoolean()))
+        when(eventViewStatsClient.getStats(anyString(), anyString(), ArgumentMatchers.any(), anyBoolean()))
                 .thenReturn(ResponseEntity.accepted().body(viewStats));
 
         EventFullDto eventPublished = eventService.getByInitiatorById(1, 1);

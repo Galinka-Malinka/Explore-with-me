@@ -8,7 +8,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.category.dto.CategoryDto;
-import ru.practicum.event.dto.*;
+import ru.practicum.event.dto.EventFullDto;
+import ru.practicum.event.dto.EventShortDto;
+import ru.practicum.event.dto.NewEventDto;
+import ru.practicum.event.dto.UpdateEventRequest;
 import ru.practicum.event.model.Location;
 import ru.practicum.event.service.EventService;
 import ru.practicum.participationRequest.dto.EventRequestStatusUpdateRequest;
@@ -185,9 +188,9 @@ public class PrivateControllerTest {
 
         mvc.perform(get("/users/1/events/1/requests"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(participationRequestDto1.getId()), Integer.class))
-                .andExpect(jsonPath("$.event", is(participationRequestDto1.getEvent()), Integer.class))
-                .andExpect(jsonPath("$.requester", is(participationRequestDto1.getRequester()),
+                .andExpect(jsonPath("$[0].id", is(participationRequestDto1.getId()), Integer.class))
+                .andExpect(jsonPath("$[0].event", is(participationRequestDto1.getEvent()), Integer.class))
+                .andExpect(jsonPath("$[0].requester", is(participationRequestDto1.getRequester()),
                         Integer.class));
     }
 
@@ -219,5 +222,40 @@ public class PrivateControllerTest {
                 .andExpect(jsonPath("$.rejectedRequests.[0].event", is(participationRequestDto2.getEvent())))
                 .andExpect(jsonPath("$.rejectedRequests.[0].status",
                         is(participationRequestDto2.getStatus())));
+    }
+
+    @Test
+    void shouldCreateRequest() throws Exception {
+        when(participationRequestService.create(anyInt(), anyInt())).thenReturn(participationRequestDto1);
+        mvc.perform(post("/users/1/requests")
+                        .param("eventId", "1"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", is(participationRequestDto1.getId())))
+                .andExpect(jsonPath("$.event", is(participationRequestDto1.getEvent())))
+                .andExpect(jsonPath("$.status", is(participationRequestDto1.getStatus())));
+
+    }
+
+    @Test
+    void shouldGetRequestByUser() throws Exception {
+        List<ParticipationRequestDto> requestDtos = new ArrayList<>();
+        requestDtos.add(participationRequestDto1);
+        when(participationRequestService.get(anyInt())).thenReturn(requestDtos);
+
+        mvc.perform(get("/users/1/requests"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id", is(participationRequestDto1.getId())))
+                .andExpect(jsonPath("$[0].event", is(participationRequestDto1.getEvent())))
+                .andExpect(jsonPath("$[0].status", is(participationRequestDto1.getStatus())));
+    }
+
+    @Test
+    void shouldCancelRequest() throws Exception {
+        when(participationRequestService.cancel(anyInt(), anyInt())).thenReturn(participationRequestDto1);
+        mvc.perform(patch("/users/1/requests/1/cancel"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(participationRequestDto1.getId())))
+                .andExpect(jsonPath("$.event", is(participationRequestDto1.getEvent())))
+                .andExpect(jsonPath("$.status", is(participationRequestDto1.getStatus())));
     }
 }

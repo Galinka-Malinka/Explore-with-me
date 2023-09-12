@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.category.dto.CategoryDto;
+import ru.practicum.category.service.CategoryService;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.model.Location;
@@ -31,6 +32,9 @@ public class PublicControllerTest {
 
     @MockBean
     EventService eventService;
+
+    @MockBean
+    CategoryService categoryService;
 
     @Autowired
     MockMvc mvc;
@@ -83,6 +87,16 @@ public class PublicControllerTest {
             .views(15)
             .build();
 
+    private final CategoryDto categoryDto1 = CategoryDto.builder()
+            .id(1)
+            .name("Category1")
+            .build();
+
+    private final CategoryDto categoryDto2 = CategoryDto.builder()
+            .id(2)
+            .name("Category2")
+            .build();
+
     @Test
     void shouldGetEvents() throws Exception {
         List<EventShortDto> eventShortDtoList = new ArrayList<>();
@@ -90,7 +104,7 @@ public class PublicControllerTest {
         eventShortDtoList.add(eventShortDto2);
 
         when(eventService.getPublicly(anyString(), any(), anyBoolean(), anyString(), anyString(), anyBoolean(),
-                anyString(), anyInt(), anyInt())).thenReturn(eventShortDtoList);
+                anyString(), anyInt(), anyInt(), any())).thenReturn(eventShortDtoList);
 
         mvc.perform(get("/events")
                         .param("text", "annotation")
@@ -112,11 +126,40 @@ public class PublicControllerTest {
 
     @Test
     void shouldGeyEventById() throws Exception {
-        when(eventService.getPubliclyById(anyInt())).thenReturn(eventFullDto);
+        when(eventService.getPubliclyById(anyInt(), any())).thenReturn(eventFullDto);
 
         mvc.perform(get("/events/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(eventFullDto.getId()), Integer.class))
                 .andExpect(jsonPath("$.title", is(eventFullDto.getTitle()), String.class));
+    }
+
+    @Test
+    void shouldGetCategoryById() throws Exception {
+        when(categoryService.getById(anyInt())).thenReturn(categoryDto1);
+
+        mvc.perform(get("/categories/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(categoryDto1.getId()), Integer.class))
+                .andExpect(jsonPath("$.name", is(categoryDto1.getName()), String.class));
+    }
+
+    @Test
+    void shouldGetCategories() throws Exception {
+        List<CategoryDto> categoryDtoList = new ArrayList<>();
+        categoryDtoList.add(categoryDto1);
+        categoryDtoList.add(categoryDto2);
+
+        when(categoryService.get(anyInt(), anyInt())).thenReturn(categoryDtoList);
+
+        mvc.perform(get("/categories")
+                        .param("from", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id", is(categoryDto1.getId()), Integer.class))
+                .andExpect(jsonPath("$[0].name", is(categoryDto1.getName()), String.class))
+                .andExpect(jsonPath("$[1].id", is(categoryDto2.getId()), Integer.class))
+                .andExpect(jsonPath("$[1].name", is(categoryDto2.getName()), String.class));
     }
 }
