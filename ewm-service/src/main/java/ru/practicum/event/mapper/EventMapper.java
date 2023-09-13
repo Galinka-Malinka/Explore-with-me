@@ -112,4 +112,18 @@ public class EventMapper {
                 .views(views)
                 .build();
     }
+
+    public static EventShortDto toEventShortDto(EventWithConfirmedRequest eventWithConfirmedRequest, Integer views) {
+        return EventShortDto.builder()
+                .id(eventWithConfirmedRequest.getId())
+                .title(eventWithConfirmedRequest.getTitle())
+                .annotation(eventWithConfirmedRequest.getAnnotation())
+                .eventDate(eventWithConfirmedRequest.getEventDate().format(formatter))
+                .paid(eventWithConfirmedRequest.getPaid())
+                .confirmedRequests(Math.toIntExact(eventWithConfirmedRequest.getConfirmedRequests()))
+                .views(views)
+                .initiator(UserMapper.toUserShortDto(eventWithConfirmedRequest.getInitiator()))
+                .category(CategoryMapper.toCategoryDto(eventWithConfirmedRequest.getCategory()))
+                .build();
+    }
 }

@@ -10,6 +10,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.dto.NewCategoryDto;
 import ru.practicum.category.service.CategoryService;
+import ru.practicum.compilation.dto.CompilationDto;
+import ru.practicum.compilation.dto.NewCompilationDto;
+import ru.practicum.compilation.dto.UpdateCompilationRequest;
+import ru.practicum.compilation.service.CompilationService;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.UpdateEventRequest;
 import ru.practicum.event.model.Location;
@@ -20,10 +24,11 @@ import ru.practicum.user.service.UserService;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -45,6 +50,8 @@ public class AdminControllerTest {
     @MockBean
     CategoryService categoryService;
 
+    @MockBean
+    CompilationService compilationService;
     @Autowired
     MockMvc mvc;
 
@@ -109,9 +116,23 @@ public class AdminControllerTest {
             .name("Category")
             .build();
 
+    private final NewCompilationDto newCompilationDto = NewCompilationDto.builder()
+            .title("Title")
+            .pinned(true)
+            .events(new HashSet<>())
+            .build();
+
+    private final CompilationDto compilationDto = CompilationDto.builder()
+            .title("Title")
+            .pinned(true)
+            .events(new HashSet<>())
+            .build();
+
+    private final UpdateCompilationRequest updateCompilationRequest = UpdateCompilationRequest.builder().build();
+
     @Test
     void shouldCreateUser() throws Exception {
-        when(userService.create(any(UserDto.class))).thenReturn(userDto1);
+        when(userService.create(any())).thenReturn(userDto1);
 
         mvc.perform(post("/admin/users").content(objectMapper.writeValueAsString(userDto1))
                         .characterEncoding(StandardCharsets.UTF_8)
@@ -198,4 +219,32 @@ public class AdminControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is(categoryDto.getName()), String.class));
     }
+
+    @Test
+    void shouldCreateCompilation() throws Exception {
+        when(compilationService.create(any())).thenReturn(compilationDto);
+
+        mvc.perform(post("/admin/compilations").content(objectMapper.writeValueAsString(newCompilationDto))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.title", equalTo(compilationDto.getTitle()), String.class))
+                .andExpect(jsonPath("$.pinned", equalTo(compilationDto.getPinned()), Boolean.class))
+                .andExpect(jsonPath("$.events", empty()));
+    }
+
+    @Test
+    void shouldUpdateCompilation() throws Exception {
+        when(compilationService.update(anyInt(), any())).thenReturn(compilationDto);
+
+        mvc.perform(patch("/admin/compilations/1")
+                        .content(objectMapper.writeValueAsString(updateCompilationRequest))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title", equalTo(compilationDto.getTitle()), String.class))
+                .andExpect(jsonPath("$.pinned", equalTo(compilationDto.getPinned()), Boolean.class))
+                .andExpect(jsonPath("$.events", empty()));
+    }
+
 }

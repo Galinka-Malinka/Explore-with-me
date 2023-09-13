@@ -8,6 +8,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.service.CategoryService;
+import ru.practicum.compilation.dto.CompilationDto;
+import ru.practicum.compilation.service.CompilationService;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.model.Location;
@@ -15,10 +17,11 @@ import ru.practicum.event.service.EventService;
 import ru.practicum.user.dto.UserShortDto;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -35,6 +38,9 @@ public class PublicControllerTest {
 
     @MockBean
     CategoryService categoryService;
+
+    @MockBean
+    CompilationService compilationService;
 
     @Autowired
     MockMvc mvc;
@@ -95,6 +101,18 @@ public class PublicControllerTest {
     private final CategoryDto categoryDto2 = CategoryDto.builder()
             .id(2)
             .name("Category2")
+            .build();
+
+    private final CompilationDto compilationDto1 = CompilationDto.builder()
+            .title("Title")
+            .pinned(true)
+            .events(new HashSet<>())
+            .build();
+
+    private final CompilationDto compilationDto2 = CompilationDto.builder()
+            .title("Title2")
+            .pinned(true)
+            .events(new HashSet<>())
             .build();
 
     @Test
@@ -161,5 +179,36 @@ public class PublicControllerTest {
                 .andExpect(jsonPath("$[0].name", is(categoryDto1.getName()), String.class))
                 .andExpect(jsonPath("$[1].id", is(categoryDto2.getId()), Integer.class))
                 .andExpect(jsonPath("$[1].name", is(categoryDto2.getName()), String.class));
+    }
+
+    @Test
+    void shouldGetCompilationById() throws Exception {
+        when(compilationService.getById(anyInt())).thenReturn(compilationDto1);
+
+        mvc.perform(get("/compilations/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title", equalTo(compilationDto1.getTitle()), String.class))
+                .andExpect(jsonPath("$.pinned", equalTo(compilationDto1.getPinned()), Boolean.class))
+                .andExpect(jsonPath("$.events", empty()));
+    }
+
+    @Test
+    void shouldGetCompilation() throws Exception {
+        List<CompilationDto> result = new ArrayList<>();
+        result.add(compilationDto1);
+        result.add(compilationDto2);
+        when(compilationService.get(anyBoolean(), anyInt(), anyInt())).thenReturn(result);
+
+        mvc.perform(get("/compilations")
+                        .param("pinned", "true")
+                        .param("from", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].title", equalTo(compilationDto1.getTitle()), String.class))
+                .andExpect(jsonPath("$[0].pinned", equalTo(compilationDto1.getPinned()), Boolean.class))
+                .andExpect(jsonPath("$[0].events", empty()))
+                .andExpect(jsonPath("$[1].title", equalTo(compilationDto2.getTitle()), String.class))
+                .andExpect(jsonPath("$[1].pinned", equalTo(compilationDto2.getPinned()), Boolean.class))
+                .andExpect(jsonPath("$[1].events", empty()));
     }
 }

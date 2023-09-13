@@ -4,9 +4,6 @@ import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.NewEventDto;
 import ru.practicum.event.dto.UpdateEventRequest;
-import ru.practicum.participationRequest.dto.EventRequestStatusUpdateRequest;
-import ru.practicum.participationRequest.dto.EventRequestStatusUpdateResult;
-import ru.practicum.participationRequest.dto.ParticipationRequestDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -32,4 +29,5 @@ public interface EventService {
 
     EventFullDto getPubliclyById(Integer eventId, HttpServletRequest request);
 
+    EventShortDto getById(Integer eventId);
 }

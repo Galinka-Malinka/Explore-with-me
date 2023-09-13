@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.service.CategoryService;
+import ru.practicum.compilation.dto.CompilationDto;
+import ru.practicum.compilation.service.CompilationService;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.service.EventService;
@@ -21,6 +23,8 @@ public class PublicController {
     private final EventService eventService;
 
     private final CategoryService categoryService;
+
+    private final CompilationService compilationService;
 
     @GetMapping("/events")
     public List<EventShortDto> getEvents(@RequestParam(value = "text", required = false) String text,
@@ -57,5 +61,19 @@ public class PublicController {
     @GetMapping("/categories/{catId}")
     public CategoryDto getCategoryById(@PathVariable Integer catId) {
         return categoryService.getById(catId);
+    }
+
+    @GetMapping("/compilations/{compId}")
+    public CompilationDto getCompilationById(@PathVariable Integer compId) {
+        return compilationService.getById(compId);
+    }
+
+    @GetMapping("/compilations")
+    public List<CompilationDto> getCompilations(@RequestParam(value = "pinned", required = false) Boolean pinned,
+                                                @RequestParam(value = "from", required = false, defaultValue = "0")
+                                                Integer from,
+                                                @RequestParam(value = "size", required = false, defaultValue = "10")
+                                                Integer size) {
+        return compilationService.get(pinned, from, size);
     }
 }

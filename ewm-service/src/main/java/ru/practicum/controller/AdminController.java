@@ -6,12 +6,17 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.dto.NewCategoryDto;
 import ru.practicum.category.service.CategoryService;
+import ru.practicum.compilation.dto.CompilationDto;
+import ru.practicum.compilation.dto.NewCompilationDto;
+import ru.practicum.compilation.dto.UpdateCompilationRequest;
+import ru.practicum.compilation.service.CompilationService;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.UpdateEventRequest;
 import ru.practicum.event.service.EventService;
 import ru.practicum.user.dto.UserDto;
 import ru.practicum.user.service.UserService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,6 +29,8 @@ public class AdminController {
     private final EventService eventService;
 
     private final CategoryService categoryService;
+
+    private final CompilationService compilationService;
 
     @PostMapping("/users")   //Добавление нового пользователя
     @ResponseStatus(HttpStatus.CREATED)
@@ -78,5 +85,23 @@ public class AdminController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable Integer catId) {
         categoryService.delete(catId);
+    }
+
+    @PostMapping("/compilations")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CompilationDto createCompilation(@RequestBody @Valid NewCompilationDto newCompilationDto) {
+        return compilationService.create(newCompilationDto);
+    }
+
+    @PatchMapping("/compilations/{compId}")
+    public CompilationDto updateCompilation(@PathVariable Integer compId,
+                                            @RequestBody UpdateCompilationRequest updateCompilationRequest) {
+        return compilationService.update(compId, updateCompilationRequest);
+    }
+
+    @DeleteMapping("/compilations/{compId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCompilation(@PathVariable Integer compId) {
+        compilationService.delete(compId);
     }
 }

@@ -370,6 +370,24 @@ public class EventServiceImpl implements EventService {
         }
     }
 
+    @Override
+    public EventShortDto getById(Integer eventId) {
+
+        if (participationRequestStorage.existsByEventId(eventId)) {
+            EventWithConfirmedRequest eventWithConfirmedRequest = participationRequestStorage
+                    .getEvenWithConfirmedRequests(eventId, Status.CONFIRMED);
+
+            Integer views = getViews(eventWithConfirmedRequest.getPublishedOn(), eventId);
+            return EventMapper.toEventShortDto(eventWithConfirmedRequest, views);
+        } else {
+            Event event = eventStorage.findById(eventId)
+                    .orElseThrow(() -> new NotFoundException("Событие с id " + eventId + " не найдено"));
+
+            Integer views = getViews(event.getPublishedOn(), eventId);
+            return EventMapper.toEventShortDto(event, 0, views);
+        }
+    }
+
     public List<Integer> getConfirmedRequestAndViews(Event event) {
         Integer confirmedRequests = 0;
         Integer views = 0;
