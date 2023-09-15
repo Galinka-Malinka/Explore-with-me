@@ -15,5 +15,6 @@ public interface UserStorage extends JpaRepository<User, Integer> {
     List<User> findAllByIds(Integer[] ids, Pageable pageable);
 
     Boolean existsByName(String name);
+
     Boolean existsByEmail(String email);
 }

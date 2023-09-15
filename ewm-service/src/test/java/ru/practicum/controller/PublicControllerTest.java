@@ -1,6 +1,5 @@
 package ru.practicum.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -30,8 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = PublicController.class)
 public class PublicControllerTest {
-    @Autowired
-    ObjectMapper objectMapper;
 
     @MockBean
     EventService eventService;

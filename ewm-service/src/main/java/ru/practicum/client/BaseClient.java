@@ -10,7 +10,6 @@ import java.util.Map;
 
 public class BaseClient {
     protected final RestTemplate rest;
-    private ResponseEntity<Object> statsServerResponse;
 
     public BaseClient(RestTemplate rest) {
         this.rest = rest;

@@ -1,7 +1,6 @@
 package ru.practicum.stats;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.expression.ParseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,13 +13,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping(path = "/stats")
 @RequiredArgsConstructor
-@Slf4j
 @Validated
 public class StatsController {
 
@@ -51,7 +47,7 @@ public class StatsController {
             uris = new String[]{"all"};
         }
 
-     return statsClient.getStats(start, end, uris, unique);
+        return statsClient.getStats(start, end, uris, unique);
     }
 
     //start - Дата и время начала диапазона за который нужно выгрузить статистику (в формате "yyyy-MM-dd HH:mm:ss")

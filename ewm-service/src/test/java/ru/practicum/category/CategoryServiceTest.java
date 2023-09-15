@@ -14,7 +14,6 @@ import ru.practicum.category.service.CategoryService;
 import ru.practicum.event.dto.NewEventDto;
 import ru.practicum.event.model.Location;
 import ru.practicum.event.service.EventService;
-import ru.practicum.exception.AlreadyExistsException;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.user.dto.UserDto;

@@ -246,5 +246,4 @@ public class AdminControllerTest {
                 .andExpect(jsonPath("$.pinned", equalTo(compilationDto.getPinned()), Boolean.class))
                 .andExpect(jsonPath("$.events", empty()));
     }
-
 }

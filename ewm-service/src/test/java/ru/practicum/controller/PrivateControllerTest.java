@@ -233,7 +233,6 @@ public class PrivateControllerTest {
                 .andExpect(jsonPath("$.id", is(participationRequestDto1.getId())))
                 .andExpect(jsonPath("$.event", is(participationRequestDto1.getEvent())))
                 .andExpect(jsonPath("$.status", is(participationRequestDto1.getStatus())));
-
     }
 
     @Test

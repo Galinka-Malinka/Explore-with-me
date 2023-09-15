@@ -1,14 +1,12 @@
 package ru.practicum.user.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.exception.AlreadyExistsException;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.user.dto.UserDto;
@@ -37,7 +35,7 @@ public class UserServiceImpl implements UserService {
             throw new ConflictException("Пользватель с email " + userDto.getName() + " уже существует");
         }
 
-            return UserMapper.toUserDto(userStorage.save(user));
+        return UserMapper.toUserDto(userStorage.save(user));
     }
 
     @Override

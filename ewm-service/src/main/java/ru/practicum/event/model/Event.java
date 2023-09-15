@@ -46,7 +46,6 @@ public class Event {
     @Column(name = "participant_limit")
     Integer participantLimit;
 
-    //    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category", nullable = false)
     Category category;

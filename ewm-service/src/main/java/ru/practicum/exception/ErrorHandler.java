@@ -33,5 +33,4 @@ public class ErrorHandler {
     public ErrorResponse handleAlreadyExists(final RuntimeException exception) {
         return new ErrorResponse(exception.getMessage());
     }
-
 }

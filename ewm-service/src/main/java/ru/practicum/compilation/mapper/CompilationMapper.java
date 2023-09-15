@@ -3,11 +3,11 @@ package ru.practicum.compilation.mapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.practicum.compilation.EventForCompilationPK;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.NewCompilationDto;
 import ru.practicum.compilation.model.Compilation;
 import ru.practicum.compilation.model.EventForCompilation;
+import ru.practicum.compilation.model.EventForCompilationPK;
 import ru.practicum.event.dto.EventShortDto;
 
 import java.util.ArrayList;
@@ -26,7 +26,6 @@ public class CompilationMapper {
                 .title(newCompilationDto.getTitle())
                 .pinned(pinned)
                 .build();
-
     }
 
     public static List<EventForCompilation> toEventForCompilationList(Integer compId, NewCompilationDto newCompilationDto) {

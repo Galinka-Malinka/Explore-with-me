@@ -1,8 +1,8 @@
 package ru.practicum.compilation.storage;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.practicum.compilation.EventForCompilationPK;
 import ru.practicum.compilation.model.EventForCompilation;
+import ru.practicum.compilation.model.EventForCompilationPK;
 
 import java.util.Set;
 

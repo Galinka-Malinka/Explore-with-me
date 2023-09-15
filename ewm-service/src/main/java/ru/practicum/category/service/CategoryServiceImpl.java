@@ -36,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
             throw new ConflictException("Категория " + newCategoryDto.getName() + " уже существует");
         }
 
-            return CategoryMapper.toCategoryDto(categoryStorage.saveAndFlush(CategoryMapper.toCategory(newCategoryDto)));
+        return CategoryMapper.toCategoryDto(categoryStorage.saveAndFlush(CategoryMapper.toCategory(newCategoryDto)));
     }
 
     @Override

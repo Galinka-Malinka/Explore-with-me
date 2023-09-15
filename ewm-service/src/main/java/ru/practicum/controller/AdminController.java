@@ -37,6 +37,7 @@ public class AdminController {
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto createUser(@RequestBody @Valid UserDto userDto) {
+
         log.info("Добавление админом нового пользователя {}", userDto);
         return userService.create(userDto);
     }
@@ -46,13 +47,14 @@ public class AdminController {
                                   @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
                                   @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
 
-      log.info("Получение админом всех пользователей с выборкой по ids {}, from {}, size {}", ids, from, size);
+        log.info("Получение админом всех пользователей с выборкой по ids {}, from {}, size {}", ids, from, size);
         return userService.get(ids, from, size);
     }
 
     @DeleteMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Integer userId) {
+
         log.info("Удаление админом пользователя с id {}", userId);
         userService.delete(userId);
     }
@@ -66,6 +68,7 @@ public class AdminController {
              @RequestParam(value = "rangeEnd", required = false) String rangeEnd,
              @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
              @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+
         log.info("Получение админом событий по следующим параметрам: users {}, states {}, categories{}," +
                 " rangeStart{}, rangeEnd{}, from {}, size {}", users, states, categories, rangeStart, rangeEnd, from, size);
         return eventService.getByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
@@ -74,6 +77,7 @@ public class AdminController {
     @PatchMapping("/events/{eventId}")
     public EventFullDto updateEvent(@PathVariable Integer eventId,
                                     @RequestBody UpdateEventRequest request) {
+
         log.info("Редактирование администратором события с id {} на {}", eventId, request);
         return eventService.updateByAdmin(eventId, request);
     }
@@ -81,6 +85,7 @@ public class AdminController {
     @PostMapping("/categories")
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto createCategory(@RequestBody @Valid NewCategoryDto newCategoryDto) {
+
         log.info("Создание категории {}", newCategoryDto);
         return categoryService.create(newCategoryDto);
     }
@@ -88,6 +93,7 @@ public class AdminController {
     @PatchMapping("/categories/{catId}")
     public CategoryDto updateCategory(@PathVariable Integer catId,
                                       @RequestBody @Valid CategoryDto categoryDto) {
+
         log.info("Обновление категории с id {} на {}", catId, categoryDto);
         return categoryService.update(catId, categoryDto);
     }
@@ -95,6 +101,7 @@ public class AdminController {
     @DeleteMapping("/categories/{catId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable Integer catId) {
+
         log.info("Удаление категории с id {}", catId);
         categoryService.delete(catId);
     }
@@ -102,6 +109,7 @@ public class AdminController {
     @PostMapping("/compilations")
     @ResponseStatus(HttpStatus.CREATED)
     public CompilationDto createCompilation(@RequestBody @Valid NewCompilationDto newCompilationDto) {
+
         log.info("Создание админом новой подборки {}", newCompilationDto);
         return compilationService.create(newCompilationDto);
     }
@@ -109,6 +117,7 @@ public class AdminController {
     @PatchMapping("/compilations/{compId}")
     public CompilationDto updateCompilation(@PathVariable Integer compId,
                                             @RequestBody @Valid UpdateCompilationRequest updateCompilationRequest) {
+
         log.info("Обновление админом подборки с id {} на {}", compId, updateCompilationRequest);
         return compilationService.update(compId, updateCompilationRequest);
     }
@@ -116,6 +125,7 @@ public class AdminController {
     @DeleteMapping("/compilations/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCompilation(@PathVariable Integer compId) {
+
         log.info("Удаление админом подборки с id {}", compId);
         compilationService.delete(compId);
     }

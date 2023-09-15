@@ -3,7 +3,6 @@ package ru.practicum.event.service;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -44,9 +43,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-@Slf4j
 public class EventServiceImpl implements EventService {
-
 
     private final EventViewStatsClient eventViewStatsClient;
 
@@ -61,7 +58,6 @@ public class EventServiceImpl implements EventService {
     private final LocationStorage locationStorage;
 
     private final ParticipationRequestStorage participationRequestStorage;
-
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -142,18 +138,19 @@ public class EventServiceImpl implements EventService {
     @Transactional
     @Override
     public EventFullDto update(Integer userId, Integer eventId, UpdateEventRequest request) {
-        if(request.getTitle() != null && (request.getTitle().length() < 3 || request.getTitle().length() > 120)) {
+        if (request.getTitle() != null && (request.getTitle().length() < 3 || request.getTitle().length() > 120)) {
             throw new ValidationException("Размер заголовка не входит в диапазон от 3 до 120 символов");
         }
 
-        if(request.getAnnotation() != null && (request.getAnnotation().length() < 20 || request.getAnnotation().length() > 2000)) {
+        if (request.getAnnotation() != null && (request.getAnnotation().length() < 20
+                || request.getAnnotation().length() > 2000)) {
             throw new ValidationException("Размер аннотации не входит в диапазон от 20 до 2000 символов");
         }
 
-        if(request.getDescription() != null && (request.getDescription().length() < 20 || request.getDescription().length() > 7000)) {
+        if (request.getDescription() != null && (request.getDescription().length() < 20
+                || request.getDescription().length() > 7000)) {
             throw new ValidationException("Размер описания не входит в диапазон от 20 до 7000 символов");
         }
-
 
         checkUser(userId);
 
@@ -186,14 +183,11 @@ public class EventServiceImpl implements EventService {
                 eventWithUpdatedParameters.setState(State.CANCELED);
             } else if (request.getStateAction().equals(State.SEND_TO_REVIEW.toString())) {
                 eventWithUpdatedParameters.setState(State.PENDING);
-            }else {
+            } else {
                 throw new ConflictException("Обновление состояния события пользователем на "
                         + request.getStateAction() + " не возможно");
             }
         }
-
-
-
         Event updatedEvent = eventStorage.save(eventWithUpdatedParameters);
 
         return EventMapper.toEventFullDto(updatedEvent, null, null);
@@ -232,7 +226,6 @@ public class EventServiceImpl implements EventService {
 
         Iterable<Event> foundEvents = eventStorage.findAll(where, sortedAndPageable);
 
-
         for (Event foundEvent : foundEvents) {
             Integer confirmedRequests = null;
             Integer views = null;
@@ -244,7 +237,6 @@ public class EventServiceImpl implements EventService {
             }
             eventFullDtoList.add(EventMapper.toEventFullDto(foundEvent, confirmedRequests, views));
         }
-
         return eventFullDtoList;
     }
 
@@ -257,39 +249,29 @@ public class EventServiceImpl implements EventService {
 
         LocalDateTime timeNow = LocalDateTime.now();
 
-if(request.getTitle() != null && (request.getTitle().length() < 3 || request.getTitle().length() > 120)) {
-    throw new ValidationException("Размер заголовка не входит в диапазон от 3 до 120 символов");
+        if (request.getTitle() != null && (request.getTitle().length() < 3 || request.getTitle().length() > 120)) {
+            throw new ValidationException("Размер заголовка не входит в диапазон от 3 до 120 символов");
         }
-
-        if(request.getAnnotation() != null && (request.getAnnotation().length() < 20 || request.getAnnotation().length() > 2000)) {
+        if (request.getAnnotation() != null && (request.getAnnotation().length() < 20 || request.getAnnotation().length() > 2000)) {
             throw new ValidationException("Размер аннотации не входит в диапазон от 20 до 2000 символов");
         }
-
-        if(request.getDescription() != null && (request.getDescription().length() < 20 || request.getDescription().length() > 7000)) {
+        if (request.getDescription() != null && (request.getDescription().length() < 20 || request.getDescription().length() > 7000)) {
             throw new ValidationException("Размер описания не входит в диапазон от 20 до 7000 символов");
         }
-
-
-
-
         if (event.getEventDate() != null && !event.getEventDate().minusHours(1).isAfter(timeNow)) {
             throw new ConflictException("Дата начала изменяемого события должна быть" +
                     " не ранее чем за час от даты публикации");
         }
-
         if (request.getEventDate() == null && event.getEventDate().isBefore(timeNow) ||
                 request.getEventDate() != null && LocalDateTime.parse(request.getEventDate(), formatter)
                         .isBefore(timeNow)) {
             throw new ValidationException("Дата и время на которые намечено событие" +
                     " не может быть раньше текущего момента");
         }
-
-
         if (request.getStateAction() != null && request.getStateAction().equals(State.PUBLISH_EVENT.toString()) &&
                 !event.getState().equals(State.PENDING)) {
             throw new ConflictException("Событие можно публиковать, только если оно в состоянии ожидания публикации");
         }
-
         if (request.getStateAction() != null && request.getStateAction().equals(State.REJECT_EVENT.toString()) &&
                 event.getState().equals(State.PUBLISHED)) {
             throw new ConflictException("Событие можно отклонить, только если оно еще не опубликовано");
@@ -301,15 +283,12 @@ if(request.getTitle() != null && (request.getTitle().length() < 3 || request.get
             eventWithUpdatedParameters.setState(State.PUBLISHED);
             eventWithUpdatedParameters.setPublishedOn(LocalDateTime.now());
         }
-
         if (request.getStateAction() != null && request.getStateAction().equals(State.CANCELED_EVENT.toString())) {
             eventWithUpdatedParameters.setState(State.CANCELED);
         }
-
         if (request.getStateAction() != null && request.getStateAction().equals(State.REJECT_EVENT.toString())) {
             eventWithUpdatedParameters.setState(State.CANCELED);
         }
-
         Event updatedEvent = eventStorage.save(eventWithUpdatedParameters);
 
         return EventMapper.toEventFullDto(updatedEvent, null, null);
@@ -319,29 +298,22 @@ if(request.getTitle() != null && (request.getTitle().length() < 3 || request.get
     public List<EventShortDto> getPublicly(String text, Integer[] categories, Boolean paid,
                                            String rangeStart, String rangeEnd, Boolean onlyAvailable, String sort,
                                            Integer from, Integer size, HttpServletRequest request) {
+
         if (rangeStart != null && rangeEnd != null
                 && LocalDateTime.parse(rangeStart, formatter).isAfter(LocalDateTime.parse(rangeEnd, formatter))) {
             throw new ValidationException("Окончание временного диапазона не может быть раньше его начала");
         }
 
-
-
         List<EventShortDto> result = new ArrayList<>();
 
         int page = from / size;
-//        Sort sorting;
-//        if (sort != null && sort.equals(ru.practicum.event.Sort.EVENT_DATE.toString())) {
-//            sorting = Sort.by(ru.practicum.event.Sort.EVENT_DATE.toString());
-//        } else {
-//            sorting = Sort.by(ru.practicum.event.Sort.VIEWS.toString());
-//        }
 
         Pageable sortedAndPageable =
                 PageRequest.of(page, size, Sort.by("id"));
 
         QEvent event = QEvent.event;
 
-       List<BooleanExpression> parameters = new ArrayList<>();
+        List<BooleanExpression> parameters = new ArrayList<>();
         if (text != null) {
             parameters.add(event.annotation.containsIgnoreCase(text).or(event.description.containsIgnoreCase(text)));
         }
@@ -361,17 +333,18 @@ if(request.getTitle() != null && (request.getTitle().length() < 3 || request.get
             parameters.add(event.eventDate.after(LocalDateTime.now()));
         }
 
-     List<Event> events;
+        List<Event> events;
+
         if (parameters.isEmpty()) {
             events = eventStorage.findAll(sortedAndPageable).toList();
         } else {
-            BooleanExpression readyParameters = parameters.stream().reduce(BooleanExpression :: and).get();
+            BooleanExpression readyParameters = parameters.stream().reduce(BooleanExpression::and).get();
             events = eventStorage.findAll(readyParameters, sortedAndPageable).toList();
         }
 
-        for (Event foundEvent: events) {
-            Integer confirmedRequests = 0;
-            Integer views = 0;
+        for (Event foundEvent : events) {
+            Integer confirmedRequests;
+            Integer views;
 
             List<Integer> confirmedRequestsAndViews = getConfirmedRequestAndViews(foundEvent);
             confirmedRequests = confirmedRequestsAndViews.get(0);
@@ -386,68 +359,15 @@ if(request.getTitle() != null && (request.getTitle().length() < 3 || request.get
             }
         }
 
-
-
-
-
-//        BooleanBuilder where = new BooleanBuilder();
-//
-//        where.and(event.state.eq(State.PUBLISHED));
-//
-//        if (text != null) {
-//            where.and(event.annotation.containsIgnoreCase(text).or(event.description.containsIgnoreCase(text)));
-//        }
-//        if (categories != null) {
-//            where.and(event.category.id.in(categories));
-//        }
-//        if (paid != null) {
-//            where.and(event.paid.eq(paid));
-//        }
-//        if (rangeStart != null) {
-//            where.and(event.eventDate.after(LocalDateTime.parse(rangeStart, formatter)));
-//        }
-//        if (rangeEnd != null) {
-//            where.and(event.eventDate.before(LocalDateTime.parse(rangeEnd, formatter)));
-//        }
-//        if (rangeStart == null && rangeEnd == null) {
-//            where.and(event.eventDate.after(LocalDateTime.now()));
-//        }
-//
-//        Page<Event> foundEvents = eventStorage.findAll(where, sortedAndPageable);
-//log.info("****************************************************************** foundEvents" + foundEvents);
-//
-//        for (Event foundEvent : foundEvents) {
-//            log.info("************************************************8 foundEvent " + foundEvent);
-//            Integer confirmedRequests = 0;
-//            Integer views = 0;
-//
-//            List<Integer> confirmedRequestsAndViews = getConfirmedRequestAndViews(foundEvent);
-//            confirmedRequests = confirmedRequestsAndViews.get(0);
-//            views = confirmedRequestsAndViews.get(1);
-//
-//            if (onlyAvailable) {
-//                if (!foundEvent.getParticipantLimit().equals(confirmedRequests)) {
-//                    result.add(EventMapper.toEventShortDto(foundEvent, confirmedRequests, views));
-//                }
-//            } else {
-//                result.add(EventMapper.toEventShortDto(foundEvent, confirmedRequests, views));
-//            }
-//        }
-//
-//        if (where.isEmpty()) {
-//            events = eventRepository.findAll(pageRequest).toList();
-//        } else {
-//            BooleanExpression finalCondition = conditions.stream().reduce(BooleanExpression::and).get();
-//            events = eventRepository.findAll(finalCondition, pageRequest).toList();
-//        }
-//
         if (sort != null) {
             switch (sort) {
                 case "EVENT_DATE":
-                    result = result.stream().sorted(Comparator.comparing(EventShortDto::getEventDate)).collect(Collectors.toList());
+                    result = result.stream().sorted(Comparator.comparing(EventShortDto::getEventDate))
+                            .collect(Collectors.toList());
                     break;
                 case "VIEWS":
-                    result = result.stream().sorted(Comparator.comparing(EventShortDto::getViews)).collect(Collectors.toList());
+                    result = result.stream().sorted(Comparator.comparing(EventShortDto::getViews))
+                            .collect(Collectors.toList());
                     break;
                 default:
                     throw new ValidationException("Сортировка " + sort + " не поддерживается");
@@ -465,20 +385,14 @@ if(request.getTitle() != null && (request.getTitle().length() < 3 || request.get
         Event event = eventStorage.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Событие с id " + eventId + " не найдено"));
 
-        log.info("---------------------------------------- ewm getPubliclyById event " + event + " -------");
-
-
         if (!event.getState().equals(State.PUBLISHED)) {
             throw new NotFoundException("Событие с id " + eventId + " не опубликованно");
         }
 
-
-        Integer confirmedRequests = null;
-        Integer views = null;
-        log.info("---------------------------------------- ewm after sendDataToStatistic  -------")  ;
+        Integer confirmedRequests;
+        Integer views;
 
         List<Integer> confirmedRequestsAndViews = getConfirmedRequestAndViews(event);
-
 
         confirmedRequests = confirmedRequestsAndViews.get(0);
         views = confirmedRequestsAndViews.get(1);
@@ -503,18 +417,15 @@ if(request.getTitle() != null && (request.getTitle().length() < 3 || request.get
 
             Integer views = getViews(eventWithConfirmedRequest.getPublishedOn(), eventId);
 
-
             return EventMapper.toEventShortDto(eventWithConfirmedRequest, views);
 
         } else {
             Event event = eventStorage.findById(eventId)
                     .orElseThrow(() -> new NotFoundException("Событие с id " + eventId + " не найдено"));
 
-            log.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" +
-                    " event " + event + "++++++++++++++++++++++++++++++++++++++++++++++++");
             Integer views = 0;
 
-            if(event.getPublishedOn() != null) {
+            if (event.getPublishedOn() != null) {
                 views = getViews(event.getPublishedOn(), eventId);
             }
 
@@ -524,9 +435,6 @@ if(request.getTitle() != null && (request.getTitle().length() < 3 || request.get
 
     public List<Integer> getConfirmedRequestAndViews(Event event) {
 
-        log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ getConfirmedRequestAndViews event " + event + "@@@@@@@@");
-
-
         Integer confirmedRequests = 0;
         Integer views = 0;
 
@@ -534,27 +442,18 @@ if(request.getTitle() != null && (request.getTitle().length() < 3 || request.get
             confirmedRequests = participationRequestStorage.countByEventIdAndStatus(event.getId(),
                     Status.CONFIRMED);
         }
-        log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ confirmedRequests " + confirmedRequests + "@@@@@@@@");
 
-
-        log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ event.getPublishedOn().format(formatter) " + event.getPublishedOn().format(formatter) + "@@@@@@@@");
-
-
-
-        ResponseEntity<Object> result = eventViewStatsClient.getStats(event.getPublishedOn().minusMinutes(1).format(formatter),
-                LocalDateTime.now().plusMinutes(1).format(formatter), new String[]{"/events/" + event.getId()}, true);
-
-        log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ResponseEntity<Object> result " + result + "@@@@@@@@");
+        ResponseEntity<Object> result = eventViewStatsClient
+                .getStats(event.getPublishedOn().minusMinutes(1).format(formatter),
+                        LocalDateTime.now().plusMinutes(1).format(formatter),
+                        new String[]{"/events/" + event.getId()}, true);
 
         if (result.hasBody()) {
-            List<Map> viewStatsList = (List<Map>)  result.getBody();
-
-            log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ viewStatsList " + viewStatsList + "@@@@@@@@");
-
+            List<Map> viewStatsList = (List<Map>) result.getBody();
 
             if (viewStatsList != null && !viewStatsList.isEmpty()) {
 
-           ViewStats viewStats = mapToViewStats(viewStatsList.get(0));
+                ViewStats viewStats = mapToViewStats(viewStatsList.get(0));
 
                 views = viewStats.getHits();
             }
@@ -568,16 +467,16 @@ if(request.getTitle() != null && (request.getTitle().length() < 3 || request.get
     }
 
     private ViewStats mapToViewStats(Map map) {
-       return ViewStats.builder()
+        return ViewStats.builder()
                 .hits((Integer) map.get("hits"))
                 .app((String) map.get("app"))
-                .uri((String)  map.get("uri"))
+                .uri((String) map.get("uri"))
                 .build();
     }
 
     public Integer getViews(LocalDateTime publishedOn, Integer eventId) {
         Integer views = 0;
-log.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ publishedOn " + publishedOn + "++++++++");
+
         ResponseEntity<Object> result = eventViewStatsClient.getStats(publishedOn.minusMinutes(1).format(formatter),
                 LocalDateTime.now().plusMinutes(1).format(formatter), new String[]{"/event/" + eventId}, false);
 
@@ -604,10 +503,12 @@ log.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ pu
             event.setEventDate(LocalDateTime.parse(request.getEventDate(), formatter));
         }
         if (request.getLocation() != null) {
+
             if (request.getLocation().getId() == null) {
                 Location newLocation = locationStorage.save(request.getLocation());
                 event.setLocation(newLocation);
             } else {
+
                 if (locationStorage.existsById(request.getLocation().getId())) {
                     event.setLocation(request.getLocation());
                 } else {
@@ -640,6 +541,7 @@ log.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ pu
                 .ip(request.getRemoteAddr())
                 .timestamp(LocalDateTime.now().format(formatter))
                 .build();
+
         eventEndpointHitClient.create(endpointHit);
     }
 }

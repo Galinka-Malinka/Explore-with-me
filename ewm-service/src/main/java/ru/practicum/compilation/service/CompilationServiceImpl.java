@@ -6,13 +6,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.compilation.EventForCompilationPK;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.NewCompilationDto;
 import ru.practicum.compilation.dto.UpdateCompilationRequest;
 import ru.practicum.compilation.mapper.CompilationMapper;
 import ru.practicum.compilation.model.Compilation;
 import ru.practicum.compilation.model.EventForCompilation;
+import ru.practicum.compilation.model.EventForCompilationPK;
 import ru.practicum.compilation.storage.CompilationStorage;
 import ru.practicum.compilation.storage.EventForCompilationStorage;
 import ru.practicum.event.dto.EventShortDto;
@@ -78,7 +78,6 @@ public class CompilationServiceImpl implements CompilationService {
             if (!updateCompilationRequest.getEvents().contains(0)) {
                 events = saveCompilationEvents(updateCompilationRequest.getEvents(), compId);
             }
-
         } else {
             Set<EventForCompilation> eventsForCompilation = eventForCompilationStorage
                     .findAllByEventForCompilationPKCompilationId(compId);

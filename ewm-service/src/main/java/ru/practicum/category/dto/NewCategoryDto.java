@@ -17,7 +17,9 @@ import javax.validation.constraints.Size;
 public class NewCategoryDto {
 
     @JsonCreator
-    public NewCategoryDto(@JsonProperty("name") String name) { this.name = name;}
+    public NewCategoryDto(@JsonProperty("name") String name) {
+        this.name = name;
+    }
 
     @NotNull
     @NotBlank

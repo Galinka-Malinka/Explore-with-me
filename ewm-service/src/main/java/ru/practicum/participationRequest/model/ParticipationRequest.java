@@ -3,8 +3,8 @@ package ru.practicum.participationRequest.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.participationRequest.Status;
 import ru.practicum.event.model.Event;
+import ru.practicum.participationRequest.Status;
 import ru.practicum.user.model.User;
 
 import javax.persistence.*;

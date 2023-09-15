@@ -2,7 +2,6 @@ package ru.practicum.compilation.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.compilation.EventForCompilationPK;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;

@@ -37,7 +37,6 @@ import ru.practicum.user.service.UserService;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -70,8 +69,6 @@ public class CompilationServiceTest {
 
     private final ParticipationRequestService participationRequestService;
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     @MockBean
     EventViewStatsClient eventViewStatsClient;
 
@@ -102,7 +99,7 @@ public class CompilationServiceTest {
 
         NewCompilationDto newCompilationDto = NewCompilationDto.builder()
                 .title("Title Collection")
-               // .pinned(true)
+                // .pinned(true)
                 .events(events)
                 .build();
 
