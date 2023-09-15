@@ -478,7 +478,7 @@ public class EventServiceImpl implements EventService {
         Integer views = 0;
 
         ResponseEntity<Object> result = eventViewStatsClient.getStats(publishedOn.minusMinutes(1).format(formatter),
-                LocalDateTime.now().plusMinutes(1).format(formatter), new String[]{"/event/" + eventId}, false);
+                LocalDateTime.now().plusMinutes(1).format(formatter), new String[]{"/events/" + eventId}, false);
 
         if (result.hasBody()) {
             List<ViewStats> viewStatsList = (List<ViewStats>) result.getBody();
