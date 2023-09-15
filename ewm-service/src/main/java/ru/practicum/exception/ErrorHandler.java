@@ -23,7 +23,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(ConflictException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleConflict(final RuntimeException exception) {
         return new ErrorResponse(exception.getMessage());
     }

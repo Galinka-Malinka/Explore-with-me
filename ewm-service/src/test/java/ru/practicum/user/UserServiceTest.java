@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exception.AlreadyExistsException;
+import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.user.dto.UserDto;
 import ru.practicum.user.mapper.UserMapper;
@@ -52,8 +53,8 @@ public class UserServiceTest {
         assertThat(user.getName(), equalTo(userDto.getName()));
         assertThat(user.getEmail(), equalTo(userDto.getEmail()));
 
-        assertThrows(AlreadyExistsException.class, () -> userService.create(userDto),
-                "Пользователь с " + userDto.getEmail() + " уже зарегистрирован");
+        assertThrows(ConflictException.class, () -> userService.create(userDto),
+                "Пользватель с именем " + userDto.getName() + " уже существует");
     }
 
 

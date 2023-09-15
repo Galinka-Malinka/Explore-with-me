@@ -36,6 +36,7 @@ public class ParticipationRequest {
     LocalDateTime created;
 
     @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
     Status status;
 
 }

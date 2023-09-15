@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exception.AlreadyExistsException;
+import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.user.dto.UserDto;
 import ru.practicum.user.mapper.UserMapper;
@@ -27,13 +28,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto create(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
-        try {
-            return UserMapper.toUserDto(userStorage.saveAndFlush(user));
-        } catch (DataIntegrityViolationException e) {
-            throw new AlreadyExistsException(String.format(
-                    "Пользователь с %s уже зарегистрирован", userDto.getEmail()
-            ));
+
+        if (userStorage.existsByName(userDto.getName())) {
+            throw new ConflictException("Пользватель с именем " + userDto.getName() + " уже существует");
         }
+
+        if (userStorage.existsByEmail(userDto.getEmail())) {
+            throw new ConflictException("Пользватель с email " + userDto.getName() + " уже существует");
+        }
+
+            return UserMapper.toUserDto(userStorage.save(user));
     }
 
     @Override

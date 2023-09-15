@@ -13,10 +13,10 @@ import ru.practicum.event.dto.EventWithConfirmedRequest;
 import ru.practicum.event.dto.NewEventDto;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.Location;
-import ru.practicum.exception.ConflictException;
 import ru.practicum.user.mapper.UserMapper;
 import ru.practicum.user.model.User;
 
+import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -37,8 +37,13 @@ public class EventMapper {
         }
 
         if (timeNow.plusHours(2).isAfter(eventDate)) {
-            throw new ConflictException("eventDate не может быть раньше, чем через два часа от текущего момента");
+            throw new ValidationException("eventDate не может быть раньше, чем через два часа от текущего момента");
         }
+
+        Boolean paid = newEventDto.getPaid() != null ? newEventDto.getPaid() : false;
+        Integer participantLimit = newEventDto.getParticipantLimit() != null ? newEventDto.getParticipantLimit() : 0;
+        Boolean requestModeration = newEventDto
+                .getRequestModeration() != null ? newEventDto.getRequestModeration() : true;
 
         return Event.builder()
                 .title(newEventDto.getTitle())
@@ -46,9 +51,9 @@ public class EventMapper {
                 .description(newEventDto.getDescription())
                 .eventDate(eventDate)
                 .location(location)
-                .paid(newEventDto.getPaid())
-                .participantLimit(newEventDto.getParticipantLimit())
-                .requestModeration(newEventDto.getRequestModeration())
+                .paid(paid)
+                .participantLimit(participantLimit)
+                .requestModeration(requestModeration)
                 .category(category)
                 .initiator(user)
                 .createdOn(timeNow)

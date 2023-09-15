@@ -6,5 +6,7 @@ public enum State {
     CANCELED,
     CANCEL_REVIEW,
     PUBLISH_EVENT,
-    CANCELED_EVENT
+    CANCELED_EVENT,
+    SEND_TO_REVIEW,
+    REJECT_EVENT
 }

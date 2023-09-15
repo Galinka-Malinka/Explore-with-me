@@ -14,22 +14,15 @@ import javax.validation.constraints.Size;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpdateEventRequest {
 
-    @Size(min = 3, max = 120, message = "Размер заголовка не входит в диапазон от {min} до {max} символов")
     String title;
-
-    @Size(min = 20, max = 2000, message = "Размер аннотации не выходит в диапазон от {min} до {max} символов")
     String annotation;
-
-    @Size(min = 20, max = 7000, message = "Размер описания не входит в диапазон от {min} до {max} символов")
     String description;
 
-    String eventDate;  //Новые дата и время на которые намечено событие. Дата и время указываются в формате "yyyy-MM-dd HH:mm:ss"
-
+    String eventDate;
     Location location;
 
     Boolean paid;
 
-    @PositiveOrZero
     Integer participantLimit;
 
     Integer category;

@@ -35,6 +35,7 @@ import ru.practicum.user.service.UserService;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -249,7 +250,7 @@ public class EventServiceTest {
         assertThat(updatedEvent.getParticipantLimit(), equalTo(updateEventRequest.getParticipantLimit()));
         assertThat(updatedEvent.getCategory().getId(), equalTo(updateEventRequest.getCategory()));
         assertThat(updatedEvent.getRequestModeration(), equalTo(updateEventRequest.getRequestModeration()));
-        assertThat(updatedEvent.getState().toString(), equalTo(updateEventRequest.getStateAction()));
+        assertThat(updatedEvent.getState(), equalTo(State.CANCELED));
 
         assertThrows(NotFoundException.class, () -> eventService.update(2, 1, updateEventRequest),
                 "Пользователь с id 2 не найден");
@@ -261,7 +262,7 @@ public class EventServiceTest {
                 "Пользователь с id 2 не является инициатором события с id 1");
 
         updateEventRequest.setEventDate(LocalDateTime.now().plusHours(1).format(formatter));
-        assertThrows(ConflictException.class, () -> eventService.update(1, 1, updateEventRequest),
+        assertThrows(ValidationException.class, () -> eventService.update(1, 1, updateEventRequest),
                 "Дата и время на которые намечено событие" +
                         " не может быть раньше, чем через два часа от текущего момента");
 
@@ -393,7 +394,7 @@ public class EventServiceTest {
         Event event2 = createEvent(2);
 
         UpdateEventRequest updateEventRequestWithCanceled = UpdateEventRequest.builder()
-                .stateAction("CANCELED_EVENT")
+                .stateAction("REJECT_EVENT")
                 .build();
 
         eventService.updateByAdmin(2, updateEventRequestWithCanceled);

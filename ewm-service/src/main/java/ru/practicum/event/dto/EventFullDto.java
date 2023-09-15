@@ -34,7 +34,8 @@ public class EventFullDto {
     @NotBlank
     String eventDate;  //Дата и время на которые намечено событие (в формате "yyyy-MM-dd HH:mm:ss")
 
-    @NotNull Location location;
+    @NotNull
+    Location location;
 
     @NotNull
     Boolean paid;  //Нужно ли оплачивать участие

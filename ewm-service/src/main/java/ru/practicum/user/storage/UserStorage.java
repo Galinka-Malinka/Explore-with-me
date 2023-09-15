@@ -13,4 +13,7 @@ public interface UserStorage extends JpaRepository<User, Integer> {
             " from User as u" +
             " where u.id in ?1")
     List<User> findAllByIds(Integer[] ids, Pageable pageable);
+
+    Boolean existsByName(String name);
+    Boolean existsByEmail(String email);
 }

@@ -57,7 +57,7 @@ public class CategoryServiceTest {
         assertThat(category.getId(), is(1));
         assertThat(category.getName(), equalTo(newCategoryDto.getName()));
 
-        assertThrows(AlreadyExistsException.class, () -> categoryService.create(newCategoryDto),
+        assertThrows(ConflictException.class, () -> categoryService.create(newCategoryDto),
                 "Категория " + newCategoryDto.getName() + " уже существует");
     }
 
@@ -82,7 +82,7 @@ public class CategoryServiceTest {
 
         createCategory(2);
 
-        assertThrows(AlreadyExistsException.class, () -> categoryService.update(2, categoryDtoForUpdating),
+        assertThrows(ConflictException.class, () -> categoryService.update(2, categoryDtoForUpdating),
                 "Категория " + categoryDtoForUpdating.getName() + " уже существует");
     }
 

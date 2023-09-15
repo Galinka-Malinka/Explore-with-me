@@ -32,17 +32,21 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto create(NewCategoryDto newCategoryDto) {
-        try {
-            return CategoryMapper.toCategoryDto(categoryStorage.saveAndFlush(CategoryMapper.toCategory(newCategoryDto)));
-        } catch (DataIntegrityViolationException e) {
-            throw new AlreadyExistsException("Категория " + newCategoryDto.getName() + " уже существует");
+        if (categoryStorage.existsByName(newCategoryDto.getName())) {
+            throw new ConflictException("Категория " + newCategoryDto.getName() + " уже существует");
         }
+
+            return CategoryMapper.toCategoryDto(categoryStorage.saveAndFlush(CategoryMapper.toCategory(newCategoryDto)));
     }
 
     @Override
     public CategoryDto update(Integer catId, CategoryDto categoryDto) {
         Category category = categoryStorage.findById(catId).orElseThrow(() ->
                 new NotFoundException("Категория с id " + catId + " не найдена"));
+
+        if (!category.getName().equals(categoryDto.getName()) && categoryStorage.existsByName(categoryDto.getName())) {
+            throw new ConflictException("Категория с названием " + categoryDto.getName() + " уже существует");
+        }
 
         category.setName(categoryDto.getName());
 

@@ -1,6 +1,7 @@
 package ru.practicum.participationRequest.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.event.State;
@@ -26,6 +27,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class ParticipationRequestServiceImpl implements ParticipationRequestService {
     private final ParticipationRequestStorage participationRequestStorage;
 
@@ -35,12 +37,18 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Override
     public ParticipationRequestDto create(Integer userId, Integer eventId) {
+        if (participationRequestStorage.existsByEventIdAndRequesterId(eventId, userId)) {
+            throw new ConflictException("Пользователь с id " + userId +
+                    " уже отправлял заявку на участие в событии с id " + eventId);
+        }
+
         User user = userStorage.findById(userId).orElseThrow(() ->
                 new NotFoundException("Пользователь с id " + userId + " не найден"));
 
         Event event = eventStorage.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Событие с id " + eventId + " не найдено"));
 
+        log.info("#################################################3 event " + event);
         if (event.getInitiator().getId().equals(userId)) {
             throw new ConflictException("Пользователь с id " + userId +
                     " не может добавить запрос на участие в событии с id " + eventId +
@@ -51,24 +59,31 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
             throw new ConflictException("Нельзя участвовать в неопубликованном событии");
         }
 
+        if (event.getParticipantLimit() == 0) {
+            return ParticipationRequestMapper.toParticipationRequestDto(
+                    participationRequestStorage.save(ParticipationRequest.builder()
+                            .requester(user)
+                            .event(event)
+                            .created(LocalDateTime.now())
+                            .status(Status.CONFIRMED)
+                            .build()));
+        }
+
         Integer confirmedRequests = 0;
 
         if (participationRequestStorage.existsByEventId(eventId)) {
             confirmedRequests = participationRequestStorage.countByEventIdAndStatus(event.getId(),
                     Status.CONFIRMED);
         }
-
+log.info("#############################################################################33 (event.getParticipantLimit() " + event.getParticipantLimit() +
+        " confirmedRequests " + confirmedRequests);
         if (event.getParticipantLimit() != 0 && event.getParticipantLimit().equals(confirmedRequests)) {
             throw new ConflictException("Невозможно оставиьт заявку на участие в событии с id " + eventId +
                     ", т.к. уже достигнут лимит участников");
         }
 
-        if (participationRequestStorage.existsByEventIdAndRequesterId(eventId, userId)) {
-            throw new ConflictException("Пользователь с id " + userId +
-                    " уже отправлял заявку на участие в событии с id " + eventId);
-        }
-
         Status status;
+
         if (event.getRequestModeration()) {
             status = Status.PENDING;
         } else {
@@ -152,10 +167,10 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
         List<ParticipationRequestDto> confirmedList = new ArrayList<>();
         List<ParticipationRequestDto> rejectedList = new ArrayList<>();
-
+log.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55 event" + event);
         List<ParticipationRequest> participationRequestList = participationRequestStorage
                 .findAllByIdIn(request.getRequestIds());
-
+log.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5participationRequestList" + participationRequestList);
         if (!participationRequestStorage.existsByEventId(eventId) || participationRequestList.isEmpty()) {
             return EventRequestStatusUpdateResult.builder()
                     .confirmedRequests(confirmedList)
@@ -165,6 +180,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
         if (event.getParticipantLimit() == 0 || !event.getRequestModeration()) {
             for (ParticipationRequest participationRequest : participationRequestList) {
+                log.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CONFIRMED AUTOMATIC %%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
                 checkRequestOnExistsEvent(participationRequest, eventId);
 
                 participationRequest.setStatus(Status.CONFIRMED);
@@ -177,10 +193,10 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                     .rejectedRequests(rejectedList)
                     .build();
         }
-
+log.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55 NO AUTOMATIC %%%%%%%%%%%%%%%%%%%%%%%%%");
             Integer confirmedRequests = participationRequestStorage.countByEventIdAndStatus(event.getId(),
                     Status.CONFIRMED);
-
+log.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5  confirmedRequests  " + confirmedRequests);
             if (request.getStatus().equals(Status.CONFIRMED.toString())
                     && event.getParticipantLimit().equals(confirmedRequests)) {
                 throw new ConflictException("Нельзя подтвердить запрос на участие," +
@@ -195,9 +211,9 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                             " находящихся в состоянии ожидания");
                 }
 
-                if (request.getStatus().equals(Status.CANCELED.toString())) {
+                if (request.getStatus().equals(Status.REJECTED.toString())) {
 
-                    participationRequest.setStatus(Status.CANCELED);
+                    participationRequest.setStatus(Status.REJECTED);
                     participationRequestStorage.save(participationRequest);
                     rejectedList.add(ParticipationRequestMapper.toParticipationRequestDto(participationRequest));
 
@@ -211,7 +227,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
                         confirmedRequests++;
                     } else {
-                        participationRequest.setStatus(Status.CANCELED);
+                        participationRequest.setStatus(Status.REJECTED);
                         participationRequestStorage.save(participationRequest);
                         rejectedList.add(ParticipationRequestMapper.toParticipationRequestDto(participationRequest));
                     }

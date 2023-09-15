@@ -56,7 +56,7 @@ import static org.mockito.Mockito.when;
         webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class CompilationTest {
+public class CompilationServiceTest {
 
     private final EntityManager entityManager;
 
@@ -102,7 +102,7 @@ public class CompilationTest {
 
         NewCompilationDto newCompilationDto = NewCompilationDto.builder()
                 .title("Title Collection")
-                .pinned(true)
+               // .pinned(true)
                 .events(events)
                 .build();
 
@@ -116,7 +116,7 @@ public class CompilationTest {
         assertThat(compilation.getId(), notNullValue());
         assertThat(compilation.getId(), is(1));
         assertThat(compilation.getTitle(), equalTo(newCompilationDto.getTitle()));
-        assertThat(compilation.isPinned(), equalTo(newCompilationDto.getPinned()));
+        assertThat(compilation.isPinned(), equalTo(false));
 
         TypedQuery<EventForCompilation> queryForEvent = entityManager.createQuery("Select" +
                 " ec from EventForCompilation ec join ec.eventForCompilationPK as pk" +

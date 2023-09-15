@@ -1,6 +1,7 @@
 package ru.practicum.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class PublicController {
 
     private final EventService eventService;
@@ -40,13 +42,16 @@ public class PublicController {
                                          @RequestParam(value = "size", required = false,
                                                  defaultValue = "10") Integer size,
                                          HttpServletRequest request) {
-
+log.info("Публичное получение событий с ограничениями: text {}, categories {}, paid {}, rangeStart {}, rangeEnd {}," +
+        " onlyAvailable {}, sort {}, from {}, size {}, request {}", text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort,
+        from, size, request);
         return eventService.getPublicly(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort,
                 from, size, request);
     }
 
     @GetMapping("/events/{eventId}")
     public EventFullDto geyEventById(@PathVariable Integer eventId, HttpServletRequest request) {
+        log.info("Публичное получение события с id {}", eventId);
         return eventService.getPubliclyById(eventId, request);
     }
 
@@ -55,16 +60,19 @@ public class PublicController {
                                            Integer from,
                                            @RequestParam(value = "size", required = false, defaultValue = "10")
                                            Integer size) {
+        log.info("Публичное получение всех категорий с ограничениями from {} и size {}", from, size);
         return categoryService.get(from, size);
     }
 
     @GetMapping("/categories/{catId}")
     public CategoryDto getCategoryById(@PathVariable Integer catId) {
+        log.info("Публичное получение категории с id {}", catId);
         return categoryService.getById(catId);
     }
 
     @GetMapping("/compilations/{compId}")
     public CompilationDto getCompilationById(@PathVariable Integer compId) {
+        log.info("Публичное получение подборки событий с id {}", compId);
         return compilationService.getById(compId);
     }
 
@@ -74,6 +82,7 @@ public class PublicController {
                                                 Integer from,
                                                 @RequestParam(value = "size", required = false, defaultValue = "10")
                                                 Integer size) {
+        log.info("Публичное получение всех событий ограничениями: pinned {}, from {}, size {}", pinned,from,size);
         return compilationService.get(pinned, from, size);
     }
 }

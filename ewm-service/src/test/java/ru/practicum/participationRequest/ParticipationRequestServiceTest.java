@@ -86,6 +86,7 @@ public class ParticipationRequestServiceTest {
 
         UpdateEventRequest updateEventRequestLimit = UpdateEventRequest.builder()
                 .participantLimit(1)
+                .requestModeration(true)
                 .build();
 
         eventService.updateByAdmin(1, updateEventRequestLimit);
@@ -114,7 +115,7 @@ public class ParticipationRequestServiceTest {
 
         assertThat(participationRequest2.getId(), is(2));
         assertThat(participationRequest2.getRequester(), equalTo(user3));
-        assertThat(participationRequest2.getStatus(), equalTo(Status.PENDING));
+        assertThat(participationRequest2.getStatus(), equalTo(Status.CONFIRMED));
     }
 
     @Test
@@ -269,10 +270,10 @@ public class ParticipationRequestServiceTest {
         createParticipationRequest(3, 2, 2);
         createParticipationRequest(4, 3, 2);
         createParticipationRequest(5, 4, 2);
-        
+
         requestIds.clear();
         requestIds.add(3);
-        
+
         EventRequestStatusUpdateRequest requestWithOneId = EventRequestStatusUpdateRequest.builder()
                 .requestIds(requestIds)
                 .status(Status.CONFIRMED.toString())
@@ -319,7 +320,7 @@ public class ParticipationRequestServiceTest {
         assertThat(resultExceedingLimit.getRejectedRequests(), hasSize(1));
         assertThat(resultExceedingLimit.getRejectedRequests().get(0).getId(), is(5));
         assertThat(resultExceedingLimit.getRejectedRequests().get(0).getStatus(),
-                equalTo(Status.CANCELED.toString()));
+                equalTo(Status.REJECTED.toString()));
 
         assertThrows(ConflictException.class, () -> participationRequestService
                         .changeRequestStatuses(2, 2, requestExceedingLimit),
