@@ -33,7 +33,7 @@ public class StatsController {
                                @RequestParam(value = "end") String end,
                                @RequestParam(value = "uris") String[] uris,
                                @RequestParam(value = "unique") Boolean unique) {
-
+log.info("================================ Stats server controller get uris " + uris);
         List<ViewStats> viewStatsList =  statsService.get(start, end, uris, unique);
 
         log.info("================================== Stats server controller get viewStatsList " + viewStatsList + "============" );

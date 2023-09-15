@@ -1,5 +1,6 @@
 package ru.practicum.client;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.lang.Nullable;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -7,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
-
+@Slf4j
 public class BaseClient {
     protected final RestTemplate rest;
 
@@ -80,6 +81,8 @@ public class BaseClient {
         HttpEntity<T> requestEntity = new HttpEntity<>(body, defaultHeaders(userId));
 
         ResponseEntity<Object> statsServerResponse;
+
+        log.info("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLl Base85 LLLLLLLLLLLL parameters " + parameters + "LLLLLLLLLLLLLLLL");
         try {
             if (parameters != null) {
                 statsServerResponse = rest.exchange(path, method, requestEntity, Object.class, parameters);

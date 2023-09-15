@@ -14,6 +14,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping(path = "/stats")
@@ -48,7 +50,12 @@ public class StatsController {
 
         log.info("Получение статистики с {} по {} для uris {} с учётом уникальных посещений {}",
                 start, end, uris, unique);
-        return statsClient.getStats(start, end, uris, unique);
+        List<String> stringList = new ArrayList<>();
+        for (String uri: uris) {
+            stringList.add(uri);
+        }
+log.info("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYStatsController 57 YYYYYYYYYY stringList "+ stringList + " YYYYYYYYYYY");
+        return statsClient.getStats(start, end, stringList, unique);
     }
 
     //start - Дата и время начала диапазона за который нужно выгрузить статистику (в формате "yyyy-MM-dd HH:mm:ss")
