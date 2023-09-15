@@ -343,13 +343,14 @@ public class EventServiceImpl implements EventService {
         }
 
         for (Event foundEvent : events) {
-            Integer confirmedRequests;
-            Integer views;
+            Integer confirmedRequests = 0;
+            Integer views = 0;
 
-            List<Integer> confirmedRequestsAndViews = getConfirmedRequestAndViews(foundEvent);
-            confirmedRequests = confirmedRequestsAndViews.get(0);
-            views = confirmedRequestsAndViews.get(1);
-
+            if (foundEvent.getState().equals(State.PUBLISHED)) {
+                List<Integer> confirmedRequestsAndViews = getConfirmedRequestAndViews(foundEvent);
+                confirmedRequests = confirmedRequestsAndViews.get(0);
+                views = confirmedRequestsAndViews.get(1);
+            }
             if (onlyAvailable) {
                 if (!foundEvent.getParticipantLimit().equals(confirmedRequests)) {
                     result.add(EventMapper.toEventShortDto(foundEvent, confirmedRequests, views));
