@@ -4,7 +4,6 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -34,12 +33,12 @@ import ru.practicum.user.storage.UserStorage;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ValidationException;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -325,7 +324,7 @@ if(request.getTitle() != null && (request.getTitle().length() < 3 || request.get
             throw new ValidationException("Окончание временного диапазона не может быть раньше его начала");
         }
 
-        sendDataToStatistic(request);
+
 
         List<EventShortDto> result = new ArrayList<>();
 
@@ -455,6 +454,7 @@ if(request.getTitle() != null && (request.getTitle().length() < 3 || request.get
             }
         }
 
+        sendDataToStatistic(request);
 
         return result;
     }
@@ -471,7 +471,7 @@ if(request.getTitle() != null && (request.getTitle().length() < 3 || request.get
         if (!event.getState().equals(State.PUBLISHED)) {
             throw new NotFoundException("Событие с id " + eventId + " не опубликованно");
         }
-        sendDataToStatistic(request);
+
 
         Integer confirmedRequests = null;
         Integer views = null;
@@ -482,6 +482,8 @@ if(request.getTitle() != null && (request.getTitle().length() < 3 || request.get
 
         confirmedRequests = confirmedRequestsAndViews.get(0);
         views = confirmedRequestsAndViews.get(1);
+
+        sendDataToStatistic(request);
 
         return EventMapper.toEventFullDto(event, confirmedRequests, views);
     }
@@ -540,18 +542,21 @@ if(request.getTitle() != null && (request.getTitle().length() < 3 || request.get
 
 
         ResponseEntity<Object> result = eventViewStatsClient.getStats(event.getPublishedOn().minusMinutes(1).format(formatter),
-                LocalDateTime.now().plusMinutes(1).format(formatter), new String[]{"/events/" + event.getId()}, false);
+                LocalDateTime.now().plusMinutes(1).format(formatter), new String[]{"/events/" + event.getId()}, true);
 
         log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ResponseEntity<Object> result " + result + "@@@@@@@@");
 
         if (result.hasBody()) {
-            List<ViewStats> viewStatsList = (List<ViewStats>) result.getBody();
+            List<Map> viewStatsList = (List<Map>)  result.getBody();
 
             log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ viewStatsList " + viewStatsList + "@@@@@@@@");
 
 
             if (viewStatsList != null && !viewStatsList.isEmpty()) {
-                views = viewStatsList.get(0).getHits();
+
+           ViewStats viewStats = mapToViewStats(viewStatsList.get(0));
+
+                views = viewStats.getHits();
             }
         }
 
@@ -560,6 +565,14 @@ if(request.getTitle() != null && (request.getTitle().length() < 3 || request.get
         list.add(views);
 
         return list;
+    }
+
+    private ViewStats mapToViewStats(Map map) {
+       return ViewStats.builder()
+                .hits((Integer) map.get("hits"))
+                .app((String) map.get("app"))
+                .uri((String)  map.get("uri"))
+                .build();
     }
 
     public Integer getViews(LocalDateTime publishedOn, Integer eventId) {
