@@ -60,14 +60,13 @@ public class AdminController {
     }
 
     @GetMapping("/events")
-    public List<EventFullDto> getEvents
-            (@RequestParam(value = "users", required = false) Integer[] users,
-             @RequestParam(value = "states", required = false) String[] states,
-             @RequestParam(value = "categories", required = false) Integer[] categories,
-             @RequestParam(value = "rangeStart", required = false) String rangeStart,
-             @RequestParam(value = "rangeEnd", required = false) String rangeEnd,
-             @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
-             @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+    public List<EventFullDto> getEvents(@RequestParam(value = "users", required = false) Integer[] users,
+                                        @RequestParam(value = "states", required = false) String[] states,
+                                        @RequestParam(value = "categories", required = false) Integer[] categories,
+                                        @RequestParam(value = "rangeStart", required = false) String rangeStart,
+                                        @RequestParam(value = "rangeEnd", required = false) String rangeEnd,
+                                        @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
+                                        @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
 
         log.info("Получение админом событий по следующим параметрам: users {}, states {}, categories{}," +
                         " rangeStart{}, rangeEnd{}, from {}, size {}", users, states, categories, rangeStart, rangeEnd,
