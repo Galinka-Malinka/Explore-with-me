@@ -70,7 +70,8 @@ public class AdminController {
              @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
 
         log.info("Получение админом событий по следующим параметрам: users {}, states {}, categories{}," +
-                " rangeStart{}, rangeEnd{}, from {}, size {}", users, states, categories, rangeStart, rangeEnd, from, size);
+                        " rangeStart{}, rangeEnd{}, from {}, size {}", users, states, categories, rangeStart, rangeEnd,
+                from, size);
         return eventService.getByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 

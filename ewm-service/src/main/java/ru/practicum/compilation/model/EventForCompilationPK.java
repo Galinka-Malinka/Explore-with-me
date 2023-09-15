@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
-import javax.persistence.ManyToMany;
 import java.io.Serializable;
 
 @Embeddable
@@ -16,6 +15,5 @@ import java.io.Serializable;
 @Builder
 public class EventForCompilationPK implements Serializable {
     private Integer compilationId;
-
     private Integer eventId;
 }
