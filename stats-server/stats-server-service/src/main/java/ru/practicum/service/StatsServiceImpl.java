@@ -37,8 +37,8 @@ public class StatsServiceImpl implements ru.practicum.service.StatsService {
 
     @Override
     public List<ViewStats> get(String start, String end, String[] uris, Boolean unique) {
-
-        log.info(" ++++++++++++++++++++++++++++ Stats server service ++++++++++" + start + end + uris + unique + "+++++++++++++++++++");
+        Boolean isAll = uris[0].equals("[all]");
+        log.info(" ++++++++++++++++++++++++++++ Stats server service ++++++++++" + start + end + uris[0] + unique + "++++ isAll " + isAll +"+++++++++++++++");
 
 
         LocalDateTime startTime = LocalDateTime.parse(start, formatter);

@@ -34,6 +34,10 @@ public class StatsController {
                                @RequestParam(value = "uris") String[] uris,
                                @RequestParam(value = "unique") Boolean unique) {
 log.info("================================ Stats server controller get uris " + uris);
+if (uris == null || uris.length == 0) {
+    uris = new String[]{"all"};
+}
+
         List<ViewStats> viewStatsList =  statsService.get(start, end, uris, unique);
 
         log.info("================================== Stats server controller get viewStatsList " + viewStatsList + "============" );

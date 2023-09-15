@@ -539,8 +539,8 @@ if(request.getTitle() != null && (request.getTitle().length() < 3 || request.get
 
 
 
-        ResponseEntity<Object> result = eventViewStatsClient.getStats(event.getPublishedOn().format(formatter),
-                LocalDateTime.now().format(formatter), new String[]{"/event/" + event.getId()}, false);
+        ResponseEntity<Object> result = eventViewStatsClient.getStats(event.getPublishedOn().minusMinutes(1).format(formatter),
+                LocalDateTime.now().plusMinutes(1).format(formatter), new String[]{"/events/" + event.getId()}, false);
 
         log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ResponseEntity<Object> result " + result + "@@@@@@@@");
 
@@ -565,8 +565,8 @@ if(request.getTitle() != null && (request.getTitle().length() < 3 || request.get
     public Integer getViews(LocalDateTime publishedOn, Integer eventId) {
         Integer views = 0;
 log.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ publishedOn " + publishedOn + "++++++++");
-        ResponseEntity<Object> result = eventViewStatsClient.getStats(publishedOn.format(formatter),
-                LocalDateTime.now().format(formatter), new String[]{"/event/" + eventId}, false);
+        ResponseEntity<Object> result = eventViewStatsClient.getStats(publishedOn.minusMinutes(1).format(formatter),
+                LocalDateTime.now().plusMinutes(1).format(formatter), new String[]{"/event/" + eventId}, false);
 
         if (result.hasBody()) {
             List<ViewStats> viewStatsList = (List<ViewStats>) result.getBody();

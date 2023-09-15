@@ -30,8 +30,7 @@ public class StatsController {
     @GetMapping
     public ResponseEntity<Object> getStats(@NotNull @NotBlank @RequestParam(value = "start") String start,
                                            @NotNull @NotBlank @RequestParam(value = "end") String end,
-                                           @RequestParam(value = "uris", required = false,
-                                                   defaultValue = "all") String[] uris,
+                                           @RequestParam(value = "uris", required = false) String[] uris,
                                            @RequestParam(value = "unique", required = false,
                                                    defaultValue = "false") Boolean unique) {
         LocalDateTime startTime;
@@ -48,14 +47,11 @@ public class StatsController {
             throw new IllegalArgumentException("Начало диапазона статистики не может быть позже его окончания");
         }
 
-        log.info("Получение статистики с {} по {} для uris {} с учётом уникальных посещений {}",
-                start, end, uris, unique);
-        List<String> stringList = new ArrayList<>();
-        for (String uri: uris) {
-            stringList.add(uri);
+        if (uris == null || uris.length == 0) {
+            uris = new String[]{"all"};
         }
-log.info("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYStatsController 57 YYYYYYYYYY stringList "+ stringList + " YYYYYYYYYYY");
-        return statsClient.getStats(start, end, stringList, unique);
+
+     return statsClient.getStats(start, end, uris, unique);
     }
 
     //start - Дата и время начала диапазона за который нужно выгрузить статистику (в формате "yyyy-MM-dd HH:mm:ss")
