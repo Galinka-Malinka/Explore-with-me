@@ -7,6 +7,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.service.CategoryService;
+import ru.practicum.comment.dto.ShortCommentDto;
+import ru.practicum.comment.service.CommentService;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.service.CompilationService;
 import ru.practicum.event.dto.EventFullDto;
@@ -15,6 +17,7 @@ import ru.practicum.event.model.Location;
 import ru.practicum.event.service.EventService;
 import ru.practicum.user.dto.UserShortDto;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -38,6 +41,9 @@ public class PublicControllerTest {
 
     @MockBean
     CompilationService compilationService;
+
+    @MockBean
+    CommentService commentService;
 
     @Autowired
     MockMvc mvc;
@@ -111,6 +117,19 @@ public class PublicControllerTest {
             .pinned(true)
             .events(new HashSet<>())
             .build();
+
+    private final ShortCommentDto shortCommentDto1 = ShortCommentDto.builder()
+            .authorName("Author1")
+            .text("Comment1")
+            .created(LocalDateTime.now())
+            .build();
+
+    private final ShortCommentDto shortCommentDto2 = ShortCommentDto.builder()
+            .authorName("Author2")
+            .text("Comment2")
+            .created(LocalDateTime.now())
+            .build();
+
 
     @Test
     void shouldGetEvents() throws Exception {
@@ -207,5 +226,21 @@ public class PublicControllerTest {
                 .andExpect(jsonPath("$[1].title", equalTo(compilationDto2.getTitle()), String.class))
                 .andExpect(jsonPath("$[1].pinned", equalTo(compilationDto2.getPinned()), Boolean.class))
                 .andExpect(jsonPath("$[1].events", empty()));
+    }
+
+    @Test
+    void shouldGetCommentsByEventId() throws Exception {
+        List<ShortCommentDto> shortCommentDtoList = new ArrayList<>();
+        shortCommentDtoList.add(shortCommentDto1);
+        shortCommentDtoList.add(shortCommentDto2);
+
+        when(commentService.getCommentsByEvent(anyInt())).thenReturn(shortCommentDtoList);
+        mvc.perform(get("/comments/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].authorName", is(shortCommentDto1.getAuthorName()), String.class))
+                .andExpect(jsonPath("$[0].text", is(shortCommentDto1.getText()), String.class))
+                .andExpect(jsonPath("$[1].authorName", is(shortCommentDto2.getAuthorName()), String.class))
+                .andExpect(jsonPath("$[1].text", is(shortCommentDto2.getText()), String.class));
     }
 }

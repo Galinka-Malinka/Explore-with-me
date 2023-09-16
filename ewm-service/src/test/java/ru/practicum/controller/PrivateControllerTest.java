@@ -8,6 +8,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.category.dto.CategoryDto;
+import ru.practicum.comment.dto.FullCommentDto;
+import ru.practicum.comment.dto.NewCommentDto;
+import ru.practicum.comment.service.CommentService;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.NewEventDto;
@@ -19,13 +22,14 @@ import ru.practicum.participationRequest.dto.EventRequestStatusUpdateResult;
 import ru.practicum.participationRequest.dto.ParticipationRequestDto;
 import ru.practicum.participationRequest.service.ParticipationRequestService;
 import ru.practicum.user.dto.UserShortDto;
+import ru.practicum.user.model.User;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
@@ -43,6 +47,9 @@ public class PrivateControllerTest {
 
     @MockBean
     ParticipationRequestService participationRequestService;
+
+    @MockBean
+    CommentService commentService;
 
     @Autowired
     MockMvc mvc;
@@ -124,6 +131,19 @@ public class PrivateControllerTest {
     private final UpdateEventRequest updateEventRequest = UpdateEventRequest.builder().build();
     private final EventRequestStatusUpdateRequest statusUpdateRequest = EventRequestStatusUpdateRequest.builder()
             .build();
+
+    private final NewCommentDto newCommentDto = NewCommentDto.builder()
+            .text("Comment")
+            .build();
+
+    private final FullCommentDto fullCommentDto1 = FullCommentDto.builder()
+            .id(1)
+            .eventTitle("EventTitle1")
+            .author(User.builder().id(1).name("User1").email("User1@mail.ru").build())
+            .text("Comment1")
+            .created(LocalDateTime.now())
+            .build();
+
 
     @Test
     void shouldCreateEvent() throws Exception {
@@ -256,5 +276,20 @@ public class PrivateControllerTest {
                 .andExpect(jsonPath("$.id", is(participationRequestDto1.getId())))
                 .andExpect(jsonPath("$.event", is(participationRequestDto1.getEvent())))
                 .andExpect(jsonPath("$.status", is(participationRequestDto1.getStatus())));
+    }
+
+    @Test
+    void shouldCreateComment() throws Exception {
+        when(commentService.create(anyInt(), anyInt(), any())).thenReturn(fullCommentDto1);
+        mvc.perform(post("/users/1/comments/1")
+                        .content(objectMapper.writeValueAsString(newCommentDto))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", is(fullCommentDto1.getId())))
+                .andExpect(jsonPath("$.eventTitle", is(fullCommentDto1.getEventTitle())))
+                .andExpect(jsonPath("$.author.email", is(fullCommentDto1.getAuthor().getEmail())))
+                .andExpect(jsonPath("$.text", is(fullCommentDto1.getText())))
+                .andExpect(jsonPath("$.created", notNullValue()));
     }
 }

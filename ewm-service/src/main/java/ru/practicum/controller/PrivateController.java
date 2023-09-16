@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.comment.dto.FullCommentDto;
+import ru.practicum.comment.dto.NewCommentDto;
+import ru.practicum.comment.service.CommentService;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.NewEventDto;
@@ -26,6 +29,8 @@ public class PrivateController {
     private final EventService eventService;
 
     private final ParticipationRequestService participationRequestService;
+
+    private final CommentService commentService;
 
     @PostMapping("/events")
     @ResponseStatus(HttpStatus.CREATED)
@@ -103,5 +108,14 @@ public class PrivateController {
 
         log.info("Отмена пользователем с id {} своего запроса на участие с id {}", userId, requestId);
         return participationRequestService.cancel(userId, requestId);
+    }
+
+    @PostMapping("/comments/{eventId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public FullCommentDto addComment(@PathVariable Integer userId, @PathVariable Integer eventId,
+                                     @RequestBody @Valid NewCommentDto newCommentDto) {
+
+        log.info("Добавление пользователем с id {} комментария {} событию с id {}", userId, newCommentDto, eventId);
+        return commentService.create(userId, eventId, newCommentDto);
     }
 }

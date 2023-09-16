@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.category.model.Category;
+import ru.practicum.comment.model.Comment;
 import ru.practicum.event.State;
 import ru.practicum.user.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
@@ -69,4 +71,8 @@ public class Event {
     @Column(name = "state")
     State state;
 
+    @OneToMany
+    @JoinColumn(name = "event_id")
+    @ToString.Exclude
+    List<Comment> comments;
 }

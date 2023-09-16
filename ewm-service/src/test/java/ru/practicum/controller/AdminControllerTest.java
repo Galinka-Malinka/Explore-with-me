@@ -10,6 +10,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.dto.NewCategoryDto;
 import ru.practicum.category.service.CategoryService;
+import ru.practicum.comment.dto.FullCommentDto;
+import ru.practicum.comment.service.CommentService;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.NewCompilationDto;
 import ru.practicum.compilation.dto.UpdateCompilationRequest;
@@ -20,9 +22,11 @@ import ru.practicum.event.model.Location;
 import ru.practicum.event.service.EventService;
 import ru.practicum.user.dto.UserDto;
 import ru.practicum.user.mapper.UserMapper;
+import ru.practicum.user.model.User;
 import ru.practicum.user.service.UserService;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -52,6 +56,10 @@ public class AdminControllerTest {
 
     @MockBean
     CompilationService compilationService;
+
+    @MockBean
+    CommentService commentService;
+
     @Autowired
     MockMvc mvc;
 
@@ -129,6 +137,22 @@ public class AdminControllerTest {
             .build();
 
     private final UpdateCompilationRequest updateCompilationRequest = UpdateCompilationRequest.builder().build();
+
+    private final FullCommentDto fullCommentDto1 = FullCommentDto.builder()
+            .id(1)
+            .eventTitle("EventTitle1")
+            .author(User.builder().id(1).name("User1").email("User1@mail.ru").build())
+            .text("Comment1")
+            .created(LocalDateTime.now())
+            .build();
+
+    private final FullCommentDto fullCommentDto2 = FullCommentDto.builder()
+            .id(2)
+            .eventTitle("EventTitle2")
+            .author(User.builder().id(1).name("User2").email("User2@mail.ru").build())
+            .text("Comment2")
+            .created(LocalDateTime.now())
+            .build();
 
     @Test
     void shouldCreateUser() throws Exception {
@@ -245,5 +269,28 @@ public class AdminControllerTest {
                 .andExpect(jsonPath("$.title", equalTo(compilationDto.getTitle()), String.class))
                 .andExpect(jsonPath("$.pinned", equalTo(compilationDto.getPinned()), Boolean.class))
                 .andExpect(jsonPath("$.events", empty()));
+    }
+
+    @Test
+    void shouldGetComments() throws Exception {
+        List<FullCommentDto> fullCommentDtoList = new ArrayList<>();
+        fullCommentDtoList.add(fullCommentDto1);
+        fullCommentDtoList.add(fullCommentDto2);
+
+        when(commentService.getComments(any(), any(), anyString(), anyString(), anyString(), anyInt(), anyInt()))
+                .thenReturn(fullCommentDtoList);
+
+        mvc.perform(get("/admin/comments")
+                        .param("events", "1, 2")
+                        .param("users", "1, 2")
+                        .param("text", "text")
+                        .param("rangeStart", "2022-09-05 09:00:00")
+                        .param("rangeEnd", "2024-09-05 09:00:00")
+                        .param("from", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id", is(fullCommentDto1.getId()), Integer.class))
+                .andExpect(jsonPath("$[1].id", is(fullCommentDto2.getId()), Integer.class));
     }
 }
