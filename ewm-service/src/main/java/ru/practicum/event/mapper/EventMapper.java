@@ -7,10 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.practicum.category.mapper.CategoryMapper;
 import ru.practicum.category.model.Category;
 import ru.practicum.event.State;
-import ru.practicum.event.dto.EventFullDto;
-import ru.practicum.event.dto.EventShortDto;
-import ru.practicum.event.dto.EventWithConfirmedRequest;
-import ru.practicum.event.dto.NewEventDto;
+import ru.practicum.event.dto.*;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.Location;
 import ru.practicum.user.mapper.UserMapper;
@@ -130,5 +127,31 @@ public class EventMapper {
                 .initiator(UserMapper.toUserShortDto(eventWithConfirmedRequest.getInitiator()))
                 .category(CategoryMapper.toCategoryDto(eventWithConfirmedRequest.getCategory()))
                 .build();
+    }
+
+    public static Event update(Event event, UpdateEventRequest request) {
+
+        if (request.getTitle() != null) {
+            event.setTitle(request.getTitle());
+        }
+        if (request.getAnnotation() != null) {
+            event.setAnnotation(request.getAnnotation());
+        }
+        if (request.getDescription() != null) {
+            event.setDescription(request.getDescription());
+        }
+        if (request.getEventDate() != null) {
+            event.setEventDate(LocalDateTime.parse(request.getEventDate(), formatter));
+        }
+        if (request.getPaid() != null) {
+            event.setPaid(request.getPaid());
+        }
+        if (request.getParticipantLimit() != null) {
+            event.setParticipantLimit(request.getParticipantLimit());
+        }
+        if (request.getRequestModeration() != null) {
+            event.setRequestModeration(request.getRequestModeration());
+        }
+        return event;
     }
 }

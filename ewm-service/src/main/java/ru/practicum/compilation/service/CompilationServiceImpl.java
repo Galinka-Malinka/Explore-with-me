@@ -27,7 +27,6 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class CompilationServiceImpl implements CompilationService {
 
     private final CompilationStorage compilationStorage;
@@ -39,6 +38,7 @@ public class CompilationServiceImpl implements CompilationService {
     private final EventService eventService;
 
     @Override
+    @Transactional
     public CompilationDto create(NewCompilationDto newCompilationDto) {
 
         if (newCompilationDto.getEvents() == null || newCompilationDto.getEvents().isEmpty()) {
@@ -58,19 +58,15 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public CompilationDto update(Integer compId, UpdateCompilationRequest updateCompilationRequest) {
         Compilation compilation = compilationStorage.findById(compId)
                 .orElseThrow(() -> new NotFoundException("Подборка событий с id " + compId + " не найдена"));
 
         if (updateCompilationRequest.getPinned() != null || updateCompilationRequest.getTitle() != null) {
-            if (updateCompilationRequest.getTitle() != null) {
-                compilation.setTitle(updateCompilationRequest.getTitle());
-            }
-            if (updateCompilationRequest.getPinned() != null) {
-                compilation.setPinned(updateCompilationRequest.getPinned());
-            }
-            compilationStorage.save(compilation);
+            compilationStorage.save(CompilationMapper.update(compilation, updateCompilationRequest));
         }
+
         Set<EventShortDto> events = new HashSet<>();
         if (updateCompilationRequest.getEvents() != null) {
             eventForCompilationStorage.deleteAllByEventForCompilationPKCompilationId(compId);
@@ -94,6 +90,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public void delete(Integer compId) {
         if (!compilationStorage.existsById(compId)) {
             throw new NotFoundException("Подборка с id " + compId + " не найдена");

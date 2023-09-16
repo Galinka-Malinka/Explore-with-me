@@ -1,7 +1,6 @@
 package ru.practicum.category.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +13,6 @@ import ru.practicum.category.mapper.CategoryMapper;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.storage.CategoryStorage;
 import ru.practicum.event.storage.EventStorage;
-import ru.practicum.exception.AlreadyExistsException;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
 
@@ -23,7 +21,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryStorage categoryStorage;
@@ -31,15 +28,17 @@ public class CategoryServiceImpl implements CategoryService {
     private final EventStorage eventStorage;
 
     @Override
+    @Transactional
     public CategoryDto create(NewCategoryDto newCategoryDto) {
         if (categoryStorage.existsByName(newCategoryDto.getName())) {
             throw new ConflictException("Категория " + newCategoryDto.getName() + " уже существует");
         }
 
-        return CategoryMapper.toCategoryDto(categoryStorage.saveAndFlush(CategoryMapper.toCategory(newCategoryDto)));
+        return CategoryMapper.toCategoryDto(categoryStorage.save(CategoryMapper.toCategory(newCategoryDto)));
     }
 
     @Override
+    @Transactional
     public CategoryDto update(Integer catId, CategoryDto categoryDto) {
         Category category = categoryStorage.findById(catId).orElseThrow(() ->
                 new NotFoundException("Категория с id " + catId + " не найдена"));
@@ -50,14 +49,11 @@ public class CategoryServiceImpl implements CategoryService {
 
         category.setName(categoryDto.getName());
 
-        try {
-            return CategoryMapper.toCategoryDto(categoryStorage.saveAndFlush(category));
-        } catch (DataIntegrityViolationException e) {
-            throw new AlreadyExistsException("Категория " + categoryDto.getName() + " уже существует");
-        }
+        return CategoryMapper.toCategoryDto(categoryStorage.save(category));
     }
 
     @Override
+    @Transactional
     public void delete(Integer catId) {
         if (!categoryStorage.existsById(catId)) {
             throw new NotFoundException("Категория с id " + catId + " не найдена");

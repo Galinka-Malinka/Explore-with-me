@@ -64,7 +64,6 @@ public class UserServiceTest {
         User user2 = createUser(2);
         Integer[] idsWithTwoIds = new Integer[]{1, 2};
         Integer[] idsWithOneId = new Integer[]{1};
-        Integer[] idsWihDefaultValue = new Integer[]{0};
 
         List<UserDto> resultWithOneId = userService.get(idsWithOneId, 0, 10);
 
@@ -79,7 +78,7 @@ public class UserServiceTest {
         assertThat(resultWithTwoId.get(0), equalTo(UserMapper.toUserDto(user1)));
         assertThat(resultWithTwoId.get(1), equalTo(UserMapper.toUserDto(user2)));
 
-        List<UserDto> resultWithDefaultValue = userService.get(idsWihDefaultValue, 0, 10);
+        List<UserDto> resultWithDefaultValue = userService.get(null, 0, 10);
 
         assertThat(resultWithDefaultValue, notNullValue());
         assertThat(resultWithDefaultValue.size(), is(2));
@@ -88,7 +87,7 @@ public class UserServiceTest {
 
         createUser(3);
 
-        List<UserDto> resultWithPageable = userService.get(idsWihDefaultValue, 1, 1);
+        List<UserDto> resultWithPageable = userService.get(null, 1, 1);
         assertThat(resultWithPageable, notNullValue());
         assertThat(resultWithPageable.size(), is(1));
         assertThat(resultWithPageable.get(0), equalTo(UserMapper.toUserDto(user2)));

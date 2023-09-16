@@ -43,7 +43,7 @@ public class AdminController {
     }
 
     @GetMapping("/users")
-    public List<UserDto> getUsers(@RequestParam(value = "ids", required = false, defaultValue = "0") Integer[] ids,
+    public List<UserDto> getUsers(@RequestParam(value = "ids", required = false) Integer[] ids,
                                   @RequestParam(value = "from", required = false, defaultValue = "0") Integer from,
                                   @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
 

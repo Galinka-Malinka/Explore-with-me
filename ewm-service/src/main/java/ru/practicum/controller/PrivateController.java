@@ -41,18 +41,18 @@ public class PrivateController {
                                      @PathVariable Integer eventId) {
 
         log.info("Получение события с id {} его оинициатором с id {}", eventId, userId);
-        return eventService.getByInitiatorById(userId, eventId);
+        return eventService.getEventFullDtoByUserId(userId, eventId);
     }
 
     @GetMapping("/events")
     public List<EventShortDto> getEvents(@PathVariable Integer userId,
-                                         @RequestParam(value = "from",
-                                                 required = false, defaultValue = "0") Integer from,
-                                         @RequestParam(value = "size",
-                                                 required = false, defaultValue = "10") Integer size) {
+                                         @RequestParam(value = "from", required = false, defaultValue = "0")
+                                         Integer from,
+                                         @RequestParam(value = "size", required = false, defaultValue = "10")
+                                         Integer size) {
 
         log.info("Получение всех событий их инициатором с id {} с ограничениями from {} и size {}", userId, from, size);
-        return eventService.getByInitiator(userId, from, size);
+        return eventService.getEventShortDtosByUserId(userId, from, size);
     }
 
     @PatchMapping("/events/{eventId}")

@@ -12,9 +12,9 @@ public interface EventService {
 
     EventFullDto create(Integer userId, NewEventDto newEventDto);
 
-    EventFullDto getByInitiatorById(Integer userId, Integer eventId);
+    EventFullDto getEventFullDtoByUserId(Integer userId, Integer eventId);
 
-    List<EventShortDto> getByInitiator(Integer userId, Integer from, Integer size);
+    List<EventShortDto> getEventShortDtosByUserId(Integer userId, Integer from, Integer size);
 
     EventFullDto update(Integer userId, Integer eventId, UpdateEventRequest request);
 

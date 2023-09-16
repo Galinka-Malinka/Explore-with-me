@@ -140,7 +140,7 @@ public class PrivateControllerTest {
 
     @Test
     void shouldGetEventById() throws Exception {
-        when(eventService.getByInitiatorById(anyInt(), anyInt())).thenReturn(eventFullDto);
+        when(eventService.getEventFullDtoByUserId(anyInt(), anyInt())).thenReturn(eventFullDto);
 
         mvc.perform(get("/users/1/events/1"))
                 .andExpect(status().isOk())
@@ -154,7 +154,7 @@ public class PrivateControllerTest {
         eventShortDtoList.add(eventShortDto1);
         eventShortDtoList.add(eventShortDto2);
 
-        when(eventService.getByInitiator(anyInt(), anyInt(), anyInt())).thenReturn(eventShortDtoList);
+        when(eventService.getEventShortDtosByUserId(anyInt(), anyInt(), anyInt())).thenReturn(eventShortDtoList);
 
         mvc.perform(get("/users/1/events")
                         .param("from", "0")

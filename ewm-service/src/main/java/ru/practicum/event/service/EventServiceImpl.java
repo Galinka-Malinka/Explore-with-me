@@ -42,7 +42,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class EventServiceImpl implements EventService {
 
     private final EventViewStatsClient eventViewStatsClient;
@@ -61,8 +60,8 @@ public class EventServiceImpl implements EventService {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    @Transactional
     @Override
+    @Transactional
     public EventFullDto create(Integer userId, NewEventDto newEventDto) {
 
         User user = userStorage.findById(userId).orElseThrow(() ->
@@ -79,7 +78,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto getByInitiatorById(Integer userId, Integer eventId) {
+    public EventFullDto getEventFullDtoByUserId(Integer userId, Integer eventId) {
         checkUser(userId);
 
         if (eventStorage.existsByIdAndState(eventId, State.PUBLISHED)) {
@@ -105,7 +104,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> getByInitiator(Integer userId, Integer from, Integer size) {
+    public List<EventShortDto> getEventShortDtosByUserId(Integer userId, Integer from, Integer size) {
         checkUser(userId);
 
         int page = from / size;
@@ -135,8 +134,8 @@ public class EventServiceImpl implements EventService {
         return eventShortDtoList;
     }
 
-    @Transactional
     @Override
+    @Transactional
     public EventFullDto update(Integer userId, Integer eventId, UpdateEventRequest request) {
         if (request.getTitle() != null && (request.getTitle().length() < 3 || request.getTitle().length() > 120)) {
             throw new ValidationException("Размер заголовка не входит в диапазон от 3 до 120 символов");
@@ -240,8 +239,8 @@ public class EventServiceImpl implements EventService {
         return eventFullDtoList;
     }
 
-    @Transactional
     @Override
+    @Transactional
     public EventFullDto updateByAdmin(Integer eventId, UpdateEventRequest request) {
 
         Event event = eventStorage.findById(eventId)
@@ -491,25 +490,13 @@ public class EventServiceImpl implements EventService {
     }
 
     public Event updateEventByParameters(Event event, UpdateEventRequest request) {
-        if (request.getTitle() != null) {
-            event.setTitle(request.getTitle());
-        }
-        if (request.getAnnotation() != null) {
-            event.setAnnotation(request.getAnnotation());
-        }
-        if (request.getDescription() != null) {
-            event.setDescription(request.getDescription());
-        }
-        if (request.getEventDate() != null) {
-            event.setEventDate(LocalDateTime.parse(request.getEventDate(), formatter));
-        }
+
         if (request.getLocation() != null) {
 
             if (request.getLocation().getId() == null) {
                 Location newLocation = locationStorage.save(request.getLocation());
                 event.setLocation(newLocation);
             } else {
-
                 if (locationStorage.existsById(request.getLocation().getId())) {
                     event.setLocation(request.getLocation());
                 } else {
@@ -517,21 +504,12 @@ public class EventServiceImpl implements EventService {
                 }
             }
         }
-        if (request.getPaid() != null) {
-            event.setPaid(request.getPaid());
-        }
-        if (request.getParticipantLimit() != null) {
-            event.setParticipantLimit(request.getParticipantLimit());
-        }
         if (request.getCategory() != null) {
             Category category = categoryStorage.findById(request.getCategory()).orElseThrow(() ->
                     new NotFoundException("Категория с id " + request.getCategory() + " не найдена"));
             event.setCategory(category);
         }
-        if (request.getRequestModeration() != null) {
-            event.setRequestModeration(request.getRequestModeration());
-        }
-        return event;
+        return EventMapper.update(event, request);
     }
 
     void sendDataToStatistic(HttpServletRequest request) {

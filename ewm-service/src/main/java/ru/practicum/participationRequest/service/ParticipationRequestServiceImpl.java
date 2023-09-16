@@ -25,7 +25,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class ParticipationRequestServiceImpl implements ParticipationRequestService {
     private final ParticipationRequestStorage participationRequestStorage;
 
@@ -34,6 +33,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     private final EventStorage eventStorage;
 
     @Override
+    @Transactional
     public ParticipationRequestDto create(Integer userId, Integer eventId) {
         if (participationRequestStorage.existsByEventIdAndRequesterId(eventId, userId)) {
             throw new ConflictException("Пользователь с id " + userId +
@@ -113,6 +113,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     }
 
     @Override
+    @Transactional
     public ParticipationRequestDto cancel(Integer userId, Integer requestId) {
         checkUser(userId);
 
@@ -152,6 +153,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     }
 
     @Override
+    @Transactional
     public EventRequestStatusUpdateResult changeRequestStatuses(Integer userId, Integer eventId,
                                                                 EventRequestStatusUpdateRequest request) {
         checkUser(userId);

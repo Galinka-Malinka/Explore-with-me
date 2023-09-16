@@ -120,7 +120,7 @@ public class EventServiceTest {
         createCategory(1);
         Event event = createEvent(1);
 
-        EventFullDto eventPending = eventService.getByInitiatorById(1, 1);
+        EventFullDto eventPending = eventService.getEventFullDtoByUserId(1, 1);
 
         assertThat(eventPending.getId(), notNullValue());
         assertThat(eventPending.getId(), is(1));
@@ -140,9 +140,9 @@ public class EventServiceTest {
         assertThat(eventPending.getConfirmedRequests(), nullValue());
         assertThat(eventPending.getViews(), nullValue());
 
-        assertThrows(NotFoundException.class, () -> eventService.getByInitiatorById(2, 1),
+        assertThrows(NotFoundException.class, () -> eventService.getEventFullDtoByUserId(2, 1),
                 "Пользователь с id 2 не найден");
-        assertThrows(NotFoundException.class, () -> eventService.getByInitiatorById(1, 2),
+        assertThrows(NotFoundException.class, () -> eventService.getEventFullDtoByUserId(1, 2),
                 "Событие с id 2 не найдено");
 
         UpdateEventRequest updateEventRequestWithPublish = UpdateEventRequest.builder()
@@ -162,7 +162,7 @@ public class EventServiceTest {
         when(eventViewStatsClient.getStats(anyString(), anyString(), ArgumentMatchers.any(), anyBoolean()))
                 .thenReturn(ResponseEntity.accepted().body(viewStats));
 
-        EventFullDto eventPublished = eventService.getByInitiatorById(1, 1);
+        EventFullDto eventPublished = eventService.getEventFullDtoByUserId(1, 1);
 
         assertThat(eventPublished.getTitle(), equalTo(event.getTitle()));
         assertThat(eventPublished.getPublishedOn(), notNullValue());
@@ -178,7 +178,7 @@ public class EventServiceTest {
         Event event1 = createEvent(1);
         Event event2 = createEvent(2);
 
-        List<EventShortDto> eventShortDtoList = eventService.getByInitiator(1, 0, 10);
+        List<EventShortDto> eventShortDtoList = eventService.getEventShortDtosByUserId(1, 0, 10);
 
         assertThat(eventShortDtoList, hasSize(2));
         assertThat(eventShortDtoList.get(0).getId(), is(event1.getId()));
@@ -202,12 +202,12 @@ public class EventServiceTest {
 
         createEvent(3);
 
-        List<EventShortDto> eventShortDtoListWithRestriction = eventService.getByInitiator(1, 1, 1);
+        List<EventShortDto> eventShortDtoListWithRestriction = eventService.getEventShortDtosByUserId(1, 1, 1);
 
         assertThat(eventShortDtoListWithRestriction, hasSize(1));
         assertThat(eventShortDtoListWithRestriction.get(0).getId(), is(event2.getId()));
 
-        assertThrows(NotFoundException.class, () -> eventService.getByInitiator(2, 1, 1),
+        assertThrows(NotFoundException.class, () -> eventService.getEventShortDtosByUserId(2, 1, 1),
                 "Пользователь с id 2 не найден");
     }
 

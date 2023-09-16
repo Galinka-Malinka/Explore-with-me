@@ -18,12 +18,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserStorage userStorage;
 
     @Override
+    @Transactional
     public UserDto create(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
 
@@ -40,13 +40,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> get(Integer[] ids, Integer from, Integer size) {
+
+        if (ids == null) {
+            ids = new Integer[0];
+        }
+
         int page = from / size;
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
 
         List<User> users;
 
-        if (ids[0] == 0) {
+        if (ids.length == 0) {
             Page<User> userPage = userStorage.findAll(pageable);
             users = userPage.getContent();
         } else {
@@ -56,6 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void delete(Integer userId) {
         if (!userStorage.existsById(userId)) {
             throw new NotFoundException("Пользователь с id " + userId + " не найден");

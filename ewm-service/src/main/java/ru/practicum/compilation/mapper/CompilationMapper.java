@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.NewCompilationDto;
+import ru.practicum.compilation.dto.UpdateCompilationRequest;
 import ru.practicum.compilation.model.Compilation;
 import ru.practicum.compilation.model.EventForCompilation;
 import ru.practicum.compilation.model.EventForCompilationPK;
@@ -59,5 +60,15 @@ public class CompilationMapper {
                 .pinned(compilation.isPinned())
                 .events(events)
                 .build();
+    }
+
+    public static Compilation update(Compilation compilation, UpdateCompilationRequest updateCompilationRequest) {
+        if (updateCompilationRequest.getTitle() != null) {
+            compilation.setTitle(updateCompilationRequest.getTitle());
+        }
+        if (updateCompilationRequest.getPinned() != null) {
+            compilation.setPinned(updateCompilationRequest.getPinned());
+        }
+        return compilation;
     }
 }
