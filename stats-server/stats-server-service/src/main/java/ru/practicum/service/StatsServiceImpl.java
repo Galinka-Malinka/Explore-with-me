@@ -33,7 +33,6 @@ public class StatsServiceImpl implements ru.practicum.service.StatsService {
 
         if (uris[0].equals("all")) {  // Если uri изначально не был указан и ему присвоилось значение "all",
             // то выгружвется вся статистика
-
             if (unique) {
                 return statsStorage.findStatsAllWithUniqueIp(startTime, endTime);
             } else {

@@ -25,6 +25,10 @@ public class StatsController {
                                @RequestParam(value = "end") String end,
                                @RequestParam(value = "uris") String[] uris,
                                @RequestParam(value = "unique") Boolean unique) {
+
+        if (uris == null || uris.length == 0) {
+            uris = new String[]{"all"};
+        }
         return statsService.get(start, end, uris, unique);
     }
 }

@@ -1,7 +1,6 @@
 package ru.practicum.stats;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.expression.ParseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,7 +17,6 @@ import java.time.format.DateTimeFormatter;
 @Controller
 @RequestMapping(path = "/stats")
 @RequiredArgsConstructor
-@Slf4j
 @Validated
 public class StatsController {
 
@@ -28,8 +26,7 @@ public class StatsController {
     @GetMapping
     public ResponseEntity<Object> getStats(@NotNull @NotBlank @RequestParam(value = "start") String start,
                                            @NotNull @NotBlank @RequestParam(value = "end") String end,
-                                           @RequestParam(value = "uris", required = false,
-                                                   defaultValue = "all") String[] uris,
+                                           @RequestParam(value = "uris", required = false) String[] uris,
                                            @RequestParam(value = "unique", required = false,
                                                    defaultValue = "false") Boolean unique) {
         LocalDateTime startTime;
@@ -46,8 +43,10 @@ public class StatsController {
             throw new IllegalArgumentException("Начало диапазона статистики не может быть позже его окончания");
         }
 
-        log.info("Получение статистики с {} по {} для uris {} с учётом уникальных посещений {}",
-                start, end, uris, unique);
+        if (uris == null || uris.length == 0) {
+            uris = new String[]{"all"};
+        }
+
         return statsClient.getStats(start, end, uris, unique);
     }
 
