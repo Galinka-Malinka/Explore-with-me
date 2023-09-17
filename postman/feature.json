@@ -159,7 +159,7 @@
 							"pm.test(\"Данные ответа должны содержать параметр id\", function () {\r",
 							"    \r",
 							"    pm.expect(jsonData).to.have.property('id');  //данные должны содержать параметр id\r",
-							"    pm.expect(jsonData.id, '\"id\"').to.eql(pm.collectionVariables.get(106));  //проверка определённого значения id\r",
+							"    pm.expect(jsonData.id, '\"id\"').to.eql(106);  //проверка определённого значения id\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Данные ответа должны содержать параметр title = Event1 \", function () {\r",
@@ -834,7 +834,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"title\": \"Event2\",\r\n  \"annotation\": \"Annotation for Event2\",\r\n  \"category\": 1,\r\n  \"description\": \"Description for Event2\",\r\n  \"eventDate\": \"2023-12-31 15:10:05\",\r\n  \"location\": {\r\n    \"lat\": 55.754167,\r\n    \"lon\": 37.62\r\n  },\r\n  \"paid\": false,\r\n  \"participantLimit\": 0,\r\n  \"requestModeration\": false\r\n}",
+					"raw": "{\r\n  \"title\": \"Event2\",\r\n  \"annotation\": \"Annotation for Event2\",\r\n  \"category\": {{categoryId}},\r\n  \"description\": \"Description for Event2\",\r\n  \"eventDate\": \"2023-12-31 15:10:05\",\r\n  \"location\": {\r\n    \"lat\": 55.754167,\r\n    \"lon\": 37.62\r\n  },\r\n  \"paid\": false,\r\n  \"participantLimit\": 0,\r\n  \"requestModeration\": false\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
