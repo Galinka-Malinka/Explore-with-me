@@ -30,7 +30,7 @@
 							"pm.test(\"Данные ответа должны содержать параметр id \", function () {\r",
 							"    \r",
 							"    pm.expect(jsonData).to.have.property('id');  //данные должны содержать параметр id\r",
-							"    pm.expect(jsonData.id, '\"id\"').to.eql(pm.collectionVariables.get(\"categoryId\"));  //проверка определённого значения id\r",
+							"    pm.expect(jsonData.id, '\"id\"').to.eql(120);  //проверка определённого значения id\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Данные ответа должны содержать параметр name = Category1 \", function () {\r",
@@ -3339,7 +3339,7 @@
 	"variable": [
 		{
 			"key": "categoryId",
-			"value": "120",
+			"value": "",
 			"type": "string"
 		},
 		{
