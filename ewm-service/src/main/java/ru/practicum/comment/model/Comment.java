@@ -6,15 +6,7 @@ import lombok.experimental.FieldDefaults;
 import ru.practicum.event.model.Event;
 import ru.practicum.user.model.User;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.GenerationType;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
