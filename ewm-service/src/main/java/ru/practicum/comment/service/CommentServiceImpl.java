@@ -29,7 +29,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class CommentServiceImpl implements CommentService {
 
     private final UserStorage userStorage;
