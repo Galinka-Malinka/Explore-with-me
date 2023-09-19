@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.dto.NewCategoryDto;
 import ru.practicum.category.service.CategoryService;
+import ru.practicum.comment.dto.FullCommentDto;
+import ru.practicum.comment.service.CommentService;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.NewCompilationDto;
 import ru.practicum.compilation.dto.UpdateCompilationRequest;
@@ -33,6 +35,9 @@ public class AdminController {
     private final CategoryService categoryService;
 
     private final CompilationService compilationService;
+
+    private final CommentService commentService;
+
 
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
@@ -128,5 +133,30 @@ public class AdminController {
 
         log.info("Удаление админом подборки с id {}", compId);
         compilationService.delete(compId);
+    }
+
+    @GetMapping("/comments")
+    public List<FullCommentDto> getComments(@RequestParam(value = "events", required = false) Integer[] events,
+                                            @RequestParam(value = "users", required = false) Integer[] users,
+                                            @RequestParam(value = "text", required = false) String text,
+                                            @RequestParam(value = "rangeStart", required = false) String rangeStart,
+                                            @RequestParam(value = "rangeEnd", required = false) String rangeEnd,
+                                            @RequestParam(value = "from", required = false,
+                                                    defaultValue = "0") Integer from,
+                                            @RequestParam(value = "size", required = false,
+                                                    defaultValue = "10") Integer size) {
+
+        log.info("Получение администратором комментариев c выборкой: events {} users {} text {} rangeStart {} rangeEnd {} from {} size {}",
+                events, users, text, rangeStart, rangeEnd, from, size);
+        return commentService.getComments(events, users, text, rangeStart, rangeEnd, from, size);
+    }
+
+    @DeleteMapping("/comments")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteComments(@RequestParam(value = "ids", required = false) Integer[] ids,
+                               @RequestParam(value = "events", required = false) Integer[] events) {
+
+        log.info("Удаление админом комментариев с ограничениями по ids {} и по events", ids);
+        commentService.delete(ids, events);
     }
 }

@@ -1,0 +1,3416 @@
+{
+	"info": {
+		"_postman_id": "dc587b38-2cfb-4174-9cdc-b1d8c57163dc",
+		"name": "Comments Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26871176"
+	},
+	"item": [
+		{
+			"name": "Добавление категории",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.collectionVariables.set(\"categoryId\", jsonData.id);\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 201\", function() {\r",
+							"    pm.response.to.have.status(201); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр id \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('id');  //данные должны содержать параметр id\r",
+							"    pm.expect(jsonData.id, '\"id\"').to.eql(Number(pm.collectionVariables.get(\"categoryId\")));  //проверка определённого значения id\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр name = Category1 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('name');\r",
+							"    pm.expect(jsonData.name, '\"name\" must be \"Category1\"').to.eql(\"Category1\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"Category1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}admin/categories",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Добавление пользователя 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.collectionVariables.set(\"user1id\", jsonData.id);\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 201\", function() {\r",
+							"    pm.response.to.have.status(201); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр id\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('id');  //данные должны содержать параметр id\r",
+							"    pm.expect(jsonData.id, '\"id\"').to.eql(Number(pm.collectionVariables.get(\"user1id\")));  //проверка определённого значения id\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр name = User1 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('name');\r",
+							"    pm.expect(jsonData.name, '\"name\" must be \"User1\"').to.eql(\"User1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр email = User1@email.ru \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('email');\r",
+							"    pm.expect(jsonData.email, '\"email\" must be \"User1@email.ru\"').to.eql(\"User1@email.ru\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"User1\",\r\n    \"email\" : \"User1@email.ru\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}admin/users",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Добавление события пользователем 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.collectionVariables.set(\"event1Id\", jsonData.id);\r",
+							"\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 201\", function() {\r",
+							"    pm.response.to.have.status(201); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр id\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('id');  //данные должны содержать параметр id\r",
+							"    pm.expect(jsonData.id, '\"id\"').to.eql(Number(pm.collectionVariables.get(\"event1Id\")));  //проверка определённого значения id\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр title = Event1 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('title');\r",
+							"    pm.expect(jsonData.title, '\"title\" must be \"Event1\"').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр annotation = Annotation for Event1 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('annotation');\r",
+							"    pm.expect(jsonData.annotation, '\"annotation\" must be \"Annotation for Event1\"').to.eql(\"Annotation for Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр description = Description for Event1 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('description');\r",
+							"    pm.expect(jsonData.description, '\"description\" must be \"Description for Event1\"').to.eql(\"Description for Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр eventDate\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData).to.have.property('eventDate');\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр location с определёнными значениями\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData).to.have.property('location');\r",
+							"    pm.expect(jsonData.location.lat, '\"lat\" must be \"55.754166\"').to.equal(55.754166).toString();\r",
+							"    pm.expect(jsonData.location.lon, '\"lon\" must be \"37.62\"').to.equal(37.62).toString();\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр paid = false \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('paid');\r",
+							"    pm.expect(jsonData.paid, '\"paid\" must be \"false\"').to.eql(false);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр participantLimit = 0 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('participantLimit');\r",
+							"    pm.expect(jsonData.participantLimit, '\"participantLimit\" must be \"0\"').to.eql(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр requestModeration = false \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('requestModeration');\r",
+							"    pm.expect(jsonData.requestModeration, '\"requestModeration\" must be \"false\"').to.eql(false);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр confirmedRequests = 0 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('confirmedRequests');\r",
+							"    pm.expect(jsonData.confirmedRequests, '\"confirmedRequests\" must be \"0\"').to.eql(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр category\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData).to.have.property('category');\r",
+							"    pm.expect(jsonData.category.id, '\"category.id\"').to.eql(Number(pm.collectionVariables.get(\"categoryId\")));\r",
+							"     pm.expect(jsonData.category.name, '\"category.name\" must be \"Category1\"').to.eql(\"Category1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр initiator\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData).to.have.property('initiator');\r",
+							"    pm.expect(jsonData.initiator.id, '\"initiator.id\"').to.eql(Number(pm.collectionVariables.get(\"user1id\")));\r",
+							"    pm.expect(jsonData.initiator.name, '\"initiator.name\" must be \"User1\"').to.eql(\"User1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр createdOn\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('createdOn');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр publishedOn = null \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('publishedOn');\r",
+							"    pm.expect(jsonData.publishedOn, '\"publishedOn\" must be \"null\"').to.eql(null);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр state = PENDING \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('state');\r",
+							"    pm.expect(jsonData.state, '\"state\" must be \"PENDING\"').to.eql(\"PENDING\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр views = 0 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('views');\r",
+							"    pm.expect(jsonData.views, '\"views\" must be \"0\"').to.eql(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Event1\",\r\n  \"annotation\": \"Annotation for Event1\",\r\n  \"category\": {{categoryId}},\r\n  \"description\": \"Description for Event1\",\r\n  \"eventDate\": \"2024-12-31 15:10:05\",\r\n  \"location\": {\r\n    \"lat\": 55.754167,\r\n    \"lon\": 37.62\r\n  },\r\n  \"paid\": false,\r\n  \"participantLimit\": 0,\r\n  \"requestModeration\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}users/{{user1id}}/events",
+					"host": [
+						"{{url}}users"
+					],
+					"path": [
+						"{{user1id}}",
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Добавление комментария неопубликованному событию",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(409);   \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\" : \"user's 1 comment on the event 1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}users/{{user1id}}/comments/{{event1Id}}",
+					"host": [
+						"{{url}}users"
+					],
+					"path": [
+						"{{user1id}}",
+						"comments",
+						"{{event1Id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Публикация события 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.collectionVariables.set(\"publ1Id\", jsonData.id);\r",
+							"\r",
+							"const pubId = Number(pm.collectionVariables.get(\"publ1Id\"));\r",
+							"const catId = Number(pm.collectionVariables.get(\"categoryId\"));\r",
+							"const userId = Number(pm.collectionVariables.get(\"user1id\"));\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 200\", function() {\r",
+							"    pm.response.to.have.status(200); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр id\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('id');  //данные должны содержать параметр id\r",
+							"    pm.expect(jsonData.id, '\"id\"').to.eql(pubId);  //проверка определённого значения id\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр title = Event1 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('title');\r",
+							"    pm.expect(jsonData.title, '\"title\" must be \"Event1\"').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр annotation = Annotation for Event1 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('annotation');\r",
+							"    pm.expect(jsonData.annotation, '\"annotation\" must be \"Annotation for Event1\"').to.eql(\"Annotation for Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр description = Description for Event1 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('description');\r",
+							"    pm.expect(jsonData.description, '\"description\" must be \"Description for Event1\"').to.eql(\"Description for Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр eventDate\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData).to.have.property('eventDate');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр location с определёнными значениями\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData).to.have.property('location');\r",
+							"    pm.expect(jsonData.location.lat, '\"lat\" must be \"55.754166\"').to.equal(55.754166).toString();\r",
+							"    pm.expect(jsonData.location.lon, '\"lon\" must be \"37.62\"').to.equal(37.62).toString();\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр paid = false \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('paid');\r",
+							"    pm.expect(jsonData.paid, '\"paid\" must be \"false\"').to.eql(false);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр participantLimit = 0 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('participantLimit');\r",
+							"    pm.expect(jsonData.participantLimit, '\"participantLimit\" must be \"0\"').to.eql(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр requestModeration = false \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('requestModeration');\r",
+							"    pm.expect(jsonData.requestModeration, '\"requestModeration\" must be \"false\"').to.eql(false);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр confirmedRequests = null \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('confirmedRequests');\r",
+							"    pm.expect(jsonData.confirmedRequests, '\"confirmedRequests\" must be \"null\"').to.eql(null);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр category\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData).to.have.property('category');\r",
+							"      pm.expect(jsonData.category.id, '\"category.id\"').to.eql(catId);\r",
+							"     pm.expect(jsonData.category.name, '\"category.name\" must be \"Category1\"').to.eql(\"Category1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр initiator\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData).to.have.property('initiator');\r",
+							"    pm.expect(jsonData.initiator.id, '\"initiator.id\"').to.eql(userId);\r",
+							"    pm.expect(jsonData.initiator.name, '\"initiator.name\" must be \"User1\"').to.eql(\"User1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр createdOn\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('createdOn');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр publishedOn\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('publishedOn');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр state = PUBLISHED \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('state');\r",
+							"    pm.expect(jsonData.state, '\"state\" must be \"PUBLISHED\"').to.eql(\"PUBLISHED\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр views = null \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('views');\r",
+							"    pm.expect(jsonData.views, '\"views\" must be \"null\"').to.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"stateAction\" : \"PUBLISH_EVENT\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}admin/events/{{event1Id}}",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"events",
+						"{{event1Id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Добавление комментария пользователем 1 событию 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.collectionVariables.set(\"com1id\", jsonData.id);\r",
+							"\r",
+							"const comId =Number(pm.collectionVariables.get(\"com1id\"));\r",
+							"const userId = Number(pm.collectionVariables.get(\"user1id\"));\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 201\", function() {\r",
+							"    pm.response.to.have.status(201); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр id\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('id');  //данные должны содержать параметр id\r",
+							"    pm.expect(jsonData.id, '\"id\"').to.eql(comId);  //проверка определённого значения id\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр eventTitle = Event1 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData.eventTitle, '\"eventTitle\" must be \"Event1\"').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр text = user 1 comment on the event 1 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('text');\r",
+							"    pm.expect(jsonData.text, '\"text\" must be \"user 1 comment on the event 1\"').to.eql(\"user 1 comment on the event 1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр author\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('author');\r",
+							"    pm.expect(jsonData.author.id, '\"author.id\"').to.eql(userId);\r",
+							"    pm.expect(jsonData.author.name, '\"author.name\" must be \"User1\"').to.eql(\"User1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр created \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('created');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\" : \"user 1 comment on the event 1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}users/{{user1id}}/comments/{{event1Id}}",
+					"host": [
+						"{{url}}users"
+					],
+					"path": [
+						"{{user1id}}",
+						"comments",
+						"{{event1Id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Добавление пользователя 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.collectionVariables.set(\"user2id\", jsonData.id);\r",
+							"\r",
+							"const userId = Number(pm.collectionVariables.get(\"user2id\"));\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 201\", function() {\r",
+							"    pm.response.to.have.status(201); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр id\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('id');  //данные должны содержать параметр id\r",
+							"    pm.expect(jsonData.id, '\"id\"').to.eql(userId);  //проверка определённого значения id\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр name = User2 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('name');\r",
+							"    pm.expect(jsonData.name, '\"name\" must be \"User2\"').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр email = User2@email.ru \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('email');\r",
+							"    pm.expect(jsonData.email, '\"email\" must be \"User2@email.ru\"').to.eql(\"User2@email.ru\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"User2\",\r\n    \"email\" : \"User2@email.ru\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}admin/users",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Добавление комментария пользователем 2 событию 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.collectionVariables.set(\"com2id\", jsonData.id);\r",
+							"\r",
+							"const comId = Number(pm.collectionVariables.get(\"com2id\"));\r",
+							"const userId = Number(pm.collectionVariables.get(\"user2id\"));\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 201\", function() {\r",
+							"    pm.response.to.have.status(201); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр id\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('id');  //данные должны содержать параметр id\r",
+							"    pm.expect(jsonData.id, '\"id\"').to.eql(comId);  //проверка определённого значения id\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр eventTitle = Event1 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData.eventTitle, '\"eventTitle\" must be \"Event1\"').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр text = user 1 comment on the event 1 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('text');\r",
+							"    pm.expect(jsonData.text, '\"text\" must be \"user 2 comment on the event 1\"').to.eql(\"user 2 comment on the event 1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр author\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('author');\r",
+							"    pm.expect(jsonData.author.id, '\"author.id\"').to.eql(userId);\r",
+							"    pm.expect(jsonData.author.name, '\"author.name\" must be \"User2\"').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр created \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('created');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\" : \"user 2 comment on the event 1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}users/{{user2id}}/comments/{{event1Id}}",
+					"host": [
+						"{{url}}users"
+					],
+					"path": [
+						"{{user2id}}",
+						"comments",
+						"{{event1Id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Добавление события пользователем 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.collectionVariables.set(\"event2Id\", jsonData.id);\r",
+							"\r",
+							"const evenId = Number(pm.collectionVariables.get(\"event2Id\"));\r",
+							"const catId = Number(pm.collectionVariables.get(\"categoryId\"));\r",
+							"const userId = Number(pm.collectionVariables.get(\"user2id\"));\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 201\", function() {\r",
+							"    pm.response.to.have.status(201); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр id\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('id');  //данные должны содержать параметр id\r",
+							"    pm.expect(jsonData.id, '\"id\"').to.eql(evenId);  //проверка определённого значения id\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр title = Event2 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('title');\r",
+							"    pm.expect(jsonData.title, '\"title\" must be \"Event2\"').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр annotation = Annotation for Event2 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('annotation');\r",
+							"    pm.expect(jsonData.annotation, '\"annotation\" must be \"Annotation for Event2\"').to.eql(\"Annotation for Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр description = Description for Event2 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('description');\r",
+							"    pm.expect(jsonData.description, '\"description\" must be \"Description for Event2\"').to.eql(\"Description for Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр eventDate\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData).to.have.property('eventDate');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр location с определёнными значениями\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData).to.have.property('location');\r",
+							"    pm.expect(jsonData.location.lat, '\"lat\" must be \"55.754166\"').to.equal(55.754166).toString();\r",
+							"    pm.expect(jsonData.location.lon, '\"lon\" must be \"37.62\"').to.equal(37.62).toString();\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр paid = false \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('paid');\r",
+							"    pm.expect(jsonData.paid, '\"paid\" must be \"false\"').to.eql(false);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр participantLimit = 0 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('participantLimit');\r",
+							"    pm.expect(jsonData.participantLimit, '\"participantLimit\" must be \"0\"').to.eql(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр requestModeration = false \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('requestModeration');\r",
+							"    pm.expect(jsonData.requestModeration, '\"requestModeration\" must be \"false\"').to.eql(false);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр confirmedRequests = 0 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('confirmedRequests');\r",
+							"    pm.expect(jsonData.confirmedRequests, '\"confirmedRequests\" must be \"0\"').to.eql(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр category\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData).to.have.property('category');\r",
+							"    pm.expect(jsonData.category.id, '\"category.id\"').to.eql(catId);\r",
+							"    pm.expect(jsonData.category.name, '\"category.name\" must be \"Category1\"').to.eql(\"Category1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр initiator\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData).to.have.property('initiator');\r",
+							"    pm.expect(jsonData.initiator.id, '\"initiator.id\"').to.eql(userId);\r",
+							"    pm.expect(jsonData.initiator.name, '\"initiator.name\" must be \"User2\"').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр createdOn\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('createdOn');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр publishedOn = null \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('publishedOn');\r",
+							"    pm.expect(jsonData.publishedOn, '\"publishedOn\" must be \"null\"').to.eql(null);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр state = PENDING \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('state');\r",
+							"    pm.expect(jsonData.state, '\"state\" must be \"PENDING\"').to.eql(\"PENDING\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр views = 0 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('views');\r",
+							"    pm.expect(jsonData.views, '\"views\" must be \"0\"').to.eql(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Event2\",\r\n  \"annotation\": \"Annotation for Event2\",\r\n  \"category\": {{categoryId}},\r\n  \"description\": \"Description for Event2\",\r\n  \"eventDate\": \"2023-12-31 15:10:05\",\r\n  \"location\": {\r\n    \"lat\": 55.754167,\r\n    \"lon\": 37.62\r\n  },\r\n  \"paid\": false,\r\n  \"participantLimit\": 0,\r\n  \"requestModeration\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}users/{{user2id}}/events",
+					"host": [
+						"{{url}}users"
+					],
+					"path": [
+						"{{user2id}}",
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Публикация события 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.collectionVariables.set(\"publ2Id\", jsonData.id);\r",
+							"\r",
+							"const pubId = Number(pm.collectionVariables.get(\"publ2Id\"));\r",
+							"const catId = Number(pm.collectionVariables.get(\"categoryId\"));\r",
+							"const userId = Number(pm.collectionVariables.get(\"user2id\"));\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 200\", function() {\r",
+							"    pm.response.to.have.status(200); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр id\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('id');  //данные должны содержать параметр id\r",
+							"    pm.expect(jsonData.id, '\"id\"').to.eql(pubId);  //проверка определённого значения id\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр title = Event2 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('title');\r",
+							"    pm.expect(jsonData.title, '\"title\" must be \"Event2\"').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр annotation = Annotation for Event2 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('annotation');\r",
+							"    pm.expect(jsonData.annotation, '\"annotation\" must be \"Annotation for Event2\"').to.eql(\"Annotation for Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр description = Description for Event2 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('description');\r",
+							"    pm.expect(jsonData.description, '\"description\" must be \"Description for Event2\"').to.eql(\"Description for Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр eventDate\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData).to.have.property('eventDate');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр location с определёнными значениями\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData).to.have.property('location');\r",
+							"    pm.expect(jsonData.location.lat, '\"lat\" must be \"55.754166\"').to.equal(55.754166).toString();\r",
+							"    pm.expect(jsonData.location.lon, '\"lon\" must be \"37.62\"').to.equal(37.62).toString();\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр paid = false \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('paid');\r",
+							"    pm.expect(jsonData.paid, '\"paid\" must be \"false\"').to.eql(false);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр participantLimit = 0 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('participantLimit');\r",
+							"    pm.expect(jsonData.participantLimit, '\"participantLimit\" must be \"0\"').to.eql(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр requestModeration = false \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('requestModeration');\r",
+							"    pm.expect(jsonData.requestModeration, '\"requestModeration\" must be \"false\"').to.eql(false);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр confirmedRequests = null \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('confirmedRequests');\r",
+							"    pm.expect(jsonData.confirmedRequests, '\"confirmedRequests\" must be \"null\"').to.eql(null);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр category\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData).to.have.property('category');\r",
+							"    pm.expect(jsonData.category.id, '\"category.id\"').to.eql(catId);\r",
+							"    pm.expect(jsonData.category.name, '\"category.name\" must be \"Category1\"').to.eql(\"Category1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр initiator\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData).to.have.property('initiator');\r",
+							"    pm.expect(jsonData.initiator.id, '\"initiator.id\"').to.eql(userId);\r",
+							"    pm.expect(jsonData.initiator.name, '\"initiator.name\" must be \"User2\"').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр createdOn\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('createdOn');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр publishedOn\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('publishedOn');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр state = PUBLISHED \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('state');\r",
+							"    pm.expect(jsonData.state, '\"state\" must be \"PUBLISHED\"').to.eql(\"PUBLISHED\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр views = null \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('views');\r",
+							"    pm.expect(jsonData.views, '\"views\" must be \"null\"').to.eql(null);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"stateAction\" : \"PUBLISH_EVENT\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}admin/events/{{event2Id}}",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"events",
+						"{{event2Id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Добавление комментария пользователем 2 событию 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.collectionVariables.set(\"com3id\", jsonData.id);\r",
+							"\r",
+							"const comId =Number(pm.collectionVariables.get(\"com3id\"));\r",
+							"const userId = Number(pm.collectionVariables.get(\"user2id\"));\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 201\", function() {\r",
+							"    pm.response.to.have.status(201); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр id\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('id');  //данные должны содержать параметр id\r",
+							"    pm.expect(jsonData.id, '\"id\"').to.eql(comId);  //проверка определённого значения id\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр eventTitle = Event2 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData.eventTitle, '\"eventTitle\" must be \"Event2\"').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр text = user 2 comment on the event 2 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('text');\r",
+							"    pm.expect(jsonData.text, '\"text\" must be \"user 2 comment on the event 2\"').to.eql(\"user 2 comment on the event 2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр author\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('author');\r",
+							"        pm.expect(jsonData.author.id, '\"author.id\"').to.eql(userId);\r",
+							"    pm.expect(jsonData.author.name, '\"author.name\" must be \"User2\"').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр created \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('created');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\" : \"user 2 comment on the event 2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}users/{{user2id}}/comments/{{event2Id}}",
+					"host": [
+						"{{url}}users"
+					],
+					"path": [
+						"{{user2id}}",
+						"comments",
+						"{{event2Id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Добавление комментария пользователем 1 событию 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.collectionVariables.set(\"com4id\", jsonData.id);\r",
+							"\r",
+							"const comId =Number(pm.collectionVariables.get(\"com4id\"));\r",
+							"const userId = Number(pm.collectionVariables.get(\"user1id\"));\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 201\", function() {\r",
+							"    pm.response.to.have.status(201); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр id\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('id');  //данные должны содержать параметр id\r",
+							"    pm.expect(jsonData.id, '\"id\"').to.eql(comId);  //проверка определённого значения id\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр eventTitle = Event2 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData.eventTitle, '\"eventTitle\" must be \"Event2\"').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр text = user 1 comment on the event 2 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('text');\r",
+							"    pm.expect(jsonData.text, '\"text\" must be \"user 1 comment on the event 2\"').to.eql(\"user 1 comment on the event 2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр author\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('author');\r",
+							"    pm.expect(jsonData.author.id, '\"author.id\"').to.eql(userId);\r",
+							"    pm.expect(jsonData.author.name, '\"author.name\" must be \"User1\"').to.eql(\"User1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр created \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('created');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\" : \"user 1 comment on the event 2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}users/{{user1id}}/comments/{{event2Id}}",
+					"host": [
+						"{{url}}users"
+					],
+					"path": [
+						"{{user1id}}",
+						"comments",
+						"{{event2Id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение админом всех комментариев без доп.параметров",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"const com1 = Number(pm.collectionVariables.get(\"com1id\"));\r",
+							"const com2 = Number(pm.collectionVariables.get(\"com2id\"));\r",
+							"const com3 = Number(pm.collectionVariables.get(\"com3id\"));\r",
+							"const com4 = Number(pm.collectionVariables.get(\"com4id\"));\r",
+							"const user1 = Number(pm.collectionVariables.get(\"user1id\"));\r",
+							"const user2 = Number(pm.collectionVariables.get(\"user2id\"));\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 200\", function() {\r",
+							"    pm.response.to.have.status(200); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Тело ответа должно быть массивом определённой длины\", function() {\r",
+							"    pm.expect(jsonData).is.an('array'); // проверяем, что тело ответа является массивом \r",
+							"    pm.expect(jsonData.length, 'List length must be 4').to.eql(4);  // проверяем определённую длину массива\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('id');\r",
+							"    pm.expect(jsonData[0].id, '\"id\"').to.eql(com1);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать eventTitle = Event1\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[0].eventTitle, '\"eventTitle\" must be Event1').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать text = user 1 comment on the event 1\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('text');\r",
+							"    pm.expect(jsonData[0].text, '\"text\" must be user 1 comment on the event 1').to.eql(\"user 1 comment on the event 1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('author');\r",
+							"    pm.expect(jsonData[0].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(jsonData[0].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('id');\r",
+							"    pm.expect(jsonData[1].id, '\"id\"').to.eql(com2);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать eventTitle = Event1\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[1].eventTitle, '\"eventTitle\" must be Event1').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать text = user 2 comment on the event 1\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('text');\r",
+							"    pm.expect(jsonData[1].text, '\"text\" must be user 2 comment on the event 1').to.eql(\"user 2 comment on the event 1\");\r",
+							"});\r",
+							"pm.test(\"Второй элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('author');\r",
+							"    pm.expect(jsonData[1].author.id, '\"author.id\"').to.eql(user2);\r",
+							"    pm.expect(jsonData[1].author.name, '\"author.name\" must be User2').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('id');\r",
+							"    pm.expect(jsonData[2].id, '\"id\"').to.eql(com3);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать eventTitle = Event2\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[2].eventTitle, '\"eventTitle\" must be Event2').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать text = user 2 comment on the event 2\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('text');\r",
+							"    pm.expect(jsonData[2].text, '\"text\" must be user 2 comment on the event 2').to.eql(\"user 2 comment on the event 2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('author');\r",
+							"    pm.expect(jsonData[2].author.id, '\"author.id\"').to.eql(user2);\r",
+							"    pm.expect(jsonData[2].author.name, '\"author.name\" must be User2').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('id');\r",
+							"    pm.expect(jsonData[3].id, '\"id\"').to.eql(com4);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать eventTitle = Event2\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[3].eventTitle, '\"eventTitle\" must be Event2').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать text = user 1 comment on the event 2\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('text');\r",
+							"    pm.expect(jsonData[3].text, '\"text\" must be user 1 comment on the event 2').to.eql(\"user 1 comment on the event 2\");\r",
+							"});\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('author');\r",
+							"    pm.expect(jsonData[3].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(jsonData[3].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}admin/comments",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение админом комментариев для события 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var body = pm.response.json();\r",
+							"\r",
+							"const com1 = Number(pm.collectionVariables.get(\"com1id\"));\r",
+							"const com2 = Number(pm.collectionVariables.get(\"com2id\"));\r",
+							"\r",
+							"const user1 = Number(pm.collectionVariables.get(\"user1id\"));\r",
+							"const user2 = Number(pm.collectionVariables.get(\"user2id\"));\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 200\", function() {\r",
+							"    pm.response.to.have.status(200); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Тело ответа должно быть массивом определённой длины\", function() {\r",
+							"    pm.expect(body).is.an('array'); // проверяем, что тело ответа является массивом \r",
+							"    pm.expect(body.length, 'List length must be 2').to.eql(2);  // проверяем определённую длину массива\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(body[0]).to.have.property('id');\r",
+							"    pm.expect(body[0].id, '\"id\"').to.eql(com1);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать eventTitle = Event1\", function () {\r",
+							"    pm.expect(body[0]).to.have.property('eventTitle');\r",
+							"    pm.expect(body[0].eventTitle, '\"eventTitle\" must be Event1').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать text = user 1 comment on the event 1\", function () {\r",
+							"    pm.expect(body[0]).to.have.property('text');\r",
+							"    pm.expect(body[0].text, '\"text\" must be user 1 comment on the event 1').to.eql(\"user 1 comment on the event 1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(body[0]).to.have.property('author');\r",
+							"    pm.expect(body[0].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(body[0].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(body[0]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(body[1]).to.have.property('id');\r",
+							"    pm.expect(body[1].id, '\"id\"').to.eql(com2);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать eventTitle = Event1\", function () {\r",
+							"    pm.expect(body[1]).to.have.property('eventTitle');\r",
+							"    pm.expect(body[1].eventTitle, '\"eventTitle\" must be Event1').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать text = user 2 comment on the event 1\", function () {\r",
+							"    pm.expect(body[1]).to.have.property('text');\r",
+							"    pm.expect(body[1].text, '\"text\" must be user 2 comment on the event 1').to.eql(\"user 2 comment on the event 1\");\r",
+							"});\r",
+							"pm.test(\"Второй элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(body[1]).to.have.property('author');\r",
+							"    pm.expect(body[1].author.id, '\"author.id\"').to.eql(user2);\r",
+							"    pm.expect(body[1].author.name, '\"author.name\" must be User2').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(body[1]).to.have.property('created');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}admin/comments?events={{event1Id}}",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "events",
+							"value": "{{event1Id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение админом комментариев для двух событий",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"const com1 = Number(pm.collectionVariables.get(\"com1id\"));\r",
+							"const com2 = Number(pm.collectionVariables.get(\"com2id\"));\r",
+							"const com3 = Number(pm.collectionVariables.get(\"com3id\"));\r",
+							"const com4 = Number(pm.collectionVariables.get(\"com4id\"));\r",
+							"const user1 = Number(pm.collectionVariables.get(\"user1id\"));\r",
+							"const user2 = Number(pm.collectionVariables.get(\"user2id\"));\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 200\", function() {\r",
+							"    pm.response.to.have.status(200); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Тело ответа должно быть массивом определённой длины\", function() {\r",
+							"    pm.expect(jsonData).is.an('array'); // проверяем, что тело ответа является массивом \r",
+							"    pm.expect(jsonData.length, 'List length must be 4').to.eql(4);  // проверяем определённую длину массива\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('id');\r",
+							"    pm.expect(jsonData[0].id, '\"id\"').to.eql(com1);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать eventTitle = Event1\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[0].eventTitle, '\"eventTitle\" must be Event1').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать text = user 1 comment on the event 1\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('text');\r",
+							"    pm.expect(jsonData[0].text, '\"text\" must be user 1 comment on the event 1').to.eql(\"user 1 comment on the event 1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('author');\r",
+							"    pm.expect(jsonData[0].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(jsonData[0].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('id');\r",
+							"    pm.expect(jsonData[1].id, '\"id\"').to.eql(com2);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать eventTitle = Event1\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[1].eventTitle, '\"eventTitle\" must be Event1').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать text = user 2 comment on the event 1\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('text');\r",
+							"    pm.expect(jsonData[1].text, '\"text\" must be user 2 comment on the event 1').to.eql(\"user 2 comment on the event 1\");\r",
+							"});\r",
+							"pm.test(\"Второй элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('author');\r",
+							"    pm.expect(jsonData[1].author.id, '\"author.id\"').to.eql(user2);\r",
+							"    pm.expect(jsonData[1].author.name, '\"author.name\" must be User2').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('id');\r",
+							"    pm.expect(jsonData[2].id, '\"id\"').to.eql(com3);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать eventTitle = Event2\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[2].eventTitle, '\"eventTitle\" must be Event2').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать text = user 2 comment on the event 2\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('text');\r",
+							"    pm.expect(jsonData[2].text, '\"text\" must be user 2 comment on the event 2').to.eql(\"user 2 comment on the event 2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('author');\r",
+							"    pm.expect(jsonData[2].author.id, '\"author.id\"').to.eql(user2);\r",
+							"    pm.expect(jsonData[2].author.name, '\"author.name\" must be User2').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('id');\r",
+							"    pm.expect(jsonData[3].id, '\"id\"').to.eql(com4);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать eventTitle = Event2\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[3].eventTitle, '\"eventTitle\" must be Event2').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать text = user 1 comment on the event 2\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('text');\r",
+							"    pm.expect(jsonData[3].text, '\"text\" must be user 1 comment on the event 2').to.eql(\"user 1 comment on the event 2\");\r",
+							"});\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('author');\r",
+							"    pm.expect(jsonData[3].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(jsonData[3].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}admin/comments?events={{event1Id}}, {{event2Id}}",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": null,
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "events",
+							"value": "{{event1Id}}, {{event2Id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение админом комментариев пользователя 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const body = pm.response.json();\r",
+							"\r",
+							"const com1 = Number(pm.collectionVariables.get(\"com1id\"));\r",
+							"const com4 = Number(pm.collectionVariables.get(\"com4id\"));\r",
+							"const user1 = Number(pm.collectionVariables.get(\"user1id\"));\r",
+							"\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 200\", function() {\r",
+							"    pm.response.to.have.status(200); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Тело ответа должно быть массивом определённой длины\", function() {\r",
+							"    pm.expect(body).is.an('array'); // проверяем, что тело ответа является массивом \r",
+							"    pm.expect(body.length, 'List length must be 2').to.eql(2);  // проверяем определённую длину массива\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(body[0]).to.have.property('id');\r",
+							"    pm.expect(body[0].id, '\"id\"').to.eql(com1);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать eventTitle = Event1\", function () {\r",
+							"    pm.expect(body[0]).to.have.property('eventTitle');\r",
+							"    pm.expect(body[0].eventTitle, '\"eventTitle\" must be Event1').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать text = user 1 comment on the event 1\", function () {\r",
+							"    pm.expect(body[0]).to.have.property('text');\r",
+							"    pm.expect(body[0].text, '\"text\" must be user 1 comment on the event 1').to.eql(\"user 1 comment on the event 1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(body[0]).to.have.property('author');\r",
+							"    pm.expect(body[0].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(body[0].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(body[0]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать\", function () {\r",
+							"    pm.expect(body[1]).to.have.property('id');\r",
+							"    pm.expect(body[1].id, '\"id\"').to.eql(com4);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать eventTitle = Event2\", function () {\r",
+							"    pm.expect(body[1]).to.have.property('eventTitle');\r",
+							"    pm.expect(body[1].eventTitle, '\"eventTitle\" must be Event2').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать text = user 1 comment on the event 2\", function () {\r",
+							"    pm.expect(body[1]).to.have.property('text');\r",
+							"    pm.expect(body[1].text, '\"text\" must be user 1 comment on the event 2').to.eql(\"user 1 comment on the event 2\");\r",
+							"});\r",
+							"pm.test(\"Второй элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(body[1]).to.have.property('author');\r",
+							"    pm.expect(body[1].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(body[1].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(body[1]).to.have.property('created');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}admin/comments?users={{user1id}}",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "users",
+							"value": "{{user1id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение админом комментариев двух пользователей",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"const com1 = Number(pm.collectionVariables.get(\"com1id\"));\r",
+							"const com2 = Number(pm.collectionVariables.get(\"com2id\"));\r",
+							"const com3 = Number(pm.collectionVariables.get(\"com3id\"));\r",
+							"const com4 = Number(pm.collectionVariables.get(\"com4id\"));\r",
+							"const user1 = Number(pm.collectionVariables.get(\"user1id\"));\r",
+							"const user2 = Number(pm.collectionVariables.get(\"user2id\"));\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 200\", function() {\r",
+							"    pm.response.to.have.status(200); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Тело ответа должно быть массивом определённой длины\", function() {\r",
+							"    pm.expect(jsonData).is.an('array'); // проверяем, что тело ответа является массивом \r",
+							"    pm.expect(jsonData.length, 'List length must be 4').to.eql(4);  // проверяем определённую длину массива\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('id');\r",
+							"    pm.expect(jsonData[0].id, '\"id\"').to.eql(com1);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать eventTitle = Event1\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[0].eventTitle, '\"eventTitle\" must be Event1').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать text = user 1 comment on the event 1\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('text');\r",
+							"    pm.expect(jsonData[0].text, '\"text\" must be user 1 comment on the event 1').to.eql(\"user 1 comment on the event 1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('author');\r",
+							"    pm.expect(jsonData[0].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(jsonData[0].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('id');\r",
+							"    pm.expect(jsonData[1].id, '\"id\"').to.eql(com2);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать eventTitle = Event1\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[1].eventTitle, '\"eventTitle\" must be Event1').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать text = user 2 comment on the event 1\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('text');\r",
+							"    pm.expect(jsonData[1].text, '\"text\" must be user 2 comment on the event 1').to.eql(\"user 2 comment on the event 1\");\r",
+							"});\r",
+							"pm.test(\"Второй элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('author');\r",
+							"    pm.expect(jsonData[1].author.id, '\"author.id\"').to.eql(user2);\r",
+							"    pm.expect(jsonData[1].author.name, '\"author.name\" must be User2').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('id');\r",
+							"    pm.expect(jsonData[2].id, '\"id\"').to.eql(com3);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать eventTitle = Event2\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[2].eventTitle, '\"eventTitle\" must be Event2').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать text = user 2 comment on the event 2\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('text');\r",
+							"    pm.expect(jsonData[2].text, '\"text\" must be user 2 comment on the event 2').to.eql(\"user 2 comment on the event 2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('author');\r",
+							"    pm.expect(jsonData[2].author.id, '\"author.id\"').to.eql(user2);\r",
+							"    pm.expect(jsonData[2].author.name, '\"author.name\" must be User2').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('id');\r",
+							"    pm.expect(jsonData[3].id, '\"id\"').to.eql(com4);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать eventTitle = Event2\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[3].eventTitle, '\"eventTitle\" must be Event2').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать text = user 1 comment on the event 2\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('text');\r",
+							"    pm.expect(jsonData[3].text, '\"text\" must be user 1 comment on the event 2').to.eql(\"user 1 comment on the event 2\");\r",
+							"});\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('author');\r",
+							"    pm.expect(jsonData[3].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(jsonData[3].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}admin/comments?users={{user1id}}, {{user2id}}",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "users",
+							"value": "{{user1id}}, {{user2id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение админом комментариев содержащих определённое слово",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"const com1 = Number(pm.collectionVariables.get(\"com1id\"));\r",
+							"const com2 = Number(pm.collectionVariables.get(\"com2id\"));\r",
+							"const com3 = Number(pm.collectionVariables.get(\"com3id\"));\r",
+							"const com4 = Number(pm.collectionVariables.get(\"com4id\"));\r",
+							"const user1 = Number(pm.collectionVariables.get(\"user1id\"));\r",
+							"const user2 = Number(pm.collectionVariables.get(\"user2id\"));\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 200\", function() {\r",
+							"    pm.response.to.have.status(200); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Тело ответа должно быть массивом определённой длины\", function() {\r",
+							"    pm.expect(jsonData).is.an('array'); // проверяем, что тело ответа является массивом \r",
+							"    pm.expect(jsonData.length, 'List length must be 4').to.eql(4);  // проверяем определённую длину массива\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('id');\r",
+							"    pm.expect(jsonData[0].id, '\"id\"').to.eql(com1);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать eventTitle = Event1\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[0].eventTitle, '\"eventTitle\" must be Event1').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать text = user 1 comment on the event 1\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('text');\r",
+							"    pm.expect(jsonData[0].text, '\"text\" must be user 1 comment on the event 1').to.eql(\"user 1 comment on the event 1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('author');\r",
+							"    pm.expect(jsonData[0].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(jsonData[0].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('id');\r",
+							"    pm.expect(jsonData[1].id, '\"id\"').to.eql(com2);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать eventTitle = Event1\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[1].eventTitle, '\"eventTitle\" must be Event1').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать text = user 2 comment on the event 1\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('text');\r",
+							"    pm.expect(jsonData[1].text, '\"text\" must be user 2 comment on the event 1').to.eql(\"user 2 comment on the event 1\");\r",
+							"});\r",
+							"pm.test(\"Второй элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('author');\r",
+							"    pm.expect(jsonData[1].author.id, '\"author.id\"').to.eql(user2);\r",
+							"    pm.expect(jsonData[1].author.name, '\"author.name\" must be User2').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('id');\r",
+							"    pm.expect(jsonData[2].id, '\"id\"').to.eql(com3);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать eventTitle = Event2\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[2].eventTitle, '\"eventTitle\" must be Event2').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать text = user 2 comment on the event 2\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('text');\r",
+							"    pm.expect(jsonData[2].text, '\"text\" must be user 2 comment on the event 2').to.eql(\"user 2 comment on the event 2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('author');\r",
+							"    pm.expect(jsonData[2].author.id, '\"author.id\"').to.eql(user2);\r",
+							"    pm.expect(jsonData[2].author.name, '\"author.name\" must be User2').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('id');\r",
+							"    pm.expect(jsonData[3].id, '\"id\"').to.eql(com4);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать eventTitle = Event2\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[3].eventTitle, '\"eventTitle\" must be Event2').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать text = user 1 comment on the event 2\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('text');\r",
+							"    pm.expect(jsonData[3].text, '\"text\" must be user 1 comment on the event 2').to.eql(\"user 1 comment on the event 2\");\r",
+							"});\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('author');\r",
+							"    pm.expect(jsonData[3].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(jsonData[3].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}admin/comments?text=comment",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "text",
+							"value": "comment"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение админом комментариев с rangeStart до комментариев",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"const com1 = Number(pm.collectionVariables.get(\"com1id\"));\r",
+							"const com2 = Number(pm.collectionVariables.get(\"com2id\"));\r",
+							"const com3 = Number(pm.collectionVariables.get(\"com3id\"));\r",
+							"const com4 = Number(pm.collectionVariables.get(\"com4id\"));\r",
+							"const user1 = Number(pm.collectionVariables.get(\"user1id\"));\r",
+							"const user2 = Number(pm.collectionVariables.get(\"user2id\"));\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 200\", function() {\r",
+							"    pm.response.to.have.status(200); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Тело ответа должно быть массивом определённой длины\", function() {\r",
+							"    pm.expect(jsonData).is.an('array'); // проверяем, что тело ответа является массивом \r",
+							"    pm.expect(jsonData.length, 'List length must be 4').to.eql(4);  // проверяем определённую длину массива\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('id');\r",
+							"    pm.expect(jsonData[0].id, '\"id\"').to.eql(com1);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать eventTitle = Event1\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[0].eventTitle, '\"eventTitle\" must be Event1').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать text = user 1 comment on the event 1\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('text');\r",
+							"    pm.expect(jsonData[0].text, '\"text\" must be user 1 comment on the event 1').to.eql(\"user 1 comment on the event 1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('author');\r",
+							"    pm.expect(jsonData[0].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(jsonData[0].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('id');\r",
+							"    pm.expect(jsonData[1].id, '\"id\"').to.eql(com2);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать eventTitle = Event1\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[1].eventTitle, '\"eventTitle\" must be Event1').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать text = user 2 comment on the event 1\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('text');\r",
+							"    pm.expect(jsonData[1].text, '\"text\" must be user 2 comment on the event 1').to.eql(\"user 2 comment on the event 1\");\r",
+							"});\r",
+							"pm.test(\"Второй элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('author');\r",
+							"    pm.expect(jsonData[1].author.id, '\"author.id\"').to.eql(user2);\r",
+							"    pm.expect(jsonData[1].author.name, '\"author.name\" must be User2').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('id');\r",
+							"    pm.expect(jsonData[2].id, '\"id\"').to.eql(com3);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать eventTitle = Event2\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[2].eventTitle, '\"eventTitle\" must be Event2').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать text = user 2 comment on the event 2\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('text');\r",
+							"    pm.expect(jsonData[2].text, '\"text\" must be user 2 comment on the event 2').to.eql(\"user 2 comment on the event 2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('author');\r",
+							"    pm.expect(jsonData[2].author.id, '\"author.id\"').to.eql(user2);\r",
+							"    pm.expect(jsonData[2].author.name, '\"author.name\" must be User2').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('id');\r",
+							"    pm.expect(jsonData[3].id, '\"id\"').to.eql(com4);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать eventTitle = Event2\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[3].eventTitle, '\"eventTitle\" must be Event2').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать text = user 1 comment on the event 2\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('text');\r",
+							"    pm.expect(jsonData[3].text, '\"text\" must be user 1 comment on the event 2').to.eql(\"user 1 comment on the event 2\");\r",
+							"});\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('author');\r",
+							"    pm.expect(jsonData[3].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(jsonData[3].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}admin/comments?rangeStart=2023-09-16 09:00:00",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "rangeStart",
+							"value": "2023-09-16 09:00:00"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение админом комментариев с rangeStart после комментариев",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 200\", function() {\r",
+							"    pm.response.to.have.status(200); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Тело ответа должно быть массивом определённой длины\", function() {\r",
+							"    pm.expect(body).is.an('array'); // проверяем, что тело ответа является массивом \r",
+							"    pm.expect(body.length, 'List length must be 0').to.eql(0);  // проверяем определённую длину массива\r",
+							"}); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}admin/comments?rangeStart=2033-09-16 09:00:00",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "rangeStart",
+							"value": "2033-09-16 09:00:00"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение админом комментариев с rangeEnd после комментариев",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"const com1 = Number(pm.collectionVariables.get(\"com1id\"));\r",
+							"const com2 = Number(pm.collectionVariables.get(\"com2id\"));\r",
+							"const com3 = Number(pm.collectionVariables.get(\"com3id\"));\r",
+							"const com4 = Number(pm.collectionVariables.get(\"com4id\"));\r",
+							"const user1 = Number(pm.collectionVariables.get(\"user1id\"));\r",
+							"const user2 = Number(pm.collectionVariables.get(\"user2id\"));\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 200\", function() {\r",
+							"    pm.response.to.have.status(200); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Тело ответа должно быть массивом определённой длины\", function() {\r",
+							"    pm.expect(jsonData).is.an('array'); // проверяем, что тело ответа является массивом \r",
+							"    pm.expect(jsonData.length, 'List length must be 4').to.eql(4);  // проверяем определённую длину массива\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('id');\r",
+							"    pm.expect(jsonData[0].id, '\"id\"').to.eql(com1);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать eventTitle = Event1\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[0].eventTitle, '\"eventTitle\" must be Event1').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать text = user 1 comment on the event 1\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('text');\r",
+							"    pm.expect(jsonData[0].text, '\"text\" must be user 1 comment on the event 1').to.eql(\"user 1 comment on the event 1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('author');\r",
+							"    pm.expect(jsonData[0].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(jsonData[0].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('id');\r",
+							"    pm.expect(jsonData[1].id, '\"id\"').to.eql(com2);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать eventTitle = Event1\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[1].eventTitle, '\"eventTitle\" must be Event1').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать text = user 2 comment on the event 1\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('text');\r",
+							"    pm.expect(jsonData[1].text, '\"text\" must be user 2 comment on the event 1').to.eql(\"user 2 comment on the event 1\");\r",
+							"});\r",
+							"pm.test(\"Второй элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('author');\r",
+							"    pm.expect(jsonData[1].author.id, '\"author.id\"').to.eql(user2);\r",
+							"    pm.expect(jsonData[1].author.name, '\"author.name\" must be User2').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('id');\r",
+							"    pm.expect(jsonData[2].id, '\"id\"').to.eql(com3);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать eventTitle = Event2\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[2].eventTitle, '\"eventTitle\" must be Event2').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать text = user 2 comment on the event 2\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('text');\r",
+							"    pm.expect(jsonData[2].text, '\"text\" must be user 2 comment on the event 2').to.eql(\"user 2 comment on the event 2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('author');\r",
+							"    pm.expect(jsonData[2].author.id, '\"author.id\"').to.eql(user2);\r",
+							"    pm.expect(jsonData[2].author.name, '\"author.name\" must be User2').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('id');\r",
+							"    pm.expect(jsonData[3].id, '\"id\"').to.eql(com4);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать eventTitle = Event2\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[3].eventTitle, '\"eventTitle\" must be Event2').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать text = user 1 comment on the event 2\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('text');\r",
+							"    pm.expect(jsonData[3].text, '\"text\" must be user 1 comment on the event 2').to.eql(\"user 1 comment on the event 2\");\r",
+							"});\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('author');\r",
+							"    pm.expect(jsonData[3].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(jsonData[3].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}admin/comments?rangeEnd=2033-09-16 09:00:00",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "rangeEnd",
+							"value": "2033-09-16 09:00:00"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение админом комментариев с rangeEnd до комментариев",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 200\", function() {\r",
+							"    pm.response.to.have.status(200); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Тело ответа должно быть массивом определённой длины\", function() {\r",
+							"    pm.expect(body).is.an('array'); // проверяем, что тело ответа является массивом \r",
+							"    pm.expect(body.length, 'List length must be 0').to.eql(0);  // проверяем определённую длину массива\r",
+							"}); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}admin/comments?rangeEnd=2023-09-16 09:00:00",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "rangeEnd",
+							"value": "2023-09-16 09:00:00"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение админом комментариев с rangeStart и rangeEnd",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"const com1 = Number(pm.collectionVariables.get(\"com1id\"));\r",
+							"const com2 = Number(pm.collectionVariables.get(\"com2id\"));\r",
+							"const com3 = Number(pm.collectionVariables.get(\"com3id\"));\r",
+							"const com4 = Number(pm.collectionVariables.get(\"com4id\"));\r",
+							"const user1 = Number(pm.collectionVariables.get(\"user1id\"));\r",
+							"const user2 = Number(pm.collectionVariables.get(\"user2id\"));\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 200\", function() {\r",
+							"    pm.response.to.have.status(200); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Тело ответа должно быть массивом определённой длины\", function() {\r",
+							"    pm.expect(jsonData).is.an('array'); // проверяем, что тело ответа является массивом \r",
+							"    pm.expect(jsonData.length, 'List length must be 4').to.eql(4);  // проверяем определённую длину массива\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('id');\r",
+							"    pm.expect(jsonData[0].id, '\"id\"').to.eql(com1);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать eventTitle = Event1\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[0].eventTitle, '\"eventTitle\" must be Event1').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать text = user 1 comment on the event 1\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('text');\r",
+							"    pm.expect(jsonData[0].text, '\"text\" must be user 1 comment on the event 1').to.eql(\"user 1 comment on the event 1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('author');\r",
+							"    pm.expect(jsonData[0].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(jsonData[0].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('id');\r",
+							"    pm.expect(jsonData[1].id, '\"id\"').to.eql(com2);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать eventTitle = Event1\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[1].eventTitle, '\"eventTitle\" must be Event1').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать text = user 2 comment on the event 1\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('text');\r",
+							"    pm.expect(jsonData[1].text, '\"text\" must be user 2 comment on the event 1').to.eql(\"user 2 comment on the event 1\");\r",
+							"});\r",
+							"pm.test(\"Второй элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('author');\r",
+							"    pm.expect(jsonData[1].author.id, '\"author.id\"').to.eql(user2);\r",
+							"    pm.expect(jsonData[1].author.name, '\"author.name\" must be User2').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('id');\r",
+							"    pm.expect(jsonData[2].id, '\"id\"').to.eql(com3);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать eventTitle = Event2\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[2].eventTitle, '\"eventTitle\" must be Event2').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать text = user 2 comment on the event 2\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('text');\r",
+							"    pm.expect(jsonData[2].text, '\"text\" must be user 2 comment on the event 2').to.eql(\"user 2 comment on the event 2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('author');\r",
+							"    pm.expect(jsonData[2].author.id, '\"author.id\"').to.eql(user2);\r",
+							"    pm.expect(jsonData[2].author.name, '\"author.name\" must be User2').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('id');\r",
+							"    pm.expect(jsonData[3].id, '\"id\"').to.eql(com4);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать eventTitle = Event2\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[3].eventTitle, '\"eventTitle\" must be Event2').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать text = user 1 comment on the event 2\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('text');\r",
+							"    pm.expect(jsonData[3].text, '\"text\" must be user 1 comment on the event 2').to.eql(\"user 1 comment on the event 2\");\r",
+							"});\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('author');\r",
+							"    pm.expect(jsonData[3].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(jsonData[3].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}admin/comments?rangeEnd=2033-09-16 09:00:00&rangeStart=2023-09-16 09:00:00",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "rangeEnd",
+							"value": "2033-09-16 09:00:00"
+						},
+						{
+							"key": "rangeStart",
+							"value": "2023-09-16 09:00:00"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение админом комментариев с неверно заданным диапазоном времени",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(409);      \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}admin/comments?rangeStart=2033-09-16 09:00:00&rangeEnd=2023-09-16 09:00:00",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "rangeStart",
+							"value": "2033-09-16 09:00:00"
+						},
+						{
+							"key": "rangeEnd",
+							"value": "2023-09-16 09:00:00"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение админом комментариев с ограничениями по пагинации",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const body = pm.response.json();\r",
+							"\r",
+							"const com3 = Number(pm.collectionVariables.get(\"com3id\"));\r",
+							"const com4 = Number(pm.collectionVariables.get(\"com4id\"));\r",
+							"const user1 = Number(pm.collectionVariables.get(\"user1id\"));\r",
+							"const user2 = Number(pm.collectionVariables.get(\"user2id\"));\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 200\", function() {\r",
+							"    pm.response.to.have.status(200); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Тело ответа должно быть массивом определённой длины\", function() {\r",
+							"    pm.expect(body).is.an('array'); // проверяем, что тело ответа является массивом \r",
+							"    pm.expect(body.length, 'List length must be 2').to.eql(2);  // проверяем определённую длину массива\r",
+							"}); \r",
+							"\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(body[0]).to.have.property('id');\r",
+							"    pm.expect(body[0].id, '\"id\"').to.eql(com3);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать eventTitle = Event2\", function () {\r",
+							"    pm.expect(body[0]).to.have.property('eventTitle');\r",
+							"    pm.expect(body[0].eventTitle, '\"eventTitle\" must be Event2').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать text = user 2 comment on the event 2\", function () {\r",
+							"    pm.expect(body[0]).to.have.property('text');\r",
+							"    pm.expect(body[0].text, '\"text\" must be user 2 comment on the event 2').to.eql(\"user 2 comment on the event 2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(body[0]).to.have.property('author');\r",
+							"    pm.expect(body[0].author.id, '\"author.id\"').to.eql(user2);\r",
+							"    pm.expect(body[0].author.name, '\"author.name\" must be User2').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(body[0]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать\", function () {\r",
+							"    pm.expect(body[1]).to.have.property('id');\r",
+							"    pm.expect(body[1].id, '\"id\"').to.eql(com4);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать eventTitle = Event2\", function () {\r",
+							"    pm.expect(body[1]).to.have.property('eventTitle');\r",
+							"    pm.expect(body[1].eventTitle, '\"eventTitle\" must be Event2').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать text = user 1 comment on the event 2\", function () {\r",
+							"    pm.expect(body[1]).to.have.property('text');\r",
+							"    pm.expect(body[1].text, '\"text\" must be user 1 comment on the event 2').to.eql(\"user 1 comment on the event 2\");\r",
+							"});\r",
+							"pm.test(\"Второй элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(body[1]).to.have.property('author');\r",
+							"    pm.expect(body[1].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(body[1].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"pm.test(\"Второй элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(body[1]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}admin/comments?from=2&size=2",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "2"
+						},
+						{
+							"key": "size",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получение админом всех комментариев со всеми ограничениями",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"const com1 = Number(pm.collectionVariables.get(\"com1id\"));\r",
+							"const com2 = Number(pm.collectionVariables.get(\"com2id\"));\r",
+							"const com3 = Number(pm.collectionVariables.get(\"com3id\"));\r",
+							"const com4 = Number(pm.collectionVariables.get(\"com4id\"));\r",
+							"const user1 = Number(pm.collectionVariables.get(\"user1id\"));\r",
+							"const user2 = Number(pm.collectionVariables.get(\"user2id\"));\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 200\", function() {\r",
+							"    pm.response.to.have.status(200); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Тело ответа должно быть массивом определённой длины\", function() {\r",
+							"    pm.expect(jsonData).is.an('array'); // проверяем, что тело ответа является массивом \r",
+							"    pm.expect(jsonData.length, 'List length must be 4').to.eql(4);  // проверяем определённую длину массива\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('id');\r",
+							"    pm.expect(jsonData[0].id, '\"id\"').to.eql(com1);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать eventTitle = Event1\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[0].eventTitle, '\"eventTitle\" must be Event1').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать text = user 1 comment on the event 1\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('text');\r",
+							"    pm.expect(jsonData[0].text, '\"text\" must be user 1 comment on the event 1').to.eql(\"user 1 comment on the event 1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('author');\r",
+							"    pm.expect(jsonData[0].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(jsonData[0].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[0]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('id');\r",
+							"    pm.expect(jsonData[1].id, '\"id\"').to.eql(com2);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать eventTitle = Event1\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[1].eventTitle, '\"eventTitle\" must be Event1').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать text = user 2 comment on the event 1\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('text');\r",
+							"    pm.expect(jsonData[1].text, '\"text\" must be user 2 comment on the event 1').to.eql(\"user 2 comment on the event 1\");\r",
+							"});\r",
+							"pm.test(\"Второй элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('author');\r",
+							"    pm.expect(jsonData[1].author.id, '\"author.id\"').to.eql(user2);\r",
+							"    pm.expect(jsonData[1].author.name, '\"author.name\" must be User2').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[1]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('id');\r",
+							"    pm.expect(jsonData[2].id, '\"id\"').to.eql(com3);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать eventTitle = Event2\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[2].eventTitle, '\"eventTitle\" must be Event2').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать text = user 2 comment on the event 2\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('text');\r",
+							"    pm.expect(jsonData[2].text, '\"text\" must be user 2 comment on the event 2').to.eql(\"user 2 comment on the event 2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('author');\r",
+							"    pm.expect(jsonData[2].author.id, '\"author.id\"').to.eql(user2);\r",
+							"    pm.expect(jsonData[2].author.name, '\"author.name\" must be User2').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Третий элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[2]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать id\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('id');\r",
+							"    pm.expect(jsonData[3].id, '\"id\"').to.eql(com4);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать eventTitle = Event2\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData[3].eventTitle, '\"eventTitle\" must be Event2').to.eql(\"Event2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать text = user 1 comment on the event 2\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('text');\r",
+							"    pm.expect(jsonData[3].text, '\"text\" must be user 1 comment on the event 2').to.eql(\"user 1 comment on the event 2\");\r",
+							"});\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать author\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('author');\r",
+							"    pm.expect(jsonData[3].author.id, '\"author.id\"').to.eql(user1);\r",
+							"    pm.expect(jsonData[3].author.name, '\"author.name\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"pm.test(\"Четвёртый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(jsonData[3]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}admin/comments?rangeEnd=2033-09-16 09:00:00&rangeStart=2023-09-16 09:00:00&from=0&size=4&text=comment&users={{user1id}}, {{user2id}}&events={{event1Id}}, {{event2Id}}",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "rangeEnd",
+							"value": "2033-09-16 09:00:00"
+						},
+						{
+							"key": "rangeStart",
+							"value": "2023-09-16 09:00:00"
+						},
+						{
+							"key": "from",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "4"
+						},
+						{
+							"key": "text",
+							"value": "comment"
+						},
+						{
+							"key": "users",
+							"value": "{{user1id}}, {{user2id}}"
+						},
+						{
+							"key": "events",
+							"value": "{{event1Id}}, {{event2Id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Публичное получение всех комментариев к событию 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 200\", function() {\r",
+							"    pm.response.to.have.status(200); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Тело ответа должно быть массивом определённой длины\", function() {\r",
+							"    pm.expect(body).is.an('array'); // проверяем, что тело ответа является массивом \r",
+							"    pm.expect(body.length, 'List length must be 2').to.eql(2);  // проверяем определённую длину массива\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать authorName = User1\", function () {\r",
+							"    pm.expect(body[0]).to.have.property('authorName');\r",
+							"    pm.expect(body[0].authorName, '\"authorName\" must be User1').to.eql(\"User1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать text = user 1 comment on the event 1\", function () {\r",
+							"    pm.expect(body[0]).to.have.property('text');\r",
+							"    pm.expect(body[0].text, '\"text\" must be user 1 comment on the event 1').to.eql(\"user 1 comment on the event 1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Первый элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(body[0]).to.have.property('created');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать authorName = User2\", function () {\r",
+							"    pm.expect(body[1]).to.have.property('authorName');\r",
+							"    pm.expect(body[1].authorName, '\"authorName\" must be User2').to.eql(\"User2\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать text = user 2 comment on the event 1\", function () {\r",
+							"    pm.expect(body[1]).to.have.property('text');\r",
+							"    pm.expect(body[1].text, '\"text\" must be user 2 comment on the event 1').to.eql(\"user 2 comment on the event 1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Второй элемент массива должен содержать created\", function () {\r",
+							"    pm.expect(body[1]).to.have.property('created');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}comments/{{event1Id}}",
+					"host": [
+						"{{url}}comments"
+					],
+					"path": [
+						"{{event1Id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Публичное получение комментариев к незарегистрированному событию",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(404);     \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}comments/{{eventInvalId}}",
+					"host": [
+						"{{url}}comments"
+					],
+					"path": [
+						"{{eventInvalId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Удаление админом комментария 4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 204 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(204);    \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}admin/comments?ids={{com4id}}",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "ids",
+							"value": "{{com4id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Удаление админом комментариев 2 и 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 204 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(204);    \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}admin/comments?ids={{com2id}}, {{com3id}}",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "ids",
+							"value": "{{com2id}}, {{com3id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Удаление админом комментариев события 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 204 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(204);    \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}admin/comments?events={{event1Id}}",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "events",
+							"value": "{{event1Id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Добавление комментария пользователем 1 событию 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.collectionVariables.set(\"com5id\", jsonData.id);\r",
+							"\r",
+							"const com5 = Number(pm.collectionVariables.get(\"com5id\"));\r",
+							"const user = Number(pm.collectionVariables.get(\"user1id\"));\r",
+							"\r",
+							"pm.test(\"Ответ должен содержать код статуса 201\", function() {\r",
+							"    pm.response.to.have.status(201); // код ответа должен быть равен 201 created\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Ответ должен содержат данные в формате json\", function() {\r",
+							"    pm.response.to.be.withBody; // ответ должен содержать тело\r",
+							"    pm.response.to.be.json; // и тело ответа должно быть в формате JSON\r",
+							"\r",
+							"}); \r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр id\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('id');  //данные должны содержать параметр id\r",
+							"    pm.expect(jsonData.id, '\"id\"').to.eql(com5);  //проверка определённого значения id\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр eventTitle = Event1 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('eventTitle');\r",
+							"    pm.expect(jsonData.eventTitle, '\"eventTitle\" must be \"Event1\"').to.eql(\"Event1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр text = user 1 comment on the event 1 \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('text');\r",
+							"    pm.expect(jsonData.text, '\"text\" must be \"user 1 comment on the event 1\"').to.eql(\"user 1 comment on the event 1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр author\", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('author');\r",
+							"    pm.expect(jsonData.author.id, '\"author.id\"').to.eql(user);\r",
+							"    pm.expect(jsonData.author.name, '\"author.name\" must be \"User1\"').to.eql(\"User1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Данные ответа должны содержать параметр created \", function () {\r",
+							"    \r",
+							"    pm.expect(jsonData).to.have.property('created');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\" : \"user 1 comment on the event 1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}users/{{user1id}}/comments/{{event1Id}}",
+					"host": [
+						"{{url}}users"
+					],
+					"path": [
+						"{{user1id}}",
+						"comments",
+						"{{event1Id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Удаление админом всех комментариев",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 204 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(204);    \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}admin/comments",
+					"host": [
+						"{{url}}admin"
+					],
+					"path": [
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Добавление комментария без регистрации",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(404);      \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\" : \"user's 3 comment on the event 2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}users/{{userInvalId}}/comments/{{event2Id}}",
+					"host": [
+						"{{url}}users"
+					],
+					"path": [
+						"{{userInvalId}}",
+						"comments",
+						"{{event2Id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Добавление комментария к незарегистрированному событию",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {\r",
+							"    pm.response.to.have.status(404);     \r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\" : \"user's 1 comment on the event 3\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}users/{{user1id}}/comments/{{eventInvalId}}",
+					"host": [
+						"{{url}}users"
+					],
+					"path": [
+						"{{user1id}}",
+						"comments",
+						"{{eventInvalId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "categoryId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user1id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "event1Id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "url",
+			"value": "localhost:8080/",
+			"type": "string"
+		},
+		{
+			"key": "com1id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "com2id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "com3id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "com4id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "com5id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user2id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "event2Id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "eventInvalId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "userInvalId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "publ1Id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "publ2Id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

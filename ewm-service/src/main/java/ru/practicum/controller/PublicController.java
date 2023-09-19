@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.service.CategoryService;
+import ru.practicum.comment.dto.ShortCommentDto;
+import ru.practicum.comment.service.CommentService;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.service.CompilationService;
 import ru.practicum.event.dto.EventFullDto;
@@ -27,6 +29,8 @@ public class PublicController {
     private final CategoryService categoryService;
 
     private final CompilationService compilationService;
+
+    private final CommentService commentService;
 
     @GetMapping("/events")
     public List<EventShortDto> getEvents(@RequestParam(value = "text", required = false) String text,
@@ -90,5 +94,12 @@ public class PublicController {
 
         log.info("Публичное получение всех событий ограничениями: pinned {}, from {}, size {}", pinned, from, size);
         return compilationService.get(pinned, from, size);
+    }
+
+    @GetMapping("/comments/{eventId}")
+    public List<ShortCommentDto> getCommentByEvent(@PathVariable Integer eventId) {
+
+        log.info("Публичное получение комментариев к событию с id {}", eventId);
+        return commentService.getCommentsByEvent(eventId);
     }
 }

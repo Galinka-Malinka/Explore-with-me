@@ -15,6 +15,8 @@ import ru.practicum.category.model.Category;
 import ru.practicum.category.storage.CategoryStorage;
 import ru.practicum.client.EventEndpointHitClient;
 import ru.practicum.client.EventViewStatsClient;
+import ru.practicum.comment.dto.ShortCommentDto;
+import ru.practicum.comment.storage.CommentStorage;
 import ru.practicum.event.State;
 import ru.practicum.event.dto.*;
 import ru.practicum.event.mapper.EventMapper;
@@ -58,6 +60,8 @@ public class EventServiceImpl implements EventService {
 
     private final ParticipationRequestStorage participationRequestStorage;
 
+    private final CommentStorage commentStorage;
+
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
@@ -74,8 +78,9 @@ public class EventServiceImpl implements EventService {
 
         Event event = eventStorage.save(EventMapper.toEvent(user, newEventDto, category, location));
 
-        return EventMapper.toEventFullDto(event, 0, 0);
+        return EventMapper.toEventFullDto(event, 0, 0, null);
     }
+
 
     @Override
     public EventFullDto getEventFullDtoByUserId(Integer userId, Integer eventId) {
@@ -94,12 +99,13 @@ public class EventServiceImpl implements EventService {
                         .orElseThrow(() -> new NotFoundException("Событие с id " + eventId + " не найдено"));
 
                 Integer views = getViews(event.getPublishedOn(), eventId);
-                return EventMapper.toEventFullDto(event, 0, views);
+                List<ShortCommentDto> comments = getComments(eventId);
+                return EventMapper.toEventFullDto(event, 0, views, comments);
             }
         } else {
             Event event = eventStorage.findById(eventId)
                     .orElseThrow(() -> new NotFoundException("Событие с id " + eventId + " не найдено"));
-            return EventMapper.toEventFullDto(event, null, null);
+            return EventMapper.toEventFullDto(event, null, null, null);
         }
     }
 
@@ -189,7 +195,7 @@ public class EventServiceImpl implements EventService {
         }
         Event updatedEvent = eventStorage.save(eventWithUpdatedParameters);
 
-        return EventMapper.toEventFullDto(updatedEvent, null, null);
+        return EventMapper.toEventFullDto(updatedEvent, null, null, null);
     }
 
     @Override
@@ -228,13 +234,15 @@ public class EventServiceImpl implements EventService {
         for (Event foundEvent : foundEvents) {
             Integer confirmedRequests = null;
             Integer views = null;
+            List<ShortCommentDto> comments = null;
 
             if (foundEvent.getState().equals(State.PUBLISHED)) {
                 List<Integer> confirmedRequestsAndViews = getConfirmedRequestAndViews(foundEvent);
                 confirmedRequests = confirmedRequestsAndViews.get(0);
                 views = confirmedRequestsAndViews.get(1);
+                comments = getComments(foundEvent.getId());
             }
-            eventFullDtoList.add(EventMapper.toEventFullDto(foundEvent, confirmedRequests, views));
+            eventFullDtoList.add(EventMapper.toEventFullDto(foundEvent, confirmedRequests, views, comments));
         }
         return eventFullDtoList;
     }
@@ -251,10 +259,12 @@ public class EventServiceImpl implements EventService {
         if (request.getTitle() != null && (request.getTitle().length() < 3 || request.getTitle().length() > 120)) {
             throw new ValidationException("Размер заголовка не входит в диапазон от 3 до 120 символов");
         }
-        if (request.getAnnotation() != null && (request.getAnnotation().length() < 20 || request.getAnnotation().length() > 2000)) {
+        if (request.getAnnotation() != null
+                && (request.getAnnotation().length() < 20 || request.getAnnotation().length() > 2000)) {
             throw new ValidationException("Размер аннотации не входит в диапазон от 20 до 2000 символов");
         }
-        if (request.getDescription() != null && (request.getDescription().length() < 20 || request.getDescription().length() > 7000)) {
+        if (request.getDescription() != null
+                && (request.getDescription().length() < 20 || request.getDescription().length() > 7000)) {
             throw new ValidationException("Размер описания не входит в диапазон от 20 до 7000 символов");
         }
         if (event.getEventDate() != null && !event.getEventDate().minusHours(1).isAfter(timeNow)) {
@@ -290,7 +300,7 @@ public class EventServiceImpl implements EventService {
         }
         Event updatedEvent = eventStorage.save(eventWithUpdatedParameters);
 
-        return EventMapper.toEventFullDto(updatedEvent, null, null);
+        return EventMapper.toEventFullDto(updatedEvent, null, null, null);
     }
 
     @Override
@@ -397,9 +407,11 @@ public class EventServiceImpl implements EventService {
         confirmedRequests = confirmedRequestsAndViews.get(0);
         views = confirmedRequestsAndViews.get(1);
 
+        List<ShortCommentDto> comments = commentStorage.findByEventId(eventId);
+
         sendDataToStatistic(request);
 
-        return EventMapper.toEventFullDto(event, confirmedRequests, views);
+        return EventMapper.toEventFullDto(event, confirmedRequests, views, comments);
     }
 
     public void checkUser(Integer userId) {
@@ -522,5 +534,14 @@ public class EventServiceImpl implements EventService {
                 .build();
 
         eventEndpointHitClient.create(endpointHit);
+    }
+
+    public List<ShortCommentDto> getComments(Integer eventId) {
+        List<ShortCommentDto> comments = new ArrayList<>();
+
+        if (commentStorage.existsByEventId(eventId)) {
+            comments = commentStorage.findByEventId(eventId);
+        }
+        return comments;
     }
 }

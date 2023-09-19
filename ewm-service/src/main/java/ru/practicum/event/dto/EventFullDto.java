@@ -6,11 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.category.dto.CategoryDto;
+import ru.practicum.comment.dto.ShortCommentDto;
 import ru.practicum.event.model.Location;
 import ru.practicum.user.dto.UserShortDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @Builder
@@ -59,5 +61,8 @@ public class EventFullDto {
     String state;  //Список состояний жизненного цикла события Enum: [ PENDING, PUBLISHED, CANCELED ]
 
     Integer views;  //Количество просмотрев события
+
+    List<ShortCommentDto> comments;
+
 }
 

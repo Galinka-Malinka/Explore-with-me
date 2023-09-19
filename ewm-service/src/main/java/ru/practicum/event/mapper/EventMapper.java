@@ -6,6 +6,7 @@ import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Component;
 import ru.practicum.category.mapper.CategoryMapper;
 import ru.practicum.category.model.Category;
+import ru.practicum.comment.dto.ShortCommentDto;
 import ru.practicum.event.State;
 import ru.practicum.event.dto.*;
 import ru.practicum.event.model.Event;
@@ -16,6 +17,8 @@ import ru.practicum.user.model.User;
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -58,8 +61,11 @@ public class EventMapper {
                 .build();
     }
 
-    public static EventFullDto toEventFullDto(Event event, Integer confirmedRequests, Integer views) {
+    public static EventFullDto toEventFullDto(Event event, Integer confirmedRequests, Integer views,
+                                              List<ShortCommentDto> comments) {
         String publishedOn = event.getPublishedOn() != null ? event.getPublishedOn().format(formatter) : null;
+
+        List<ShortCommentDto> shortCommentDtoList = comments != null ? comments : new ArrayList<>();
 
         return EventFullDto.builder()
                 .id(event.getId())
@@ -78,6 +84,7 @@ public class EventMapper {
                 .confirmedRequests(confirmedRequests)
                 .state(event.getState().toString())
                 .views(views)
+                .comments(shortCommentDtoList)
                 .build();
     }
 
