@@ -92,7 +92,7 @@ public class PublicController {
                                                 @RequestParam(value = "size", required = false, defaultValue = "10")
                                                 Integer size) {
 
-        log.info("Публичное получение всех событий ограничениями: pinned {}, from {}, size {}", pinned, from, size);
+        log.info("Публичное получение всех подборок с ограничениями: pinned {}, from {}, size {}", pinned, from, size);
         return compilationService.get(pinned, from, size);
     }
 

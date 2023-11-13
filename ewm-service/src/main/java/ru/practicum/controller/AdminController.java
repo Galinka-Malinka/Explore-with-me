@@ -156,7 +156,7 @@ public class AdminController {
     public void deleteComments(@RequestParam(value = "ids", required = false) Integer[] ids,
                                @RequestParam(value = "events", required = false) Integer[] events) {
 
-        log.info("Удаление админом комментариев с ограничениями по ids {} и по events", ids);
+        log.info("Удаление админом комментариев с ограничениями по ids {} и по events {}", ids, events);
         commentService.delete(ids, events);
     }
 }
